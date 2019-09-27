@@ -28,6 +28,12 @@ class HostedCheckout extends Checkout implements CheckoutInterface
     public function getPaymentRequest()
     {
         $request = new EcommercePaymentRequest($this->getConfiguration()->getShaComposer('in'));
+
+        // Set Production mode if enabled
+        if (!$this->getConfiguration()->isTestMode()) {
+            $request->setOgoneUri(EcommercePaymentRequest::PRODUCTION);
+        }
+
         $request->setOrig($this->getConfiguration()->getShoppingCartExtensionId())
             ->setShoppingCartExtensionId($this->getConfiguration()->getShoppingCartExtensionId())
             ->setPspId($this->getConfiguration()->getPspid())

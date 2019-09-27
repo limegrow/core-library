@@ -23,6 +23,12 @@ class FlexCheckout extends Checkout
     public function getPaymentRequest()
     {
         $request = new FlexCheckoutPaymentRequest($this->getConfiguration()->getShaComposer('in'));
+
+        // Set Production mode if enabled
+        if (!$this->getConfiguration()->isTestMode()) {
+            $request->setOgoneUri(FlexCheckoutPaymentRequest::PRODUCTION);
+        }
+
         $request->setPspId($this->getConfiguration()->getPspid())
             ->setOrderId($this->getOrder()->getOrderId())
             ->setPaymentMethod($this->getAlias()->getPm())

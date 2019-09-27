@@ -31,6 +31,12 @@ class DirectLink extends Checkout implements CheckoutInterface
     public function getPaymentRequest()
     {
         $request = new DirectLinkPaymentRequest($this->getConfiguration()->getShaComposer('in'));
+
+        // Set Production mode if enabled
+        if (!$this->getConfiguration()->isTestMode()) {
+            $request->setOgoneUri(DirectLinkPaymentRequest::PRODUCTION);
+        }
+
         $request->setOrig($this->getConfiguration()->getShoppingCartExtensionId())
             ->setShoppingCartExtensionId($this->getConfiguration()->getShoppingCartExtensionId())
             ->setPspId($this->getConfiguration()->getPspid())
@@ -93,8 +99,14 @@ class DirectLink extends Checkout implements CheckoutInterface
         $cvc = null
     ) {
         /** @var DirectLinkPaymentRequest $request */
-        $request = (clone $this)
-            ->setConfiguration($configuration)
+        $request = (clone $this);
+
+        // Set Production mode if enabled
+        if (!$this->getConfiguration()->isTestMode()) {
+            $request->setOgoneUri(DirectLinkPaymentRequest::PRODUCTION);
+        }
+
+        $request->setConfiguration($configuration)
             ->setOrder($order)
             ->setUrls($urls)
             ->setOperation($operation)
@@ -200,6 +212,12 @@ class DirectLink extends Checkout implements CheckoutInterface
         MaintenanceOperation $operation
     ) {
         $maintenanceRequest = new DirectLinkMaintenanceRequest($configuration->getShaComposer());
+
+        // Set Production mode if enabled
+        if (!$this->getConfiguration()->isTestMode()) {
+            $maintenanceRequest->setOgoneUri(DirectLinkMaintenanceRequest::PRODUCTION);
+        }
+
         $maintenanceRequest->setPspId($configuration->getPspid());
         $maintenanceRequest->setUserId($configuration->getUserId());
         $maintenanceRequest->setPassword($configuration->getPassword());
@@ -264,6 +282,12 @@ class DirectLink extends Checkout implements CheckoutInterface
         $payId
     ) {
         $queryRequest = new DirectLinkQueryRequest($configuration->getShaComposer());
+
+        // Set Production mode if enabled
+        if (!$this->getConfiguration()->isTestMode()) {
+            $queryRequest->setOgoneUri(DirectLinkQueryRequest::PRODUCTION);
+        }
+
         $queryRequest->setPspId($configuration->getPspid());
         $queryRequest->setUserId($configuration->getUserId());
         $queryRequest->setPassword($configuration->getPassword());
