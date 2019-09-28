@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.3] - 2019-09-28
+### Fixed
+- DirectLink issue
+
 ## [1.0.2] - 2019-09-28
 ### Fixed
 - Live mode for DirectLink

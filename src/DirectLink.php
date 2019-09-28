@@ -101,21 +101,21 @@ class DirectLink extends Checkout implements CheckoutInterface
         /** @var DirectLinkPaymentRequest $request */
         $request = (clone $this);
 
-        // Set Production mode if enabled
-        if (!$configuration->isTestMode()) {
-            $request->setOgoneUri(DirectLinkPaymentRequest::PRODUCTION);
-        }
-
         $request->setConfiguration($configuration)
             ->setOrder($order)
             ->setUrls($urls)
             ->setOperation($operation)
             ->setAlias(new Alias($alias))
-            ->setCvc($cvc)
-            ->getPaymentRequest();
+            ->setCvc($cvc);
+
+        $dlPaymentRequest = $request->getPaymentRequest();
 
         $client = new Client($this->logger);
-        $response = $client->post($request->toArray(), $request->getOgoneUri(), $request->getShaSign());
+        $response = $client->post(
+            $dlPaymentRequest->toArray(),
+            $dlPaymentRequest->getOgoneUri(),
+            $dlPaymentRequest->getShaSign()
+        );
 
         return new Payment((new DirectLinkPaymentResponse($response))->toArray());
     }
@@ -214,7 +214,7 @@ class DirectLink extends Checkout implements CheckoutInterface
         $maintenanceRequest = new DirectLinkMaintenanceRequest($configuration->getShaComposer());
 
         // Set Production mode if enabled
-        if (!$configuration->isTestMode()) {
+        if (!$this->getConfiguration()->isTestMode()) {
             $maintenanceRequest->setOgoneUri(DirectLinkMaintenanceRequest::PRODUCTION);
         }
 
@@ -284,7 +284,7 @@ class DirectLink extends Checkout implements CheckoutInterface
         $queryRequest = new DirectLinkQueryRequest($configuration->getShaComposer());
 
         // Set Production mode if enabled
-        if (!$configuration->isTestMode()) {
+        if (!$this->getConfiguration()->isTestMode()) {
             $queryRequest->setOgoneUri(DirectLinkQueryRequest::PRODUCTION);
         }
 
