@@ -214,7 +214,7 @@ class DirectLink extends Checkout implements CheckoutInterface
         $maintenanceRequest = new DirectLinkMaintenanceRequest($configuration->getShaComposer());
 
         // Set Production mode if enabled
-        if (!$this->getConfiguration()->isTestMode()) {
+        if (!$configuration->isTestMode()) {
             $maintenanceRequest->setOgoneUri(DirectLinkMaintenanceRequest::PRODUCTION);
         }
 
@@ -284,7 +284,7 @@ class DirectLink extends Checkout implements CheckoutInterface
         $queryRequest = new DirectLinkQueryRequest($configuration->getShaComposer());
 
         // Set Production mode if enabled
-        if (!$this->getConfiguration()->isTestMode()) {
+        if (!$configuration->isTestMode()) {
             $queryRequest->setOgoneUri(DirectLinkQueryRequest::PRODUCTION);
         }
 
