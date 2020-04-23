@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0] - 2020-04-24
+### Added
+- Support for OpenInvoice
+- Special flow for Twint
+
+### Changed
+- Alias operation
+
+### Fixed
+-  Payment page template for HostedCheckout
+
 ## [1.0.4] - 2019-11-08
 ### Fixed
 - DirectLink configuration issue
