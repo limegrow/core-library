@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.0] - 2020-07-06
+### Added
+- Country support for Austria
+
 ## [2.0.0] - 2020-04-24
 ### Added
 - Support for OpenInvoice
