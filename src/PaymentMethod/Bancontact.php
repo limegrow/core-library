@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Bancontact extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'bancontact';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'bancontact';
+    protected $id = self::CODE;
 
     /**
      * Name

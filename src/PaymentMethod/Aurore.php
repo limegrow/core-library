@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Aurore extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'aurore';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'aurore';
+    protected $id = self::CODE;
 
     /**
      * Name

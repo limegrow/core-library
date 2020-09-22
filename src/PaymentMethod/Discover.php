@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Discover extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'discover';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'discover';
+    protected $id = self::CODE;
 
     /**
      * Name

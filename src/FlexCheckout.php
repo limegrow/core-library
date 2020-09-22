@@ -4,23 +4,32 @@ namespace IngenicoClient;
 
 use Ogone\FlexCheckout\FlexCheckoutPaymentRequest;
 
-/**
- * Class FlexCheckout
- *
- * @method $this setAlias(Alias $value)
- * @method Alias getAlias()
- * @method $this setTemplate($value)
- * @method mixed getTemplate()
- * @package IngenicoClient
- */
-class FlexCheckout extends Checkout
+trait FlexCheckout
 {
     /**
-     * Get Payment Request Instance
+     * Get Inline payment method URL
+     *
+     * @param $orderId
+     * @param Alias $alias
+     * @return string
+     */
+    public function getInlineIFrameUrl($orderId, Alias $alias)
+    {
+        $order = $this->getOrder($orderId);
+
+        $request = $this->getFlexCheckoutPaymentRequest($order, $alias);
+        $request->setShaSign();
+        $request->validate();
+
+        return $request->getCheckoutUrl();
+    }
+
+    /**
+     * Get Flex Checkout Payment Request Instance
      *
      * @return FlexCheckoutPaymentRequest
      */
-    public function getPaymentRequest()
+    public function getFlexCheckoutPaymentRequest(Order $order, Alias $alias)
     {
         $request = new FlexCheckoutPaymentRequest($this->getConfiguration()->getShaComposer('in'));
 
@@ -29,59 +38,20 @@ class FlexCheckout extends Checkout
             $request->setOgoneUri(FlexCheckoutPaymentRequest::PRODUCTION);
         }
 
-        $template = $this->getConfiguration()->getPaymentpageTemplateName();
-
-        // For compatibility with createFlexCheckout()
-        if ($this->hasData('template')) {
-            $template = $this->getTemplate();
-        }
+        /** @var ReturnUrl $urls */
+        $urls = $this->requestReturnUrls($order->getOrderId());
 
         $request->setPspId($this->getConfiguration()->getPspid())
-            ->setOrderId($this->getOrder()->getOrderId())
-            ->setPaymentMethod($this->getAlias()->getPm())
-            ->setBrand($this->getAlias()->getBrand())
-            ->setAccepturl($this->getAcceptUrl())
-            ->setExceptionurl($this->getExceptionUrl())
-            ->setStorePermanently($this->getAlias()->getIsShouldStoredPermanently() ? 'Y' : 'N')
-            ->setAliasId(new \Ogone\FlexCheckout\Alias($this->getAlias()->getAlias()))
-            ->setTemplate($template)
-            ->setLanguage($this->getOrder()->getLocale());
-
-        if ($this->getAlias()->getIsShouldStoredPermanently()) {
-            $request->setForceAliasSave(true);
-        }
-
-        return $request;
-    }
-
-    /**
-     * Create FlexCheckout Payment Request
-     *
-     * @deprecated Use getPaymentRequest() instead of
-     * @param Configuration $configuration
-     * @param Order $order
-     * @param Alias $alias
-     * @param array $urls
-     * @param string $template
-     * @return FlexCheckoutPaymentRequest
-     */
-    public function createFlexCheckout(
-        Configuration $configuration,
-        Order $order,
-        Alias $alias,
-        $urls,
-        $template
-    ) {
-        $request = (clone $this)
-            ->setConfiguration($configuration)
-            ->setOrder($order)
-            ->setUrls($urls)
-            ->setAlias($alias)
-            ->setTemplate($template)
-            ->getPaymentRequest();
-
-        $request->setShaSign();
-        $request->validate();
+            ->setOrderId($order->getOrderId())
+            ->setPaymentMethod($alias->getPm())
+            ->setBrand($alias->getBrand())
+            ->setAccepturl($urls->getAcceptUrl())
+            ->setExceptionurl($urls->getExceptionUrl())
+            ->setStorePermanently($alias->getIsShouldStoredPermanently() ? 'Y' : 'N')
+            ->setAliasId(new \Ogone\FlexCheckout\Alias($alias->getAlias()))
+            ->setTemplate($this->getConfiguration()->getPaymentpageTemplateName())
+            ->setLanguage($order->getLocale())
+            ->setForceAliasSave($alias->getIsShouldStoredPermanently());
 
         return $request;
     }

@@ -2,8 +2,6 @@
 
 namespace IngenicoClient;
 
-use Ogone\DirectLink\PaymentOperation;
-
 /**
  * Trait OpenInvoice
  * @package IngenicoClient
@@ -20,7 +18,7 @@ trait OpenInvoice
      */
     public function getMissingOrderFields($orderId, PaymentMethod\PaymentMethod $pm, array $fields = [])
     {
-        if (!in_array($pm->getId(), ['afterpay', 'klarna'])) {
+        if (!$pm->getAdditionalDataRequired()) {
             throw new Exception(sprintf('Unable to use "%s" as Open Invoice method.', $pm->getId()));
         }
 
@@ -148,40 +146,65 @@ trait OpenInvoice
      */
     public function initiateOpenInvoicePayment($orderId, $alias, array $fields = [])
     {
-        if (!in_array($alias->getPaymentId(), ['afterpay', 'klarna'])) {
+        $paymentMethod = $alias->getPaymentMethod();
+        if (!$paymentMethod->getAdditionalDataRequired()) {
             throw new Exception(sprintf('Unable to use %s as Open Invoice method. Use %s::initiateRedirectPayment() instead of.', $alias->getPaymentId(), __CLASS__));
         }
 
         // Check Saved Order ID in Session
-        $storedOrderId = $this->getSessionValue(IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_ORDER_ID);
+        $storedOrderId = $this->getSessionValue(
+            $alias->getPaymentId() . '_' . IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_ORDER_ID
+        );
         if ($storedOrderId && $storedOrderId !== $orderId) {
             // Destroy previous session data
-            $this->unsetSessionValue(IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_ORDER_ID);
-            $this->unsetSessionValue(IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_CHECKOUT_INPUT);
-            $this->unsetSessionValue(IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_FIELDS);
+            $this->unsetSessionValue(
+                $alias->getPaymentId() . '_' . IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_ORDER_ID
+            );
+            $this->unsetSessionValue(
+                $alias->getPaymentId() . '_' . IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_CHECKOUT_INPUT
+            );
+            $this->unsetSessionValue(
+                $alias->getPaymentId() . '_' . IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_FIELDS
+            );
         }
 
         // Store current Order ID
-        $this->setSessionValue(IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_ORDER_ID, $orderId);
+        $this->setSessionValue(
+            $alias->getPaymentId() . '_' . IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_ORDER_ID,
+            $orderId
+        );
 
         $order = $this->getOrder($orderId);
 
         // Order items are required
         if (count((array) $order->getItems()) === 0) {
-            $this->logger->debug(__CLASS__ . '::' . __METHOD__ . ' Open Invoice requires order items', [$order->getData(), $alias->getData(), $fields]);
+            $this->logger->debug(__CLASS__ . '::' . __METHOD__ . ' Open Invoice requires order items', [
+                $order->getData(),
+                $alias->getData(),
+                $fields]
+            );
+
             throw new Exception('Open Invoice requires order items');
         }
 
         // Save Order data in Session
-        $this->setSessionValue(IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_CHECKOUT_INPUT, $fields);
+        $this->setSessionValue(
+            $alias->getPaymentId() . '_' . IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_CHECKOUT_INPUT,
+            $fields
+        );
 
         // Get Additional fields
-        $additionalFields = $this->getSessionValue(IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_FIELDS);
+        $additionalFields = $this->getSessionValue(
+            $alias->getPaymentId() . '_' . IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_FIELDS
+        );
         if (!$additionalFields) {
             $additionalFields = $this->getMissingOrderFields($orderId, $alias->getPaymentMethod(), $fields);
 
             // Save Additional Fields in Session
-            $this->setSessionValue(IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_FIELDS, $additionalFields);
+            $this->setSessionValue(
+                $alias->getPaymentId() . '_' . IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_FIELDS,
+                $additionalFields
+            );
         }
 
         // Validate them
@@ -195,52 +218,37 @@ trait OpenInvoice
         }
 
         // Clean up
-        $this->unsetSessionValue(IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_ORDER_ID);
-        $this->unsetSessionValue(IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_CHECKOUT_INPUT);
-        $this->unsetSessionValue(IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_FIELDS);
+        $this->unsetSessionValue(
+            $alias->getPaymentId() . '_' . IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_ORDER_ID
+        );
+        $this->unsetSessionValue(
+            $alias->getPaymentId() . '_' . IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_CHECKOUT_INPUT
+        );
+        $this->unsetSessionValue(
+            $alias->getPaymentId() . '_' . IngenicoCoreLibrary::PARAM_NAME_OPEN_INVOICE_FIELDS
+        );
 
         // Initiate OpenInvoice Payment with HostedCheckout API
-        // @see IngenicoCoreLibrary::initiateRedirectPayment()
-        if ($this->configuration->getSettingsDirectsales()) {
-            $operation = new PaymentOperation(PaymentOperation::REQUEST_FOR_DIRECT_SALE);
-        } else {
-            $operation = new PaymentOperation(PaymentOperation::REQUEST_FOR_AUTHORISATION);
-        }
-
         // Get order and add overridden fields
         $order = $this->getOrder($orderId);
         $order->setData($fields);
 
-        // Redirect method require empty Alias name to generate new Alias
-        if ($alias->getIsShouldStoredPermanently()) {
-            $alias->setAlias('');
-        }
+        // Initiate Redirect Payment
+        $paymentRequest = $this->getHostedCheckoutPaymentRequest($order, $alias);
 
-        // Initiate HostedCheckout Payment Request
-        $hostedCheckout = (new HostedCheckout())
-            ->setConfiguration($this->configuration)
-            ->setOrder($order)
-            ->setUrls($this->requestReturnUrls($orderId))
-            ->setPaymentMethod($alias->getPaymentMethod())
-            ->setOperation($operation)
-            ->setAlias($alias->getIsPreventStoring() ? null : $alias->exchange())
-            ->setPm($alias->getPm())
-            ->setBrand($alias->getBrand())
-            ->setLanguage($order->getLocale())
-            ->getPaymentRequest();
-
-        $params = $hostedCheckout->toArray();
-        $params['SHASIGN'] = $hostedCheckout->getShaSign();
+        // Prepare the form fields
+        $result = $paymentRequest->toArray();
+        $result['SHASIGN'] = $paymentRequest->getShaSign();
 
         if ($this->logger) {
-            $this->logger->debug(__CLASS__. '::' . __METHOD__, $params);
+            $this->logger->debug(__CLASS__. '::' . __METHOD__, $result);
         }
 
         // Show page with list of payment methods
         $this->extension->showPaymentListRedirectTemplate([
             'order_id' => $orderId,
-            'url' => $hostedCheckout->getOgoneUri(),
-            'fields' => $params
+            'url' => $paymentRequest->getOgoneUri(),
+            'fields' => $result
         ]);
     }
 }

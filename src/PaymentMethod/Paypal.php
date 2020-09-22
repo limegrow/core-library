@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Paypal extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'pay_pal';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'pay_pal';
+    protected $id = self::CODE;
 
     /**
      * Name

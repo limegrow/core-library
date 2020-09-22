@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Kbc extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'kbc';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'kbc';
+    protected $id = self::CODE;
 
     /**
      * Name

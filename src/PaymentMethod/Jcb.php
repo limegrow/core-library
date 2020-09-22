@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Jcb extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'jcb';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'jcb';
+    protected $id = self::CODE;
 
     /**
      * Name

@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Ing extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'ing';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'ing';
+    protected $id = self::CODE;
 
     /**
      * Name

@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class BankTransfer extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'bank_transfer';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'bank_transfer';
+    protected $id = self::CODE;
 
     /**
      * Name

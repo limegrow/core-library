@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class CarteBancaire extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'cb';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'cb';
+    protected $id = self::CODE;
 
     /**
      * Name

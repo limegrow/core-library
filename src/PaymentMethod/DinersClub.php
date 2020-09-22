@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class DinersClub extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'diners_club';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'diners_club';
+    protected $id = self::CODE;
 
     /**
      * Name

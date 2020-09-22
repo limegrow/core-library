@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Belfius extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'belfius';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'belfius';
+    protected $id = self::CODE;
 
     /**
      * Name

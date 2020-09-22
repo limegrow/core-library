@@ -12,6 +12,7 @@ abstract class Connector implements ConnectorInterface
     const PARAM_NAME_ORDER_ID = 'order_id';
     const PARAM_NAME_ALIAS_ID = 'alias_id';
     const PARAM_CARD_BRAND = 'card_brand';
+    const PARAM_CARD_CN = 'card_cn';
     const PARAM_DATA = 'data';
     const PARAM_NAME_URL = 'url';
     const PARAM_NAME_FIELDS = 'fields';

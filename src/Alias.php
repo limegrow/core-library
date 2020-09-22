@@ -15,6 +15,8 @@ namespace IngenicoClient;
  * @method $this setBrand($value)
  * @method string getCardno()
  * @method $this setCardno($value)
+ * @method string getCn()
+ * @method $this setCn($value)
  * @method string getBin()
  * @method $this setBin($value)
  * @method string getPm()
@@ -64,6 +66,7 @@ class Alias extends Data
      */
     public function getName()
     {
+        // @todo Translate that
         return sprintf('%s ends with %s, expires on %s/%s',
             $this->getBrand(),
             substr($this->getCardno(),-4,4),
@@ -112,6 +115,21 @@ class Alias extends Data
     public function exchange()
     {
         return new \Ogone\Ecommerce\Alias($this->getAlias(), $this->getOperation(), $this->getUsage());
+    }
+
+    /**
+     * Get Alias instance of DirectLink SDK.
+     *
+     * @return \Ogone\DirectLink\Alias
+     */
+    public function exchangeDirectLink()
+    {
+        return (new \Ogone\DirectLink\Alias(
+            $this->getAlias(),
+            $this->getCardno(),
+            $this->getCardno(),
+            $this->getEd()
+        ))->setAliasOperation($this->getOperation());
     }
 }
 

@@ -2,9 +2,11 @@
 
 namespace IngenicoClient\PaymentMethod;
 
-class Twint extends PaymentMethod implements PaymentMethodInterface
+use IngenicoClient\PaymentMethod\Abstracts\Klarna as KlarnaAbstract;
+
+class KlarnaPayNow extends KlarnaAbstract
 {
-    const CODE = 'twint';
+    const CODE = 'klarna_paynow';
 
     /**
      * ID Code
@@ -16,65 +18,56 @@ class Twint extends PaymentMethod implements PaymentMethodInterface
      * Name
      * @var string
      */
-    protected $name = 'Twint';
+    protected $name = 'Klarna Pay Now';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'twint.svg';
+    protected $logo = 'https://x.klarnacdn.net/payment-method/assets/badges/generic/klarna.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'real_time_banking';
+    protected $category = 'open_invoice';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'TWINT';
+    protected $pm = 'KLARNA_PAYNOW';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'TWINT';
+    protected $brand = 'KLARNA_PAYNOW';
 
     /**
      * Countries
      * @var array
      */
     protected $countries = [
+        'AT' => [
+            'popularity' => 100
+        ],
         'BE' => [
-            'popularity' => 80
-        ],
-        'FR' => [
-            'popularity' => 100
-        ],
-        'DE' => [
-            'popularity' => 100
-        ],
-        'IT' => [
-            'popularity' => 100
-        ],
-        'LU' => [
-            'popularity' => 100
-        ],
-        'NL' => [
-            'popularity' => 40
-        ],
-        'PT' => [
-            'popularity' => 100
-        ],
-        'ES' => [
             'popularity' => 100
         ],
         'CH' => [
             'popularity' => 100
         ],
-        'GB' => [
+        'DE' => [
+            'popularity' => 100
+        ],
+        'FI' => [
+            'popularity' => 80
+        ],
+        'NL' => [
+            'popularity' => 100
+        ],
+        'SE' => [
             'popularity' => 100
         ]
     ];
@@ -86,8 +79,14 @@ class Twint extends PaymentMethod implements PaymentMethodInterface
     protected $is_redirect_only = true;
 
     /**
-     * Is support Two phase flow
+     * Defines if this payment method requires order line items to be sent with the request
      * @var bool
      */
-    protected $two_phase_flow = false;
+    protected $order_line_items_required = true;
+
+    /**
+     * Defines if this payment method requires additional data to be sent with the request.
+     * @var bool
+     */
+    protected $additional_data_required = true;
 }

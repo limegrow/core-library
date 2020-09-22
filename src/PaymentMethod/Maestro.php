@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Maestro extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'maestro';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'maestro';
+    protected $id = self::CODE;
 
     /**
      * Name

@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Paysafecard extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'paysafecard';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'paysafecard';
+    protected $id = self::CODE;
 
     /**
      * Name

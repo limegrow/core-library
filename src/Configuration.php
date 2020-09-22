@@ -184,6 +184,7 @@ class Configuration extends Data
         'direct_sale_email_option' => false,
         'instalments_enabled' => false,
         'selected_payment_methods' => [],
+        'generic_country' => null,
     ];
 
     /** @var ConnectorInterface */

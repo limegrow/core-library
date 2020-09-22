@@ -4,6 +4,8 @@ namespace IngenicoClient\PaymentMethod;
 
 class Giropay extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'giropay';
+
     /**
      * ID Code
      * @var string

@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Mastercard extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'mastercard';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'mastercard';
+    protected $id = self::CODE;
 
     /**
      * Name

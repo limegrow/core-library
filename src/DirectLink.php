@@ -2,122 +2,47 @@
 
 namespace IngenicoClient;
 
-use Ogone\DirectLink\Alias;
-use Ogone\DirectLink\DirectLinkPaymentRequest;
-use Ogone\DirectLink\DirectLinkPaymentResponse;
+use Psr\Log\LoggerInterface;
 use Ogone\DirectLink\DirectLinkQueryRequest;
 use Ogone\DirectLink\DirectLinkQueryResponse;
 use Ogone\DirectLink\DirectLinkMaintenanceRequest;
 use Ogone\DirectLink\DirectLinkMaintenanceResponse;
 use Ogone\DirectLink\MaintenanceOperation;
-use Ogone\DirectLink\PaymentOperation;
 
 /**
  * Class DirectLink
- *
- * @method $this setAlias(Alias $value)
- * @method Alias getAlias()
- * @method $this setCvc($value)
- * @method mixed getCvc()
- * @package IngenicoClient
  */
-class DirectLink extends Checkout implements CheckoutInterface
+class DirectLink
 {
+    const ITEM_ID = 'itemid';
+    const ITEM_NAME = 'itemname';
+    const ITEM_PRICE = 'itemprice';
+    const ITEM_VATCODE = 'itemvatcode';
+
+    /** @var LoggerInterface|null */
+    private $logger;
+
     /**
-     * Get Payment Request Instance
+     * Set Logger.
      *
-     * @return DirectLinkPaymentRequest
+     * @param LoggerInterface|null $logger
+     * @return $this
      */
-    public function getPaymentRequest()
+    public function setLogger(LoggerInterface $logger = null)
     {
-        $request = new DirectLinkPaymentRequest($this->getConfiguration()->getShaComposer('in'));
+        $this->logger = $logger;
 
-        // Set Production mode if enabled
-        if (!$this->getConfiguration()->isTestMode()) {
-            $request->setOgoneUri(DirectLinkPaymentRequest::PRODUCTION);
-        }
-
-        $request->setOrig($this->getConfiguration()->getShoppingCartExtensionId())
-            ->setShoppingCartExtensionId($this->getConfiguration()->getShoppingCartExtensionId())
-            ->setPspId($this->getConfiguration()->getPspid())
-            ->setUserId($this->getConfiguration()->getUserId())
-            ->setPassword($this->getConfiguration()->getPassword())
-            ->setAccepturl($this->getAcceptUrl())
-            ->setDeclineurl($this->getDeclineUrl())
-            ->setExceptionurl($this->getExceptionUrl())
-            ->setCancelurl($this->getCancelUrl())
-            ->setBackurl($this->getBackUrl())
-            ->setAmount($this->getOrder()->getAmountInCents())
-            ->setCurrency($this->getOrder()->getCurrency())
-            ->setLanguage($this->getOrder()->getLocale())
-            ->setAlias($this->getAlias())
-            ->setEci($this->getEci())
-            ->setCreditDebit($this->getCreditDebit())
-            ->setData($this->getData());
-
-        // Add Order values
-        $request = $this->assignOrder($request, $this->getOrder());
-
-        // Use 3DSecure
-        if ($this->getIsSecure()) {
-            // MPI 2.0 (3DS V.2)
-            $request->setFlag3D('Y')
-                ->setHttpAccept($this->getOrder()->getHttpAccept())
-                ->setHttpUserAgent($this->getOrder()->getHttpUserAgent())
-                ->setWin3DS(self::WIN3DS_MAIN)
-                ->setComplus($this->getOrder()->getOrderId());
-
-            // Add Browser values
-            $request = $this->assignBrowserData($request, $this->getOrder());
-        }
-
-        $this->unsData('is_secure');
-        $request->validate();
-
-        return $request;
+        return $this;
     }
 
     /**
-     * Create Direct Link payment request.
+     * Get Logger.
      *
-     * @param Configuration $configuration
-     * @param Order         $order
-     * @param \Ogone\Ecommerce\Alias $alias
-     * @param PaymentOperation $operation
-     * @param array            $urls
-     * @param string|null      $cvc
-     *
-     * @return Payment
-     * @SuppressWarnings("Duplicates")
+     * @return LoggerInterface|null
      */
-    public function createDirectLinkRequest(
-        Configuration $configuration,
-        Order $order,
-        \Ogone\Ecommerce\Alias $alias,
-        $operation,
-        array $urls,
-        $cvc = null
-    ) {
-        /** @var DirectLinkPaymentRequest $request */
-        $request = (clone $this);
-
-        $request->setConfiguration($configuration)
-            ->setOrder($order)
-            ->setUrls($urls)
-            ->setOperation($operation)
-            ->setAlias((new Alias($alias->getAlias()))->setAliasOperation($alias->getAliasOperation()))
-            ->setCvc($cvc);
-
-        $dlPaymentRequest = $request->getPaymentRequest();
-
-        $client = new Client($this->logger);
-        $response = $client->post(
-            $dlPaymentRequest->toArray(),
-            $dlPaymentRequest->getOgoneUri(),
-            $dlPaymentRequest->getShaSign()
-        );
-
-        return new Payment((new DirectLinkPaymentResponse($response))->toArray());
+    public function getLogger()
+    {
+        return $this->logger;
     }
 
     /**

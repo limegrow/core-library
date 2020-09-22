@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Ideal extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'ideal';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'ideal';
+    protected $id = self::CODE;
 
     /**
      * Name

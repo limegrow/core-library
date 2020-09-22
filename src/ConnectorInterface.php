@@ -85,7 +85,7 @@ interface ConnectorInterface
      * Matches Ingenico payment statuses to the platform's order statuses.
      *
      * @param mixed $orderId
-     * @param string $paymentStatus
+     * @param \IngenicoClient\Payment|string $paymentStatus
      * @param string|null $message
      * @return void
      */

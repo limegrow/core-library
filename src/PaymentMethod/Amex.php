@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Amex extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'amex';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'amex';
+    protected $id = self::CODE;
 
     /**
      * Name

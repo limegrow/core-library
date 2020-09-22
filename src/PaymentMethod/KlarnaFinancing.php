@@ -2,9 +2,11 @@
 
 namespace IngenicoClient\PaymentMethod;
 
-class Twint extends PaymentMethod implements PaymentMethodInterface
+use IngenicoClient\PaymentMethod\Abstracts\Klarna as KlarnaAbstract;
+
+class KlarnaFinancing extends KlarnaAbstract
 {
-    const CODE = 'twint';
+    const CODE = 'klarna_financing';
 
     /**
      * ID Code
@@ -16,67 +18,58 @@ class Twint extends PaymentMethod implements PaymentMethodInterface
      * Name
      * @var string
      */
-    protected $name = 'Twint';
+    protected $name = 'Klarna Financing';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'twint.svg';
+    protected $logo = 'https://x.klarnacdn.net/payment-method/assets/badges/generic/klarna.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'real_time_banking';
+    protected $category = 'open_invoice';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'TWINT';
+    protected $pm = 'KLARNA_FINANCING';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'TWINT';
+    protected $brand = 'KLARNA_FINANCING';
 
     /**
      * Countries
      * @var array
      */
     protected $countries = [
-        'BE' => [
-            'popularity' => 80
-        ],
-        'FR' => [
+        'AT' => [
             'popularity' => 100
         ],
         'DE' => [
             'popularity' => 100
         ],
-        'IT' => [
-            'popularity' => 100
-        ],
-        'LU' => [
+        'FI' => [
             'popularity' => 100
         ],
         'NL' => [
-            'popularity' => 40
-        ],
-        'PT' => [
             'popularity' => 100
         ],
-        'ES' => [
+        'NO' => [
             'popularity' => 100
         ],
-        'CH' => [
+        'SE' => [
             'popularity' => 100
         ],
         'GB' => [
             'popularity' => 100
-        ]
+        ],
     ];
 
     /**
@@ -86,8 +79,14 @@ class Twint extends PaymentMethod implements PaymentMethodInterface
     protected $is_redirect_only = true;
 
     /**
-     * Is support Two phase flow
+     * Defines if this payment method requires order line items to be sent with the request
      * @var bool
      */
-    protected $two_phase_flow = false;
+    protected $order_line_items_required = true;
+
+    /**
+     * Defines if this payment method requires additional data to be sent with the request.
+     * @var bool
+     */
+    protected $additional_data_required = true;
 }

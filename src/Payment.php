@@ -15,6 +15,7 @@ namespace IngenicoClient;
  * @method string getHtmlAnswer()
  * @method string getAlias()
  * @method string getCardNo()
+ * @method string getCn()
  * @method string getBrand()
  * @method string getBin()
  * @method string getPm()
@@ -131,8 +132,7 @@ class Payment extends Data
      */
     public function isTransactionSuccessful()
     {
-        // @see https://payment-services.ingenico.com/int/en/ogone/support/guides/user%20guides/statuses-and-errors
-        return $this->getNcStatus() === '0';
+        return $this->getNcError() === '0' || empty($this->getNcError());
     }
 
     /**
@@ -144,7 +144,8 @@ class Payment extends Data
         return in_array($this->getPaymentStatus(), [
             IngenicoCoreLibrary::STATUS_PENDING,
             IngenicoCoreLibrary::STATUS_AUTHORIZED,
-            IngenicoCoreLibrary::STATUS_CAPTURED
+            IngenicoCoreLibrary::STATUS_CAPTURED,
+            IngenicoCoreLibrary::STATUS_CAPTURE_PROCESSING,
         ]);
     }
 

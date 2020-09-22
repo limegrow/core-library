@@ -4,13 +4,19 @@ namespace IngenicoClient\PaymentMethod;
 
 use IngenicoClient\OrderField;
 
+/**
+ * Class Klarna
+ * @deprecated Use new integration instead of
+ */
 class Klarna extends PaymentMethod
 {
+    const CODE = 'klarna';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'klarna';
+    protected $id = self::CODE;
 
     /**
      * Name
@@ -68,10 +74,20 @@ class Klarna extends PaymentMethod
     protected $order_line_items_required = true;
 
     /**
+     * Defines if this payment method requires additional data to be sent with the request.
+     * @var bool
+     */
+    protected $additional_data_required = true;
+
+    /**
      * Different PM values per different countries
      * @var array
      */
     protected $pm_per_country = [
+        'SE' => 'Open Invoice SE',
+        'FI' => 'Open Invoice FI',
+        'DK' => 'Open Invoice DK',
+        'NO' => 'Open Invoice NO',
         'DE' => 'Open Invoice DE',
         'NL' => 'Open Invoice NL'
     ];
@@ -81,6 +97,10 @@ class Klarna extends PaymentMethod
      * @var array
      */
     protected $brand_per_country = [
+        'SE' => 'Open Invoice SE',
+        'FI' => 'Open Invoice FI',
+        'DK' => 'Open Invoice DK',
+        'NO' => 'Open Invoice NO',
         'DE' => 'Open Invoice DE',
         'NL' => 'Open Invoice NL'
     ];

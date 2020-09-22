@@ -4,11 +4,13 @@ namespace IngenicoClient\PaymentMethod;
 
 class Visa extends PaymentMethod implements PaymentMethodInterface
 {
+    const CODE = 'visa';
+
     /**
      * ID Code
      * @var string
      */
-    protected $id = 'visa';
+    protected $id = self::CODE;
 
     /**
      * Name

@@ -169,12 +169,20 @@ class OrderField extends Data
 
         if ($this->getFieldType() === PaymentMethod::TYPE_RADIO) {
             // Radio field has [$key => $value] items
-            if ($this->getValues() && !in_array($value, array_keys($this->getValues()))) {
-                throw new Exception('Invalid value');
+            if ($this->getValues() &&
+                !in_array($value, array_keys($this->getValues()))
+            ) {
+                // Pass the validation if have empty value and NOT required
+                if (!(empty($value) && !$this->getRequired())) {
+                    throw new Exception('Invalid value');
+                }
             }
         } else {
             if ($this->getValues() && !in_array($value, $this->getValues())) {
-                throw new Exception('Invalid value');
+                // Pass the validation if have empty value and NOT required
+                if (!(empty($value) && !$this->getRequired())) {
+                    throw new Exception('Invalid value');
+                }
             }
         }
 

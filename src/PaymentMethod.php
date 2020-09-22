@@ -32,7 +32,7 @@ class PaymentMethod implements \Countable, \IteratorAggregate
             $file = $directory . DIRECTORY_SEPARATOR . $file;
 
             $info = pathinfo($file);
-            if ($info['extension'] !== 'php') {
+            if (!isset($info['extension']) || $info['extension'] !== 'php') {
                 continue;
             }
 
@@ -47,10 +47,12 @@ class PaymentMethod implements \Countable, \IteratorAggregate
                 require_once $file;
             }
 
-            /** @var PaymentMethod\PaymentMethod $instance */
-            $instance = new $class_name();
-            $instance->setCategoryName(self::CATEGORY_LABELS[$instance->getCategory()]);
-            $this->payment_methods[$instance->getId()] = $instance;
+            if (class_exists($class_name, false)) {
+                /** @var PaymentMethod\PaymentMethod $instance */
+                $instance = new $class_name();
+                $instance->setCategoryName(self::CATEGORY_LABELS[$instance->getCategory()]);
+                $this->payment_methods[$instance->getId()] = $instance;
+            }
         }
     }
     /**

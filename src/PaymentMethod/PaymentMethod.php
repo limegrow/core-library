@@ -3,7 +3,6 @@
 namespace IngenicoClient\PaymentMethod;
 
 use IngenicoClient\Exception;
-use IngenicoClient\Order;
 
 /**
  * Class PaymentMethod
@@ -11,6 +10,8 @@ use IngenicoClient\Order;
  * @method $this setIFrameUrl($url)
  * @method bool getOrderLineItemsRequired();
  * @method $this setOrderLineItemsRequired(bool $value);
+ * @method bool getAdditionalDataRequired();
+ * @method $this setAdditionalDataRequired(bool $value);
  * @method array getCommonFields();
  * @method $this setCommonFields(array $value);
  *
@@ -111,6 +112,13 @@ class PaymentMethod  implements \ArrayAccess, PaymentMethodInterface
     protected $two_phase_flow = true;
 
     /**
+     * Defines if this payment method requires additional data to be sent with the request.
+     * Like OpenInvoice/Klarna/Afterpay
+     * @var bool
+     */
+    protected $additional_data_required = false;
+
+    /**
      * Transaction codes that indicate capturing.
      * @var array
      */
@@ -200,6 +208,18 @@ class PaymentMethod  implements \ArrayAccess, PaymentMethodInterface
     }
 
     /**
+     * Set Category Name
+     * @param string $categoryName
+     * @return $this
+     */
+    public function setCategoryName($categoryName)
+    {
+        $this->category_name = $categoryName;
+
+        return $this;
+    }
+
+    /**
      * Get Category Name
      * @return string
      */
@@ -236,6 +256,18 @@ class PaymentMethod  implements \ArrayAccess, PaymentMethodInterface
     public function getBrand()
     {
         return $this->brand;
+    }
+
+    /**
+     * Set Brand
+     * @param string $brand
+     * @return $this
+     */
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
+
+        return $this;
     }
 
     /**
@@ -412,6 +444,10 @@ class PaymentMethod  implements \ArrayAccess, PaymentMethodInterface
      */
     public function getEmbeddedLogo()
     {
+        if (filter_var($this->logo, FILTER_VALIDATE_URL) !== false) {
+            return $this->logo;
+        }
+
         $file = realpath(__DIR__ . '/../../assets/images/payment_logos/' . $this->logo);
         if (file_exists($file)) {
             $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));

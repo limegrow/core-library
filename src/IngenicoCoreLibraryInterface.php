@@ -2,6 +2,7 @@
 
 namespace IngenicoClient;
 
+use Ogone\Ecommerce\EcommercePaymentRequest;
 use Psr\Log\LoggerInterface;
 
 interface IngenicoCoreLibraryInterface
@@ -104,6 +105,41 @@ interface IngenicoCoreLibraryInterface
     public function processPayment($orderId, $aliasId = null, $forceAliasSave = false);
 
     /**
+     * Process Payment Confirmation: Redirect
+     *
+     * @param mixed $orderId
+     * @param mixed $aliasId
+     * @param bool $forceAliasSave
+     * @throws Exception
+     * @return void
+     */
+    public function processPaymentRedirect($orderId, $aliasId = null, $forceAliasSave = false);
+
+    /**
+     * Process Payment Confirmation: Redirect with specified PM/Brand.
+     *
+     * @param mixed $orderId
+     * @param mixed $aliasId
+     * @param       $paymentMethod
+     * @param       $brand
+     *
+     * @throws Exception
+     * @return void
+     */
+    public function processPaymentRedirectSpecified($orderId, $aliasId, $paymentMethod, $brand);
+
+    /**
+     * Process Payment Confirmation: Inline
+     *
+     * @param mixed $orderId
+     * @param mixed $aliasId
+     * @param bool $forceAliasSave
+     * @return void
+     * @throws Exception
+     */
+    public function processPaymentInline($orderId, $aliasId, $forceAliasSave = false);
+
+    /**
      * Executed on the moment when customer's alias saved, and we're should charge payment.
      * Used in Inline payment mode.
      *
@@ -125,13 +161,45 @@ interface IngenicoCoreLibraryInterface
     public function webhookListener();
 
     /**
-     * Get Hosted Checkout HTML.
+     * Get Hosted Checkout parameters to generate the payment form.
+     * @deprecated Use IngenicoCoreLibrary::getHostedCheckoutPaymentRequest() instead of
      *
      * @param $orderId
      * @param Alias $alias
      * @return Data
      */
     public function initiateRedirectPayment($orderId, Alias $alias);
+
+    /**
+     * Get Hosted Checkout Payment Request
+     *
+     * @param \IngenicoClient\Order $order
+     * @param \IngenicoClient\Alias $alias
+     * @return EcommercePaymentRequest
+     * @throws \Exception
+     */
+    public function getHostedCheckoutPaymentRequest(Order $order, Alias $alias);
+
+    /**
+     * Get "Redirect" Payment Request with specified PaymentMethod and Brand.
+     * @see \IngenicoClient\PaymentMethod\PaymentMethod
+     *
+     * @param mixed $orderId
+     * @param mixed|null $aliasId
+     * @param string $paymentMethod
+     * @param string $brand
+     * @param string|null $paymentId
+     *
+     * @return Data Data with url and fields keys
+     * @throws Exception
+     */
+    public function getSpecifiedRedirectPaymentRequest(
+        $orderId,
+        $aliasId,
+        $paymentMethod,
+        $brand,
+        $paymentId = null
+    );
 
     /**
      * Get Country By ISO Code

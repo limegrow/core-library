@@ -1,5 +1,27 @@
 # Changelog
+## [4.0.0] - 2020-09-22
+### Added
+- Klarna Pay Later
+- Klarna Pay Now
+- Klarna Bank Transfer
+- Klarna Direct Debit
+- Klarna Financing
+- Implemented `processPaymentRedirectSpecified()`
+- Implemented `getSpecifiedRedirectPaymentRequest()`
+- Implemented `getHostedCheckoutPaymentRequest()`
+- Helper functions for Inline CC form
+- Use `CN` for `Alias`
+- Use `CODE` const for payment method classes
 
+### Changed
+- Make `processPaymentRedirect()` and `processPaymentInline()` public
+- Condition of Payment::isTransactionSuccessful()
+
+### Fixed
+- Issue with `updateOrderStatus()`
+- Don't validate radio field if they aren't mandatory
+- Issue with partial refund via WebHook
+- Solved: Sometimes the gateway just outputs `NCERROR` with NULL
 
 ## [3.0.1] - 2020-07-22
 ### Changed

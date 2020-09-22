@@ -71,8 +71,6 @@ use InvalidArgumentException;
  * @method $this setShippingCountryCode($value)
  * @method $this setShippingCountry($value)
  * @method mixed getShippingCountry()
- * @method $this setShippingCounty($value)
- * @method mixed getShippingCounty()
  * @method $this setShippingAddress1($value)
  * @method mixed getShippingAddress1()
  * @method $this setShippingAddress2($value)
@@ -501,5 +499,18 @@ class Order extends Data
         }
 
         return $result;
+    }
+
+    /**
+     * Returns array with cancel, accept,
+     * exception and back url.
+     *
+     * @param mixed $orderId
+     * @param string|null $paymentMode
+     * @return ReturnUrl
+     */
+    public function getReturnUrls($orderId, $paymentMode = null)
+    {
+        // @todo move from IngenicoCoreLibrary:requestReturnUrls()
     }
 }
