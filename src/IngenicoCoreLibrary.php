@@ -22,6 +22,18 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
     use OpenInvoice;
 
     /**
+     * Platforms
+     */
+    const PLATFORM_INGENICO = 'ingenico';
+    const PLATFORM_BARCLAYS = 'barclays';
+    const PLATFORM_POSTFINANCE = 'postfinance';
+    const PLATFORM_KBC = 'kbc';
+    const PLATFORM_CONCARDIS = 'concardis';
+    const PLATFORM_VIVEUM = 'viveum';
+    const PLATFORM_PAYGLOBE = 'payglobe';
+    const PLATFORM_SANTANDER = 'santander';
+
+    /**
      * Payment Statuses
      */
     const STATUS_PENDING = 'pending';
@@ -633,6 +645,71 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
     private $mail_templates_directory;
 
     /**
+     * @var string
+     */
+    public $platform_name = self::PLATFORM_INGENICO;
+
+    /**
+     * @var string
+     */
+    public $api_ecommerce_test = 'https://ogone.test.v-psp.com/ncol/test/orderstandard_utf8.asp';
+
+    /**
+     * @var string
+     */
+    public $api_ecommerce_prod = 'https://secure.ogone.com/ncol/prod/orderstandard_utf8.asp';
+
+    /**
+     * @var string
+     */
+    public $api_flexcheckout_test = 'https://ogone.test.v-psp.com/Tokenization/HostedPage';
+
+    /**
+     * @var string
+     */
+    public $api_flexcheckout_prod = 'https://secure.ogone.com/Tokenization/HostedPage';
+
+    /**
+     * @var string
+     */
+    public $api_querydirect_test = 'https://secure.ogone.com/ncol/test/querydirect_utf8.asp';
+
+    /**
+     * @var string
+     */
+    public $api_querydirect_prod = 'https://secure.ogone.com/ncol/prod/querydirect_utf8.asp';
+
+    /**
+     * @var string
+     */
+    public $api_orderdirect_test = 'https://secure.ogone.com/ncol/test/orderdirect_utf8.asp';
+
+    /**
+     * @var string
+     */
+    public $api_orderdirect_prod = 'https://secure.ogone.com/ncol/prod/orderdirect_utf8.asp';
+
+    /**
+     * @var string
+     */
+    public $api_maintenancedirect_test = 'https://secure.ogone.com/ncol/test/maintenancedirect_utf8.asp';
+
+    /**
+     * @var string
+     */
+    public $api_maintenancedirect_prod = 'https://secure.ogone.com/ncol/prod/maintenancedirect_utf8.asp';
+
+    /**
+     * @var string
+     */
+    public $api_alias_test = 'https://secure.ogone.com/ncol/test/alias_gateway_utf8.asp';
+
+    /**
+     * @var string
+     */
+    public $api_alias_prod = 'https://secure.ogone.com/ncol/prod/alias_gateway_utf8.asp';
+
+    /**
      * IngenicoCoreLibrary constructor.
      *
      * @param ConnectorInterface $extension
@@ -669,6 +746,37 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
             list($domain, $locale) = explode('.', $filename);
             $this->translator->addResource('po', $directory . DIRECTORY_SEPARATOR . $info['basename'], $locale, $domain);
         }
+
+        // Load environment
+        $env = parse_ini_file(__DIR__ . '/../environments.ini', true);
+        $environment = $env[$extension->getPlatformEnvironment()];
+
+        // Platform name
+        $this->platform_name = $environment['platform'];
+
+        // Ecommerce API
+        $this->api_ecommerce_test = $environment['ecommerce_test'];
+        $this->api_ecommerce_prod = $environment['ecommerce_prod'];
+
+        // Flexcheckout
+        $this->api_flexcheckout_test = $environment['flexcheckout_test'];
+        $this->api_flexcheckout_prod = $environment['flexcheckout_prod'];
+
+        // Query Direct
+        $this->api_querydirect_test = $environment['querydirect_test'];
+        $this->api_querydirect_prod = $environment['querydirect_prod'];
+
+        // Order Direct
+        $this->api_orderdirect_test = $environment['orderdirect_test'];
+        $this->api_orderdirect_prod = $environment['orderdirect_prod'];
+
+        // Maintenance Direct
+        $this->api_maintenancedirect_test = $environment['maintenancedirect_test'];
+        $this->api_maintenancedirect_prod = $environment['maintenancedirect_prod'];
+
+        // Alias
+        $this->api_alias_test = $environment['alias_test'];
+        $this->api_alias_prod = $environment['alias_prod'];
     }
 
     /**
@@ -782,12 +890,12 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
             ->save();
     }
 
+    /**
+     * Get Generic Merchant Country.
+     * @return string|null
+     */
     public function getGenericCountry()
     {
-        /**
-         *
-         */
-
         if (method_exists($this->extension, 'getGenericCountry')) {
             return $this->extension->getGenericCountry();
         }
@@ -933,7 +1041,16 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
 
                 // Cancel button press in Inline cc iframe - Payment is not created yet
                 if (!$payment->getPayId()) {
-                    break;
+                    $this->extension->showPaymentErrorTemplate(
+                        [
+                            'order_id' => null,
+                            'pay_id' => null,
+                            'message' => $this->__('checkout.payment_cancelled', [], 'messages')
+                        ],
+                        $payment
+                    );
+
+                    return;
                 }
 
                 // Debug log
@@ -1633,52 +1750,9 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
 
                 $url = $this->getInlineIFrameUrl($orderId, $_alias);
             } else {
-                // This Payment Method don't support Inline
-                // Use special page for "Redirect" payment
-                if (in_array($paymentMethod->getId(), [Afterpay::CODE, Klarna::CODE])) {
-                    // Workaround for Afterpay and Klarna
-                    // Use save generic country
-                    $genericCountry = $this->getGenericCountry();
-                    if ($genericCountry) {
-                        $pm = $paymentMethod->getPMByCountry($genericCountry);
-                        $brand = $paymentMethod->getBrandByCountry($genericCountry);
-                    } else {
-                        // Use DE as failback
-                        $pm = $paymentMethod->getPMByCountry('DE');
-                        $brand = $paymentMethod->getBrandByCountry('DE');
-                    }
-
-                    // Override PM/Brand
-                    $paymentMethod->setPM($pm)
-                        ->setBrand($brand);
-                }
-
                 // Validate Order data for Payment Methods which require additional data
                 if ($paymentMethod->getAdditionalDataRequired()) {
-                    // Get previous entered fields from Session
-                    $previousFields = $this->getSessionValue(
-                        $paymentMethod->getId() . '_' . self::PARAM_NAME_OPEN_INVOICE_CHECKOUT_INPUT
-                    );
-                    if (!$previousFields) {
-                        $previousFields = [];
-                    }
-
-                    // Get Additional fields from Session
-                    $additionalFields = $this->getSessionValue(
-                        $paymentMethod->getId() . '_' . self::PARAM_NAME_OPEN_INVOICE_FIELDS
-                    );
-                    if (!$additionalFields) {
-                        // Get Additional fields
-                        $additionalFields = $this->getMissingOrderFields($orderId, $paymentMethod, $previousFields);
-
-                        // Save Additional Fields in Session
-                        $this->setSessionValue(
-                            $paymentMethod->getId() . '_' . self::PARAM_NAME_OPEN_INVOICE_FIELDS,
-                            $additionalFields
-                        );
-                    }
-
-                    $additionalFields = $this->validateAdditionalFields($additionalFields, $previousFields);
+                    $additionalFields = $this->validateOpenInvoiceCheckoutAdditionalFields($orderId, $paymentMethod);
 
                     // Save missing fields
                     $paymentMethod->setMissingFields($additionalFields);
@@ -1830,6 +1904,24 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
         }
 
         $info = $this->extension->requestOrderInfo($orderId);
+
+        // Word-wrap of street address
+        if (mb_strlen($info[OrderField::BILLING_ADDRESS1]) > 35) {
+            $billingAddress1 = $info[OrderField::BILLING_ADDRESS1];
+            $info[OrderField::BILLING_ADDRESS1] = mb_substr($billingAddress1, 0, 35, 'UTF-8');
+            $info[OrderField::BILLING_ADDRESS2] = trim(
+                mb_substr($billingAddress1, 35, null, 'UTF-8') . ' ' . $info[OrderField::BILLING_ADDRESS2]
+            );
+        }
+
+        if (mb_strlen($info[OrderField::SHIPPING_ADDRESS1]) > 35) {
+            $shippingAddress1 = $info[OrderField::SHIPPING_ADDRESS1];
+            $info[OrderField::SHIPPING_ADDRESS1] = mb_substr($shippingAddress1, 0, 35, 'UTF-8');
+            $info[OrderField::SHIPPING_ADDRESS2] = trim(
+                mb_substr($shippingAddress1, 35, null, 'UTF-8') . ' ' . $info[OrderField::SHIPPING_ADDRESS2]
+            );
+        }
+
         return $info ? new Order($info) : false;
     }
 
@@ -1844,6 +1936,24 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
     private function getOrderBeforePlaceOrder($reservedOrderId)
     {
         $info = $this->extension->requestOrderInfoBeforePlaceOrder($reservedOrderId);
+
+        // Word-wrap of street address
+        if (mb_strlen($info[OrderField::BILLING_ADDRESS1]) > 35) {
+            $billingAddress1 = $info[OrderField::BILLING_ADDRESS1];
+            $info[OrderField::BILLING_ADDRESS1] = mb_substr($billingAddress1, 0, 35, 'UTF-8');
+            $info[OrderField::BILLING_ADDRESS2] = trim(
+                mb_substr($billingAddress1, 35, null, 'UTF-8') . ' ' . $info[OrderField::BILLING_ADDRESS2]
+            );
+        }
+
+        if (mb_strlen($info[OrderField::SHIPPING_ADDRESS1]) > 35) {
+            $shippingAddress1 = $info[OrderField::SHIPPING_ADDRESS1];
+            $info[OrderField::SHIPPING_ADDRESS1] = mb_substr($shippingAddress1, 0, 35, 'UTF-8');
+            $info[OrderField::SHIPPING_ADDRESS2] = trim(
+                mb_substr($shippingAddress1, 35, null, 'UTF-8') . ' ' . $info[OrderField::SHIPPING_ADDRESS2]
+            );
+        }
+
         return $info ? new Order($info) : false;
     }
 
@@ -1928,9 +2038,39 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
      *
      * @return array
      */
-    public static function getPaymentMethods()
+    public function getPaymentMethods()
     {
-        return PaymentMethod::getPaymentMethods();
+        $paymentMethods = PaymentMethod::getPaymentMethods();
+
+        // Filter Payment Methods
+        /** @var PaymentMethod\PaymentMethod $paymentMethod */
+        foreach ($paymentMethods as $key => $paymentMethod) {
+            if ($paymentMethod->isHidden()) {
+                unset($paymentMethods[$key]);
+            }
+
+            // This Payment Method don't support Inline
+            // Use special page for "Redirect" payment
+            if (in_array($paymentMethod->getId(), [Afterpay::CODE, Klarna::CODE])) {
+                // Workaround for Afterpay and Klarna
+                // Use save generic country
+                $genericCountry = $this->getGenericCountry();
+                if ($genericCountry) {
+                    $pm = $paymentMethod->getPMByCountry($genericCountry);
+                    $brand = $paymentMethod->getBrandByCountry($genericCountry);
+                } else {
+                    // Use DE as failback
+                    $pm = $paymentMethod->getPMByCountry('DE');
+                    $brand = $paymentMethod->getBrandByCountry('DE');
+                }
+
+                // Override PM/Brand
+                $paymentMethod->setPM($pm)
+                    ->setBrand($brand);
+            }
+        }
+
+        return $paymentMethods;
     }
 
     /**
@@ -1964,7 +2104,17 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
      */
     public static function getPaymentMethodsByCategory($category)
     {
-        return PaymentMethod::getPaymentMethodsByCategory($category);
+        $paymentMethods = PaymentMethod::getPaymentMethodsByCategory($category);
+
+        // Filter Payment Methods
+        /** @var PaymentMethod\PaymentMethod $paymentMethod */
+        foreach ($paymentMethods as $key => $paymentMethod) {
+            if ($paymentMethod->isHidden()) {
+                unset($paymentMethods[$key]);
+            }
+        }
+
+        return $paymentMethods;
     }
 
     /**
@@ -1980,7 +2130,7 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
         }
 
         // Get All Payment Methods
-        $paymentMethods = PaymentMethod::getPaymentMethods();
+        $paymentMethods = $this->getPaymentMethods();
 
         // Filter Payment Methods
         /** @var PaymentMethod\PaymentMethod $paymentMethod */
@@ -2070,7 +2220,7 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
         $ingenicoLogo,
         $locale = 'en_US'
     ) {
-        $onboarding = new Onboarding();
+        $onboarding = new Onboarding($this->extension, $this);
         if (!$saleEmails = $onboarding->getOnboardingEmailsByCountry($countryCode)) {
             throw new Exception(sprintf('%s country is not found', $countryCode));
         }
@@ -2258,8 +2408,8 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
                 $this->updateOrderStatus($orderId, $paymentResult);
                 break;
             case self::STATUS_CAPTURED:
-                $this->updateOrderStatus($orderId, $paymentResult);
                 $this->extension->addCapturedAmount($orderId, $paymentResult->getAmount());
+                $this->updateOrderStatus($orderId, $paymentResult);
                 break;
             case self::STATUS_REFUND_PROCESSING:
                 $this->updateOrderStatus($orderId, $paymentResult);
@@ -2270,12 +2420,12 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
                 $this->extension->sendRefundFailedAdminEmail($orderId);
                 break;
             case self::STATUS_REFUNDED:
-                $this->updateOrderStatus($orderId, $paymentResult);
                 $this->extension->addRefundedAmount($orderId, $paymentResult->getAmount());
+                $this->updateOrderStatus($orderId, $paymentResult);
                 break;
             case self::STATUS_CANCELLED:
-                $this->updateOrderStatus($orderId, $paymentResult);
                 $this->extension->addCancelledAmount($orderId, $paymentResult->getAmount());
+                $this->updateOrderStatus($orderId, $paymentResult);
                 break;
             case self::STATUS_ERROR:
                 $message = $this->__('checkout.error', [
@@ -2733,6 +2883,8 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
         $fields = array(),
         $locale = null
     ) {
+        $fields['platform_name'] = $this->platform_name;
+
         return $this->sendMail(
             (new MailTemplate(
                 $locale ?: $this->extension->getLocale(),
@@ -2811,6 +2963,8 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
         $fields = array(),
         $locale = null
     ) {
+        $fields['platform_name'] = $this->platform_name;
+
         return $this->sendMail(
             (new MailTemplate(
                 $locale ?: $this->extension->getLocale(),
@@ -2889,6 +3043,8 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
         $fields = array(),
         $locale = null
     ) {
+        $fields['platform_name'] = $this->platform_name;
+
         return $this->sendMail(
             (new MailTemplate(
                 $locale ?: $this->extension->getLocale(),
@@ -2928,6 +3084,8 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
         $fields = array(),
         $locale = null
     ) {
+        $fields['platform_name'] = $this->platform_name;
+
         return $this->sendMail(
             (new MailTemplate(
                 $locale ?: $this->extension->getLocale(),
@@ -2983,6 +3141,17 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
             $subject,
             $attachedFiles
         );
+    }
+
+    /**
+     * Returns WhiteLabels Data.
+     * It allows to customize data like support name etc.
+     *
+     * @return WhiteLabels
+     */
+    public function getWhiteLabelsData()
+    {
+        return (new WhiteLabels($this->extension, $this));
     }
 
     /**

@@ -2,34 +2,29 @@
 
 namespace IngenicoClient;
 
+use IngenicoClient\PaymentMethod\PaymentMethodInterface;
+
 interface OpenInvoiceInterface
 {
     /**
      * Get Missing or Invalid Order's fields.
      *
      * @param mixed $orderId Order Id
-     * @param PaymentMethod\PaymentMethod $pm PaymentMethod Instance
+     * @param PaymentMethod\PaymentMethod $paymentMethod PaymentMethod Instance
      * @param array $fields Order fields
      * @return array
      */
-    public function getMissingOrderFields($orderId, PaymentMethod\PaymentMethod $pm, array $fields = []);
+    public function getMissingOrderFields($orderId, PaymentMethodInterface $paymentMethod, array $fields = []);
 
     /**
-     * Validate Additional Fields.
+     * Validate OpenInvoice Additional Fields on Checkout Session
      *
-     * @param array $additionalFields
-     * @param array $fields
+     * @param $orderId
+     * @param PaymentMethodInterface $paymentMethod
      * @return array
+     * @throws Exception
      */
-    public function validateAdditionalFields(array $additionalFields, array $fields = []);
-
-    /**
-     * Check if fields have invalid field.
-     *
-     * @param array $additionalFields
-     * @return bool
-     */
-    public function haveInvalidAdditionalFields(array $additionalFields);
+    public function validateOpenInvoiceCheckoutAdditionalFields($orderId, PaymentMethodInterface $paymentMethod);
 
     /**
      * Initiate Open Invoice Payment

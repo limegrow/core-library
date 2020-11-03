@@ -31,6 +31,12 @@ interface IngenicoCoreLibraryInterface
     public function setGenericCountry($country);
 
     /**
+     * Get Generic Merchant Country.
+     * @return string|null
+     */
+    public function getGenericCountry();
+
+    /**
      * Translate string.
      *
      * @param $id
@@ -226,7 +232,7 @@ interface IngenicoCoreLibraryInterface
      *
      * @return array
      */
-    public static function getPaymentMethods();
+    public function getPaymentMethods();
 
     /**
      * @deprecated

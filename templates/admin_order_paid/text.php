@@ -7,6 +7,7 @@
 /** @var $order_reference*/
 /** @var $ingenico_logo */
 /** @var $order_view_url */
+/** @var $platform_name */
 ?>
 <?php echo $view->__('order_paid.dear', ['%name%' => $shop_name], 'email'); ?>,
 
@@ -15,4 +16,4 @@
 <?php echo $view->__('admin_order_paid.text3', [], 'email'); ?>
 
 <?php echo $view->__('admin_authorization.regards', [], 'email'); ?>,
-<?php echo $view->__('admin_authorization.team', [], 'email'); ?>
+<?php echo $view->__('admin_authorization.team', ['%platform_name%' => $platform_name], 'email'); ?>

@@ -33,7 +33,7 @@ msgid "admin_authorization.regards"
 msgstr "Kind regards"
 
 msgid "admin_authorization.team"
-msgstr "Ingenico team"
+msgstr "%platform_name% team"
 
 msgid "admin_order_paid.subject"
 msgstr "Order status changed"
@@ -54,7 +54,7 @@ msgid "admin_order_paid.regards"
 msgstr "Kind regards"
 
 msgid "admin_order_paid.team"
-msgstr "Ingenico team"
+msgstr "%platform_name% team"
 
 msgid "admin_refund_failed.subject"
 msgstr "No refund possible"
@@ -75,7 +75,7 @@ msgid "admin_refund_failed.regards"
 msgstr "Kind regards"
 
 msgid "admin_refund_failed.team"
-msgstr "Ingenico team"
+msgstr "%platform_name% team"
 
 msgid "authorization.subject"
 msgstr "Payment authorized"
@@ -99,7 +99,7 @@ msgid "onboarding_request.dear"
 msgstr "Dear"
 
 msgid "onboarding_request.text1"
-msgstr "A new Ingenico ePayments account request has been received through"
+msgstr "A new %platform_name% account request has been received through"
 
 msgid "onboarding_request.text2"
 msgstr "Merchant data"
@@ -124,9 +124,6 @@ msgstr "Plugin version"
 
 msgid "onboarding_request.text9"
 msgstr "Please get in touch with the merchant in order to proceed with this account!"
-
-msgid "onboarding_request.text10"
-msgstr "Ingenico ePayments"
 
 msgid "onboarding_request.text11"
 msgstr "Shopping Cart team"

@@ -54,7 +54,7 @@ msgid "admin_order_paid.regards"
 msgstr "Saludos cordiales,"
 
 msgid "admin_order_paid.team"
-msgstr "El equipo de Ingenico"
+msgstr "El equipo de %platform_name%"
 
 msgid "admin_refund_failed.subject"
 msgstr "No ha sido posible el reembolso"
@@ -75,7 +75,7 @@ msgid "admin_refund_failed.regards"
 msgstr "Saludos cordiales,"
 
 msgid "admin_refund_failed.team"
-msgstr "El equipo de Ingenico"
+msgstr "El equipo de %platform_name%"
 
 msgid "authorization.subject"
 msgstr "Pago autorizado"
@@ -99,7 +99,7 @@ msgid "onboarding_request.dear"
 msgstr "Hola."
 
 msgid "onboarding_request.text1"
-msgstr "Hemos recibido una solicitud de nueva cuenta de Ingenico ePayments"
+msgstr "Hemos recibido una solicitud de nueva cuenta de %platform_name%"
 
 msgid "onboarding_request.text2"
 msgstr "Datos del comerciante"
@@ -124,9 +124,6 @@ msgstr "Versión del complemento"
 
 msgid "onboarding_request.text9"
 msgstr "Póngase en contacto con el comerciante para poder continuar con el registro de esta cuenta."
-
-msgid "onboarding_request.text10"
-msgstr "Ingenico ePayments"
 
 msgid "onboarding_request.text11"
 msgstr "Equipo de la cesta de la compra"

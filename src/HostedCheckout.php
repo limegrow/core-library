@@ -67,11 +67,7 @@ trait HostedCheckout
 
         // Build Payment Request
         $request = new EcommercePaymentRequest($this->getConfiguration()->getShaComposer('in'));
-
-        // Set Production mode if enabled
-        if (!$this->getConfiguration()->isTestMode()) {
-            $request->setOgoneUri(EcommercePaymentRequest::PRODUCTION);
-        }
+        $request->setOgoneUri($this->getConfiguration()->getApiEcommerce());
 
         /** @var ReturnUrl $urls */
         $urls = $this->requestReturnUrls($order->getOrderId());
@@ -136,23 +132,25 @@ trait HostedCheckout
                 ->setCivility($order->getCustomerCivility())
                 ->setEcomConsumerGender($order->getCustomerGender())
                 ->setEcomShiptoPostalNamePrefix($order->getShippingCustomerTitle())
-                ->setEcomShiptoDob($order->getCustomerDob())
+                ->setEcomShiptoDob(
+                    $order->getCustomerDob() ? date('d/m/Y', $order->getCustomerDob()) : null
+                )
                 ->setEcomShiptoTelecomFaxNumber($order->getShippingFax())
                 ->setEcomShiptoTelecomPhoneNumber($order->getShippingPhone())
                 ->setEcomBilltoPostalStreetNumber($order->getBillingStreetNumber())
                 ->setEcomShiptoPostalStreetNumber($order->getShippingStreetNumber())
                 ->setEcomShiptoPostalState($order->getShippingState())
-                ->setOrdershipmeth($order->getShippingMethod())
-                ->setOrdershipcost(bcmul($order->getShippingAmount() - $order->getShippingTaxAmount(), 100))
-                ->setOrdershiptax(bcmul($order->getShippingTaxAmount(), 100))
-                ->setOrdershiptaxcode((int) $order->getShippingTaxCode() . '%')
                 //->setEcomBilltoCompany($order->getCompanyName())
                 ->setEcomShiptoCompany($order->getCompanyName()) // Not required
-                ->setEcomShiptoOnlineEmail($order->getShippingEmail())
 
                 // Klarna doesn't support ECOM_BILLTO_POSTAL_STREET_LINE3
                 ->unsEcomBilltoPostalStreetLine3()
                 ->unsEcomShiptoPostalStreetLine3();
+        }
+
+        // Parameters for Klarna (deprecated)
+        if ($paymentMethod && $paymentMethod->getId() === Klarna::CODE) {
+            $request->setEcomShiptoOnlineEmail($order->getBillingEmail());
         }
 
         // Parameters for Afterpay
@@ -160,18 +158,16 @@ trait HostedCheckout
             $request->setEcomShiptoPostalNamePrefix($order->getShippingCustomerTitle())
                 ->setEcomShiptoOnlineEmail($order->getBillingEmail())
                 ->setEcomBilltoPostalStreetNumber($order->getBillingStreetNumber())
-                ->setEcomShiptoPostalStreetNumber($order->getShippingStreetNumber())
-                ->setOrdershipmeth($order->getShippingMethod())
-                ->setOrdershipcost(bcmul($order->getShippingAmount() - $order->getShippingTaxAmount(), 100))
-                ->setOrdershiptax(bcmul($order->getShippingTaxAmount(), 100))
-                ->setOrdershiptaxcode((int) $order->getShippingTaxCode() . '%');
+                ->setEcomShiptoPostalStreetNumber($order->getShippingStreetNumber());
 
             $checkoutType = $order->getCheckoutType() ? $order->getCheckoutType() : Checkout::TYPE_B2C;
             if ($checkoutType === Checkout::TYPE_B2C) {
                 // B2C
                 $request->setEcomShiptoOnlineEmail($order->getBillingEmail())
                     ->setEcomConsumerGender($order->getCustomerGender())
-                    ->setEcomShiptoDob($order->getCustomerDob())
+                    ->setEcomShiptoDob(
+                        $order->getCustomerDob() ? date('d/m/Y', $order->getCustomerDob()) : null
+                    )
                     ->setDatein($order->getShippingDateTime());
             } else {
                 // B2B
@@ -187,6 +183,19 @@ trait HostedCheckout
                 ->unsEcomShiptoPostalStreetLine3();
         }
 
+        // Shipping cost parameters for Klarna/Afterpay
+        if ($paymentMethod &&
+            in_array($paymentMethod->getId(), [
+                Klarna::CODE,
+                Afterpay::CODE
+            ])
+        ) {
+            $request->setOrdershipmeth($order->getShippingMethod())
+                ->setOrdershipcost(bcmul($order->getShippingAmount() - $order->getShippingTaxAmount(), 100))
+                ->setOrdershiptax(bcmul($order->getShippingTaxAmount(), 100))
+                ->setOrdershiptaxcode((int) $order->getShippingTaxCode() . '%');
+        }
+
         if ($paymentMethod) {
             // Generating the string with the list of items for the PMs that are requiring it (i.e. Open Invoice)
             if ($paymentMethod->getOrderLineItemsRequired() && $items = (array) $order->getItems()) {
@@ -196,11 +205,6 @@ trait HostedCheckout
                     if (in_array($paymentMethod->getId(), [
                         Afterpay::CODE,
                         Klarna::CODE,
-                        KlarnaBankTransfer::CODE,
-                        KlarnaDirectDebit::CODE,
-                        KlarnaFinancing::CODE,
-                        KlarnaPayLater::CODE,
-                        KlarnaPayNow::CODE,
                     ])) {
                         if ($item->getType() === OrderItem::TYPE_SHIPPING) {
                             continue;
@@ -312,15 +316,12 @@ trait HostedCheckout
         $request->setOrderId($order->getOrderId())
             ->setAmount($order->getAmountInCents())
             ->setCurrency($order->getCurrency())
-            ->setOwnerAddress($order->getBillingAddress1())
             ->setOwnercty($order->getBillingCountryCode())
             ->setOwnerTown($order->getBillingCity())
             ->setOwnerZip($order->getBillingPostcode())
             ->setOwnertelno($order->getBillingPhone())
             ->setCivility($order->getCustomerCivility())
             ->setEmail($order->getBillingEmail())
-            ->setCuid($order->getBillingEmail())
-            ->setEcomShiptoDob($order->getCustomerDob())
             ->setRemoteAddr($order->getCustomerIp())
             ->setAddrmatch($order->getIsShippingSame() ? '1' : '0')
             ->setEcomBilltoPostalNameFirst($order->getBillingFirstName())
@@ -339,6 +340,17 @@ trait HostedCheckout
             ->setEcomShiptoPostalStreetLine1($order->getShippingAddress1())
             ->setEcomShiptoPostalStreetLine2($order->getShippingAddress2());
         //->setEcomShiptoPostalStreetLine3($order->getShippingAddress3());
+
+        // Set owner address
+        $ownerAddress = implode(' ', [
+            $order->getBillingAddress1(),
+            $order->getBillingAddress2(),
+            $order->getBillingAddress3()
+        ]);
+
+        if (mb_strlen($ownerAddress, 'UTF-8') <= 50) {
+            $request->setOwnerAddress($ownerAddress);
+        }
 
         return $request;
     }

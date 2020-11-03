@@ -18,10 +18,13 @@ msgstr ""
 "X-Poedit-SearchPath-0: ../src\n"
 
 msgid "checkout.error"
-msgstr "Une erreur s’est produite. Veuillez essayer de placer de nouveau la commande. Identifiant de paiement : %payment_id%. Statut : %status%. Coordonnées : %code% %message%."
+msgstr "Une erreur s’est produite. Veuillez essayer de placer de nouveau la commande. Identifiant de paiement: %payment_id%. Statut: %status%. Coordonnées: %code% %message%."
 
 msgid "checkout.payment_info"
-msgstr "Le paiement est %status%. Statut : %status_code%. Identifiant de paiement : %payment_id%."
+msgstr "Le paiement est %status%. Statut: %status_code%. Identifiant de paiement: %payment_id%."
+
+msgid "checkout.payment_cancelled"
+msgstr "Payment has been cancelled."
 
 msgid "exceptions.alias_none"
 msgstr "L’alias n’existe pas."
@@ -72,7 +75,7 @@ msgid "validator.request_timeout"
 msgstr "Requête expirée non valide."
 
 msgid "validator.short_signature"
-msgstr "Vous devez utiliser une signature contenant exactement 40 caractères. Nous vous recommandons de la générer et de l’insérer dans le back-office d’Ingenico comme indiqué dans la fenêtre d’aide."
+msgstr "Vous devez utiliser une signature contenant exactement 40 caractères. Nous vous recommandons de la générer et de l’insérer dans le back-office d’ comme indiqué dans la fenêtre d’aide."
 
 msgid "validator.template_url_invalid"
 msgstr "Le modèle de fichier URL n’est pas valide."

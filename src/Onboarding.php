@@ -17,10 +17,15 @@ class Onboarding
 
     /**
      * Onboarding constructor.
+     * @param ConnectorInterface $extension
+     * @param IngenicoCoreLibraryInterface $coreLibrary
      * @throws Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct()
-    {
+    public function __construct(
+        ConnectorInterface $extension,
+        IngenicoCoreLibraryInterface $coreLibrary
+    ) {
         $iniFile = __DIR__.'/../onboarding/emails.ini';
         if (!file_exists($iniFile)) {
             throw new Exception('Cannot find onboarding email file: onboarding/emails.ini');
@@ -30,11 +35,13 @@ class Onboarding
             throw new Exception('Cannot parse onboarding email file: onboarding/emails.ini');
         }
 
-        if (!isset($data['emails'])) {
-            throw new Exception('There is no "emails" section in onboarding email file');
+        if (!isset($data[$extension->getPlatformEnvironment()])) {
+            throw new Exception(
+                'There is no "' . $extension->getPlatformEnvironment() . '" section in onboarding email file'
+            );
         }
 
-        $this->emails = $data['emails'];
+        $this->emails = $data[$extension->getPlatformEnvironment()];
     }
 
     /**

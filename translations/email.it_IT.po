@@ -33,7 +33,7 @@ msgid "admin_authorization.regards"
 msgstr "Cordiali saluti"
 
 msgid "admin_authorization.team"
-msgstr "Il team di Ingenico"
+msgstr "Il team di %platform_name%"
 
 msgid "admin_order_paid.subject"
 msgstr "Stato dell’ordine modificato"
@@ -54,7 +54,7 @@ msgid "admin_order_paid.regards"
 msgstr "Cordiali saluti"
 
 msgid "admin_order_paid.team"
-msgstr "Il team di Ingenico"
+msgstr "Il team di %platform_name%"
 
 msgid "admin_refund_failed.subject"
 msgstr "Rimborso non possibile"
@@ -75,7 +75,7 @@ msgid "admin_refund_failed.regards"
 msgstr "Cordiali saluti"
 
 msgid "admin_refund_failed.team"
-msgstr "Il team di Ingenico"
+msgstr "Il team di %platform_name%"
 
 msgid "authorization.subject"
 msgstr "Pagamento autorizzato"
@@ -99,7 +99,7 @@ msgid "onboarding_request.dear"
 msgstr "Gentile"
 
 msgid "onboarding_request.text1"
-msgstr "La richiesta di nuovo account per Ingenico ePayments è stato ricevuto mediante"
+msgstr "La richiesta di nuovo account per %platform_name% è stato ricevuto mediante"
 
 msgid "onboarding_request.text2"
 msgstr "Dati del commerciante"
@@ -124,9 +124,6 @@ msgstr "Versione del plugin"
 
 msgid "onboarding_request.text9"
 msgstr "Contattare il commerciante per poter procedere con il presente account."
-
-msgid "onboarding_request.text10"
-msgstr "Ingenico ePayments"
 
 msgid "onboarding_request.text11"
 msgstr "Team del carrello"

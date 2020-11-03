@@ -7,6 +7,7 @@
 /** @var $order_reference*/
 /** @var $ingenico_logo */
 /** @var $order_view_url */
+/** @var $platform_name */
 ?>
 
 <?php echo $view->__('admin_authorization.dear_manager', ['%name%' => $shop_name], 'email'); ?>,<br/>
@@ -16,4 +17,4 @@
 <?php echo $view->__('admin_authorization.text2', ['%url%' => $order_view_url], 'email'); ?><br/>
 <br/>
 <?php echo $view->__('admin_authorization.regards', [], 'email'); ?>,<br/>
-<?php echo $view->__('admin_authorization.team', [], 'email'); ?><br/>
+<?php echo $view->__('admin_authorization.team', ['%platform_name%' => $platform_name], 'email'); ?>

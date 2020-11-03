@@ -56,11 +56,7 @@ trait DirectLinkPayment {
 
         // Build Payment Request
         $request = new DirectLinkPaymentRequest($this->getConfiguration()->getShaComposer('in'));
-
-        // Set Production mode if enabled
-        if (!$this->getConfiguration()->isTestMode()) {
-            $request->setOgoneUri(DirectLinkPaymentRequest::PRODUCTION);
-        }
+        $request->setOgoneUri($this->getConfiguration()->getApiOrderdirect());
 
         // Get the "Skip security check"
         $skipSecurityCheck = $this->configuration->getSettingsSkipsecuritycheck();

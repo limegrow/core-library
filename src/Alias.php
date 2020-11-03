@@ -2,6 +2,9 @@
 
 namespace IngenicoClient;
 
+use IngenicoClient\PaymentMethod\Afterpay;
+use IngenicoClient\PaymentMethod\Klarna;
+
 /**
  * Class Alias
  * @method int getAliasId()
@@ -83,6 +86,11 @@ class Alias extends Data
     {
         if ($this->getPaymentId() && $paymentMethod = PaymentMethod::getPaymentMethodById($this->getPaymentId())) {
             // Map payment_id property as PaymentMethod->id
+            if (in_array($paymentMethod->getId(), [Afterpay::CODE, Klarna::CODE])) {
+                $paymentMethod->setPM($this->getPm())
+                    ->setBrand($this->getBrand());
+            }
+
             return $paymentMethod;
         } elseif ('Bancontact/Mister Cash' === $this->getBrand()) {
             // Workaround for Bancontact

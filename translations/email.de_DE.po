@@ -33,7 +33,7 @@ msgid "admin_authorization.regards"
 msgstr "Mit freundlichen Grüßen"
 
 msgid "admin_authorization.team"
-msgstr "Ihr Ingenico-Team"
+msgstr "Ihr %platform_name%-Team"
 
 msgid "admin_order_paid.subject"
 msgstr "Bestellstatus geändert"
@@ -54,7 +54,7 @@ msgid "admin_order_paid.regards"
 msgstr "Mit freundlichen Grüßen"
 
 msgid "admin_order_paid.team"
-msgstr "Ihr Ingenico-Team"
+msgstr "Ihr %platform_name%-Team"
 
 msgid "admin_refund_failed.subject"
 msgstr "Keine Erstattung möglich"
@@ -75,7 +75,7 @@ msgid "admin_refund_failed.regards"
 msgstr "Mit freundlichen Grüßen"
 
 msgid "admin_refund_failed.team"
-msgstr "Ihr Ingenico-Team"
+msgstr "Ihr %platform_name%-Team"
 
 msgid "authorization.subject"
 msgstr "Zahlung autorisiert"
@@ -99,7 +99,7 @@ msgid "onboarding_request.dear"
 msgstr "Sehr geehrter"
 
 msgid "onboarding_request.text1"
-msgstr "Ein neuer Antrag auf ein Ingenico ePayments-Konto wurde erhalten über"
+msgstr "Ein neuer Antrag auf ein %platform_name%-Konto wurde erhalten über"
 
 msgid "onboarding_request.text2"
 msgstr "Händlerdaten"
@@ -124,9 +124,6 @@ msgstr "Plugin-Version"
 
 msgid "onboarding_request.text9"
 msgstr "Bitte wenden Sie sich an Ihren Händler, um mit diesem Konto fortzufahren!"
-
-msgid "onboarding_request.text10"
-msgstr "Ingenico ePayments"
 
 msgid "onboarding_request.text11"
 msgstr "Warenkorb-Team"

@@ -159,7 +159,8 @@ class OrderField extends Data
             throw new Exception(sprintf('Value must not exceed %s characters', $this->getLength()));
         }
 
-        if ($this->getFieldType() === 'date' && ! empty($value) && !@strtotime($value)) {
+        // Date can be string like Y-m-d or timestamp
+        if ($this->getFieldType() === 'date' && ! empty($value) && (!@strtotime($value) && !is_numeric($value))) {
             throw new Exception('Date is invalid');
         }
 

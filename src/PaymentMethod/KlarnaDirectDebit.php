@@ -80,4 +80,10 @@ class KlarnaDirectDebit extends KlarnaAbstract
      * @var bool
      */
     protected $additional_data_required = true;
+
+    /**
+     * Defines if this payment method should be hidden from the checkout or listing
+     * @var bool
+     */
+    protected $is_hidden = true;
 }

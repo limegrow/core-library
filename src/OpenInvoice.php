@@ -2,6 +2,8 @@
 
 namespace IngenicoClient;
 
+use IngenicoClient\PaymentMethod\PaymentMethodInterface;
+
 /**
  * Trait OpenInvoice
  * @package IngenicoClient
@@ -12,14 +14,14 @@ trait OpenInvoice
      * Get Missing or Invalid Order's fields.
      *
      * @param mixed $orderId Order Id
-     * @param PaymentMethod\PaymentMethod $pm PaymentMethod Instance
+     * @param PaymentMethodInterface $paymentMethod PaymentMethod Instance
      * @param array $fields Order fields
      * @return array
      */
-    public function getMissingOrderFields($orderId, PaymentMethod\PaymentMethod $pm, array $fields = [])
+    public function getMissingOrderFields($orderId, PaymentMethodInterface $paymentMethod, array $fields = [])
     {
-        if (!$pm->getAdditionalDataRequired()) {
-            throw new Exception(sprintf('Unable to use "%s" as Open Invoice method.', $pm->getId()));
+        if (!$paymentMethod->getAdditionalDataRequired()) {
+            throw new Exception(sprintf('Unable to use "%s" as Open Invoice method.', $paymentMethod->getId()));
         }
 
         /** @var Order $order */
@@ -27,7 +29,7 @@ trait OpenInvoice
 
         // Order items are required
         if (count((array) $order->getItems()) === 0) {
-            $this->logger->debug(__CLASS__ . '::' . __METHOD__ . ' Open Invoice requires order items', [$order->getData(), $pm, $fields]);
+            $this->logger->debug(__CLASS__ . '::' . __METHOD__ . ' Open Invoice requires order items', [$order->getData(), $paymentMethod, $fields]);
             throw new Exception('Open Invoice requires order items');
         }
 
@@ -36,7 +38,7 @@ trait OpenInvoice
 
         // Get Expected Fields
         $checkoutType = $order->getCheckoutType() ? $order->getCheckoutType() : PaymentMethod\PaymentMethod::CHECKOUT_B2C;
-        $expectedFields = (array) $pm->getExpectedFields($checkoutType);
+        $expectedFields = (array) $paymentMethod->getExpectedFields($checkoutType);
 
         // Get Missing or Invalid parameters
         $result = [];
@@ -84,7 +86,7 @@ trait OpenInvoice
      * @param array $fields
      * @return array
      */
-    public function validateAdditionalFields(array $additionalFields, array $fields = [])
+    private function validateAdditionalFields(array $additionalFields, array $fields = [])
     {
         // Check Open Invoice fields
         foreach ($additionalFields as &$field) {
@@ -125,7 +127,7 @@ trait OpenInvoice
      * @param array $additionalFields
      * @return bool
      */
-    public function haveInvalidAdditionalFields(array $additionalFields)
+    private function haveInvalidAdditionalFields(array $additionalFields)
     {
         foreach ($additionalFields as &$field) {
             if (!$field->getIsValid()) {
@@ -134,6 +136,49 @@ trait OpenInvoice
         }
 
         return true;
+    }
+
+    /**
+     * Validate OpenInvoice Additional Fields on Checkout Session
+     *
+     * @param $orderId
+     * @param PaymentMethodInterface $paymentMethod
+     * @return array
+     * @throws Exception
+     */
+    public function validateOpenInvoiceCheckoutAdditionalFields($orderId, PaymentMethodInterface $paymentMethod)
+    {
+        if (!$paymentMethod->getAdditionalDataRequired()) {
+            throw new Exception(sprintf('Unable to use "%s" as Open Invoice method.', $paymentMethod->getId()));
+        }
+
+        // Validate Order data for Payment Methods which require additional data
+        // Get previous entered fields from Session
+        $previousFields = $this->getSessionValue(
+            $paymentMethod->getId() . '_' . self::PARAM_NAME_OPEN_INVOICE_CHECKOUT_INPUT
+        );
+        if (!$previousFields) {
+            $previousFields = [];
+        }
+
+        // Get Additional fields from Session
+        $additionalFields = $this->getSessionValue(
+            $paymentMethod->getId() . '_' . self::PARAM_NAME_OPEN_INVOICE_FIELDS
+        );
+        if (!$additionalFields) {
+            // Get Additional fields
+            $additionalFields = $this->getMissingOrderFields($orderId, $paymentMethod, $previousFields);
+
+            // Save Additional Fields in Session
+            $this->setSessionValue(
+                $paymentMethod->getId() . '_' . self::PARAM_NAME_OPEN_INVOICE_FIELDS,
+                $additionalFields
+            );
+        }
+
+        $additionalFields = $this->validateAdditionalFields($additionalFields, $previousFields);
+
+        return $additionalFields;
     }
 
     /**
@@ -148,7 +193,11 @@ trait OpenInvoice
     {
         $paymentMethod = $alias->getPaymentMethod();
         if (!$paymentMethod->getAdditionalDataRequired()) {
-            throw new Exception(sprintf('Unable to use %s as Open Invoice method. Use %s::initiateRedirectPayment() instead of.', $alias->getPaymentId(), __CLASS__));
+            throw new Exception(sprintf(
+                'Unable to use %s as Open Invoice method. Use %s::initiateRedirectPayment() instead of.',
+                $alias->getPaymentId(),
+                __CLASS__)
+            );
         }
 
         // Check Saved Order ID in Session

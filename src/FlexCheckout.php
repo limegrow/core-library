@@ -32,11 +32,7 @@ trait FlexCheckout
     public function getFlexCheckoutPaymentRequest(Order $order, Alias $alias)
     {
         $request = new FlexCheckoutPaymentRequest($this->getConfiguration()->getShaComposer('in'));
-
-        // Set Production mode if enabled
-        if (!$this->getConfiguration()->isTestMode()) {
-            $request->setOgoneUri(FlexCheckoutPaymentRequest::PRODUCTION);
-        }
+        $request->setOgoneUri($this->getConfiguration()->getApiFlexcheckout());
 
         /** @var ReturnUrl $urls */
         $urls = $this->requestReturnUrls($order->getOrderId());

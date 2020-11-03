@@ -1,4 +1,32 @@
 # Changelog
+## [5.0.0] - 2020-11-03
+
+### Added
+- Implemented `isHidden()` for `PaymentMethod` class
+- Make KlarnaDirectDebit and KlarnaBankTransfer payment methods to be hidden
+
+### Changed
+- Make `getPaymentMethods()` to be non-static
+
+### Fixed
+- Fixed the country configuration of Afterpay payment method
+
+## [4.1.0] - 2020-10-26
+### Added
+- Improve WhiteLabels feature
+- Implemented `validateOpenInvoiceCheckoutAdditionalFields()`
+
+### Changed
+- Remove address length limitions
+- Word-wrap of street address
+- Don't use `ECOM_SHIPTO_ONLINE_EMAIL` parameter for Klarna
+- Don't use `ORDERSHIPCOST` parameter for Klarna
+- Don't use `CUID` parameter for Klarna
+- Changed the format of customer date of birth
+
+### Fixed
+- Fixed error message on cancellation from FlexCheckout frame
+
 ## [4.0.0] - 2020-09-22
 ### Added
 - Klarna Pay Later

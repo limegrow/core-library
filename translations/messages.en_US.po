@@ -23,6 +23,9 @@ msgstr "An error occurred. Please try to place the order again. PaymentID: %paym
 msgid "checkout.payment_info"
 msgstr "Payment is %status%. Status: %status_code%. PayID: %payment_id%."
 
+msgid "checkout.payment_cancelled"
+msgstr "Payment has been cancelled."
+
 msgid "exceptions.alias_none"
 msgstr "Alias doesn't exist."
 
@@ -72,7 +75,7 @@ msgid "validator.request_timeout"
 msgstr "Request timeout is not valid."
 
 msgid "validator.short_signature"
-msgstr "You need to use a signature value that is exactly 40 characters long. We recommend that you generate it and insert it into Ingenico Backoffice as shown in the help window."
+msgstr "You need to use a signature value that is exactly 40 characters long. We recommend that you generate it and insert it into Backoffice as shown in the help window."
 
 msgid "validator.template_url_invalid"
 msgstr "Template file URL is not valid."

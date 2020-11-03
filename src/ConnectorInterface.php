@@ -621,4 +621,28 @@ interface ConnectorInterface
      */
     public function unsetSessionValue($key);
 
+    /**
+     * Check whether an order with given ID is created in Magento
+     *
+     * @param $orderId
+     * @return bool
+     */
+    public function isOrderCreated($orderId);
+
+    /**
+     * Same As requestOrderInfo()
+     * But Order Object Cannot Be Used To Fetch The Required Info
+     *
+     * @param mixed $reservedOrderId
+     * @return array
+     */
+    public function requestOrderInfoBeforePlaceOrder($reservedOrderId);
+
+    /**
+     * Get Platform Environment.
+     *
+     * @return string
+     */
+    public function getPlatformEnvironment();
+
 }

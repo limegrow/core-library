@@ -33,7 +33,7 @@ msgid "admin_authorization.regards"
 msgstr "Meilleures salutations"
 
 msgid "admin_authorization.team"
-msgstr "L’équipe Ingenico"
+msgstr "L’équipe %platform_name%"
 
 msgid "admin_order_paid.subject"
 msgstr "Statut de la commande modifié"
@@ -54,7 +54,7 @@ msgid "admin_order_paid.regards"
 msgstr "Meilleures salutations"
 
 msgid "admin_order_paid.team"
-msgstr "L’équipe Ingenico"
+msgstr "L’équipe %platform_name%"
 
 msgid "admin_refund_failed.subject"
 msgstr "Remboursement impossible"
@@ -75,7 +75,7 @@ msgid "admin_refund_failed.regards"
 msgstr "Meilleures salutations"
 
 msgid "admin_refund_failed.team"
-msgstr "L’équipe Ingenico"
+msgstr "L’équipe %platform_name%"
 
 msgid "authorization.subject"
 msgstr "Paiement autorisé"
@@ -99,7 +99,7 @@ msgid "onboarding_request.dear"
 msgstr "Cher/Chère"
 
 msgid "onboarding_request.text1"
-msgstr "Une nouvelle demande de compte Ingenico ePayments a été reçue via"
+msgstr "Une nouvelle demande de compte %platform_name% a été reçue via"
 
 msgid "onboarding_request.text2"
 msgstr "Données du commerçant"
@@ -123,10 +123,7 @@ msgid "onboarding_request.text8"
 msgstr "Version du plugin"
 
 msgid "onboarding_request.text9"
-msgstr "Veuillez contacter le commerçant afin de créer ce compte !"
-
-msgid "onboarding_request.text10"
-msgstr "Ingenico ePayments"
+msgstr "Veuillez contacter le commerçant afin de créer ce compte!"
 
 msgid "onboarding_request.text11"
 msgstr "L’équipe de gestion des paniers"

@@ -137,11 +137,7 @@ class DirectLink
         MaintenanceOperation $operation
     ) {
         $maintenanceRequest = new DirectLinkMaintenanceRequest($configuration->getShaComposer());
-
-        // Set Production mode if enabled
-        if (!$configuration->isTestMode()) {
-            $maintenanceRequest->setOgoneUri(DirectLinkMaintenanceRequest::PRODUCTION);
-        }
+        $maintenanceRequest->setOgoneUri($configuration->getApiMaintenancedirect());
 
         $maintenanceRequest->setPspId($configuration->getPspid());
         $maintenanceRequest->setUserId($configuration->getUserId());
@@ -207,11 +203,7 @@ class DirectLink
         $payId
     ) {
         $queryRequest = new DirectLinkQueryRequest($configuration->getShaComposer());
-
-        // Set Production mode if enabled
-        if (!$configuration->isTestMode()) {
-            $queryRequest->setOgoneUri(DirectLinkQueryRequest::PRODUCTION);
-        }
+        $queryRequest->setOgoneUri($configuration->getApiQuerydirect());
 
         $queryRequest->setPspId($configuration->getPspid());
         $queryRequest->setUserId($configuration->getUserId());

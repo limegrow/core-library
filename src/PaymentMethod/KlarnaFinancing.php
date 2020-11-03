@@ -58,9 +58,6 @@ class KlarnaFinancing extends KlarnaAbstract
         'FI' => [
             'popularity' => 100
         ],
-        'NL' => [
-            'popularity' => 100
-        ],
         'NO' => [
             'popularity' => 100
         ],

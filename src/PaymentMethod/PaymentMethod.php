@@ -119,6 +119,12 @@ class PaymentMethod  implements \ArrayAccess, PaymentMethodInterface
     protected $additional_data_required = false;
 
     /**
+     * Defines if this payment method should be hidden from the checkout or listing
+     * @var bool
+     */
+    protected $is_hidden = false;
+
+    /**
      * Transaction codes that indicate capturing.
      * @var array
      */
@@ -409,6 +415,15 @@ class PaymentMethod  implements \ArrayAccess, PaymentMethodInterface
     public function isRedirectOnly()
     {
         return $this->is_redirect_only;
+    }
+
+    /**
+     * Is Hidden
+     * @return bool
+     */
+    public function isHidden()
+    {
+        return $this->is_hidden;
     }
 
     /**

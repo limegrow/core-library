@@ -33,7 +33,7 @@ msgid "admin_authorization.regards"
 msgstr "Vriendelijke groet"
 
 msgid "admin_authorization.team"
-msgstr "Ingenico-team"
+msgstr "%platform_name%-team"
 
 msgid "admin_order_paid.subject"
 msgstr "De status van de bestelling is gewijzigd"
@@ -54,7 +54,7 @@ msgid "admin_order_paid.regards"
 msgstr "Vriendelijke groet"
 
 msgid "admin_order_paid.team"
-msgstr "Ingenico-team"
+msgstr "%platform_name%-team"
 
 msgid "admin_refund_failed.subject"
 msgstr "Terugbetaling is niet mogelijk"
@@ -75,7 +75,7 @@ msgid "admin_refund_failed.regards"
 msgstr "Vriendelijke groet"
 
 msgid "admin_refund_failed.team"
-msgstr "Ingenico-team"
+msgstr "%platform_name%-team"
 
 msgid "authorization.subject"
 msgstr "Betaling geautoriseerd"
@@ -99,7 +99,7 @@ msgid "onboarding_request.dear"
 msgstr "Geachte"
 
 msgid "onboarding_request.text1"
-msgstr "Er is een nieuwe aanvraag voor een Ingenico ePayments-account ontvangen via"
+msgstr "Er is een nieuwe aanvraag voor een %platform_name%-account ontvangen via"
 
 msgid "onboarding_request.text2"
 msgstr "Gegevens handelaar"
@@ -124,9 +124,6 @@ msgstr "Versie plug-in"
 
 msgid "onboarding_request.text9"
 msgstr "Neem contact op met de handelaar om door te gaan met deze account!"
-
-msgid "onboarding_request.text10"
-msgstr "Ingenico ePayments"
 
 msgid "onboarding_request.text11"
 msgstr "Winkelwagenteam"

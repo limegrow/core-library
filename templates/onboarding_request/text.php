@@ -10,9 +10,10 @@
 /** @var $shop_logo */
 /** @var $shop_url */
 /** @var $ingenico_logo */
+/** @var $platform_name */
 ?>
 <?php echo $view->__('onboarding_request.dear', [], 'email'); ?>,
-<?php echo $view->__('onboarding_request.text1', [], 'email'); ?> <?php echo $eCommercePlatform; ?>.
+<?php echo $view->__('onboarding_request.text1', ['%platform_name%' => $platform_name], 'email'); ?> <?php echo $eCommercePlatform; ?>.
 
 
 <?php echo $view->__('onboarding_request.text2', [], 'email'); ?>:
@@ -27,5 +28,5 @@
 
 
 <?php echo $view->__('onboarding_request.text9', [], 'email'); ?>
-<?php echo $view->__('onboarding_request.text10', [], 'email'); ?>,
+<?php echo $platform_name; ?>,
 <?php echo $view->__('onboarding_request.text11', [], 'email'); ?>>

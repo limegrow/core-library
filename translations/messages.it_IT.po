@@ -23,6 +23,9 @@ msgstr "Si è verificato un errore. Si prega di ripetere la procedura di ordinaz
 msgid "checkout.payment_info"
 msgstr "Il pagamento è %status%. Stato: %status_code%. PayID: %payment_id%."
 
+msgid "checkout.payment_cancelled"
+msgstr "Payment has been cancelled."
+
 msgid "exceptions.alias_none"
 msgstr "Non ci sono Alias."
 
@@ -72,7 +75,7 @@ msgid "validator.request_timeout"
 msgstr "Il timeout richiesto non è valido."
 
 msgid "validator.short_signature"
-msgstr "Il signaturevalue da utilizzare deve essere lungo esattamente 40 caratteri. Si consiglia di generarlo e inserirlo in Ingenico Backoffice, come indicato nella finestra di Help."
+msgstr "Il signaturevalue da utilizzare deve essere lungo esattamente 40 caratteri. Si consiglia di generarlo e inserirlo in Backoffice, come indicato nella finestra di Help."
 
 msgid "validator.template_url_invalid"
 msgstr "Il file URL del modello non è valido."

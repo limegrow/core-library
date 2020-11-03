@@ -679,4 +679,88 @@ class Configuration extends Data
 
         return $shaComposer;
     }
+
+    /**
+     * Get url of Ecommerce API.
+     *
+     * @return string
+     */
+    public function getApiEcommerce()
+    {
+        if ($this->isTestMode()) {
+            return $this->coreLibrary->api_ecommerce_test;
+        }
+
+        return $this->coreLibrary->api_ecommerce_prod;
+    }
+
+    /**
+     * Get url of Flexcheckout API.
+     *
+     * @return string
+     */
+    public function getApiFlexcheckout()
+    {
+        if ($this->isTestMode()) {
+            return $this->coreLibrary->api_flexcheckout_test;
+        }
+
+        return $this->coreLibrary->api_flexcheckout_prod;
+    }
+
+    /**
+     * Get url of Querydirect API.
+     *
+     * @return string
+     */
+    public function getApiQuerydirect()
+    {
+        if ($this->isTestMode()) {
+            return $this->coreLibrary->api_querydirect_test;
+        }
+
+        return $this->coreLibrary->api_querydirect_prod;
+    }
+
+    /**
+     * Get url of Orderdirect API.
+     *
+     * @return string
+     */
+    public function getApiOrderdirect()
+    {
+        if ($this->isTestMode()) {
+            return $this->coreLibrary->api_orderdirect_test;
+        }
+
+        return $this->coreLibrary->api_orderdirect_prod;
+    }
+
+    /**
+     * Get url of Maintenancedirect API.
+     *
+     * @return string
+     */
+    public function getApiMaintenancedirect()
+    {
+        if ($this->isTestMode()) {
+            return $this->coreLibrary->api_maintenancedirect_test;
+        }
+
+        return $this->coreLibrary->api_maintenancedirect_prod;
+    }
+
+    /**
+     * Get url of Alias API.
+     *
+     * @return string
+     */
+    public function getApiAlias()
+    {
+        if ($this->isTestMode()) {
+            return $this->coreLibrary->api_alias_test;
+        }
+
+        return $this->coreLibrary->api_alias_prod;
+    }
 }

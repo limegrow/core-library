@@ -26,12 +26,12 @@ abstract class Klarna extends PaymentMethod
         OrderField::BILLING_ADDRESS1 => [
             'required' => true,
             'field_type' => PaymentMethod::TYPE_TEXT,
-            'length' => 35
+            //'length' => 35
         ],
         OrderField::BILLING_ADDRESS2 => [
             'required' => false,
             'field_type' => PaymentMethod::TYPE_TEXT,
-            'length' => 35
+            //'length' => 35
         ],
         OrderField::BILLING_CITY => [
             'required' => true,
@@ -86,12 +86,12 @@ abstract class Klarna extends PaymentMethod
         OrderField::SHIPPING_ADDRESS1 => [
             'required' => true,
             'field_type' => PaymentMethod::TYPE_TEXT,
-            'length' => 35
+            //'length' => 35
         ],
         OrderField::SHIPPING_ADDRESS2 => [
             'required' => false,
             'field_type' => PaymentMethod::TYPE_TEXT,
-            'length' => 35
+            //'length' => 35
         ],
         OrderField::SHIPPING_CITY => [
             'required' => false,

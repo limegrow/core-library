@@ -23,6 +23,9 @@ msgstr "Se ha producido un error. Pruebe a volver a hacer el pedido. PaymentID: 
 msgid "checkout.payment_info"
 msgstr "Estado del pago: %status%. Estado: %status_code%. PayID: %payment_id%."
 
+msgid "checkout.payment_cancelled"
+msgstr "Payment has been cancelled."
+
 msgid "exceptions.alias_none"
 msgstr "El alias no existe."
 
@@ -72,7 +75,7 @@ msgid "validator.request_timeout"
 msgstr "Tiempo de espera de la solicitud no válido."
 
 msgid "validator.short_signature"
-msgstr "Debe usar un valor de firma que tenga exactamente 40 caracteres de longitud. Recomendamos generarlo e insertarlo en la administración de Ingenico, tal como se muestra en la ventana de ayuda."
+msgstr "Debe usar un valor de firma que tenga exactamente 40 caracteres de longitud. Recomendamos generarlo e insertarlo en la administración de, tal como se muestra en la ventana de ayuda."
 
 msgid "validator.template_url_invalid"
 msgstr "URL del archivo de plantilla no válida."
