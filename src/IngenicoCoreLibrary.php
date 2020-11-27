@@ -1118,13 +1118,13 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
         // Save Alias
         if ($this->configuration->getSettingsOneclick()) {
             $this->processAlias($orderId, [
-                'ALIAS' => $paymentResult->getAlias(),
-                'BRAND' => $paymentResult->getBrand(),
-                'CARDNO' => $paymentResult->getCardNo(),
-                'CN' => $paymentResult->getCn(),
-                'BIN' => $paymentResult->getBin(),
-                'PM' => $paymentResult->getPm(),
-                'ED' => $paymentResult->getEd(),
+                'ALIAS' => $_REQUEST[Payment::FIELD_ALIAS] ?? '',
+                'BRAND' => $_REQUEST[Payment::FIELD_BRAND] ?? '',
+                'CARDNO' => $_REQUEST[Payment::FIELD_CARD_NO] ?? '',
+                'CN' => $_REQUEST[Payment::FIELD_CN] ?? '',
+                'BIN' => $_REQUEST[Payment::FIELD_BIN] ?? '',
+                'PM' => $_REQUEST[Payment::FIELD_PM] ?? '',
+                'ED' => $_REQUEST[Payment::FIELD_ED] ?? '',
             ]);
         }
 
@@ -1204,15 +1204,20 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
 
         // Save Alias
         if ($this->configuration->getSettingsOneclick()) {
-            $this->processAlias($orderId, [
-                'ALIAS' => $_REQUEST[self::ALIAS_ID] ?? '',
-                'BRAND' => $_REQUEST[self::CARD_BRAND] ?? '',
-                'CARDNO' => $_REQUEST[self::CARD_NUMBER] ?? '',
-                'CN' => $_REQUEST[self::CARD_CN] ?? '',
-                'BIN' => $_REQUEST[self::CARD_BIN] ?? '',
-                'PM' => 'CreditCard',
-                'ED' => $_REQUEST[self::CARD_EXPIRY_DATE] ?? '',
-            ]);
+            if (isset($_REQUEST[self::ALIAS_ID]) &&
+                $_REQUEST[self::ALIAS_STOREPERMANENTLY] === 'Y' &&
+                in_array($_REQUEST[self::ALIAS_STATUS], [self::ALIAS_STATUS_OK, self::ALIAS_STATUS_UPDATED])
+            ) {
+                $this->processAlias($orderId, [
+                    'ALIAS' => $_REQUEST[self::ALIAS_ID] ?? '',
+                    'BRAND' => $_REQUEST[self::CARD_BRAND] ?? '',
+                    'CARDNO' => $_REQUEST[self::CARD_NUMBER] ?? '',
+                    'CN' => $_REQUEST[self::CARD_CN] ?? '',
+                    'BIN' => $_REQUEST[self::CARD_BIN] ?? '',
+                    'PM' => 'CreditCard',
+                    'ED' => $_REQUEST[self::CARD_EXPIRY_DATE] ?? '',
+                ]);
+            }
         }
 
         // Save Alias parameters to session to future usage in the "finishReturnInline" method
@@ -2708,40 +2713,16 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
      */
     private function processAlias($orderId, array $data)
     {
-        $order = $this->extension->isOrderCreated($orderId) ? $this->getOrder($orderId) : $this->getOrderBeforePlaceOrder($orderId);
-        $mode = $this->configuration->getPaymentpageType();
-        switch ($mode) {
-            case self::PAYMENT_MODE_REDIRECT:
-                if (!empty($data['ALIAS'])) {
-                    // Build Alias instance and save
-                    $alias = new Alias($data);
-                    $alias->setCustomerId($order->getCustomerId());
-                    $this->saveAlias($alias);
-                }
-                break;
-            case self::PAYMENT_MODE_INLINE:
-                if (isset($_REQUEST[self::ALIAS_ID]) &&
-                    $_REQUEST[self::ALIAS_STOREPERMANENTLY] === 'Y' &&
-                    in_array($_REQUEST[self::ALIAS_STATUS], [self::ALIAS_STATUS_OK, self::ALIAS_STATUS_UPDATED])
-                ) {
-                    // Build Alias instance and save
-                    $alias = new Alias([
-                        'ALIAS' => $_REQUEST[self::ALIAS_ID] ?? '',
-                        'BRAND' => $_REQUEST[self::CARD_BRAND] ?? '',
-                        'CARDNO' => $_REQUEST[self::CARD_NUMBER] ?? '',
-                        'CN' => $_REQUEST[self::CARD_CN] ?? '',
-                        'BIN' => $_REQUEST[self::CARD_BIN] ?? '',
-                        'PM' => 'CreditCard',
-                        'ED' => $_REQUEST[self::CARD_EXPIRY_DATE] ?? '',
-                    ]);
-
-                    $alias->setCustomerId($order->getCustomerId());
-                    $this->saveAlias($alias);
-                }
-                break;
-            default:
-                throw new Exception('Unknown payment type.');
+        if (empty($data['ALIAS'])) {
+            return;
         }
+
+        $order = $this->extension->isOrderCreated($orderId) ? $this->getOrder($orderId) : $this->getOrderBeforePlaceOrder($orderId);
+
+        // Build Alias instance and save
+        $alias = new Alias($data);
+        $alias->setCustomerId($order->getCustomerId());
+        $this->saveAlias($alias);
     }
 
     /**

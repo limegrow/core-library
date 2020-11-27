@@ -1,4 +1,8 @@
 # Changelog
+## [5.0.1] - 2020-11-27
+### Changed
+- Fixed alias saving in the inline payment page mode
+
 ## [5.0.0] - 2020-11-03
 
 ### Added
