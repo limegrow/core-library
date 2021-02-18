@@ -1,4 +1,8 @@
 # Changelog
+## [5.0.2] - 2020-12-01
+### Added
+- Added Sofort payment methods
+
 ## [5.0.1] - 2020-11-27
 ### Changed
 - Fixed alias saving in the inline payment page mode

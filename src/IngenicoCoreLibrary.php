@@ -2391,8 +2391,15 @@ class IngenicoCoreLibrary implements IngenicoCoreLibraryInterface,
 
         // Payment result must have status
         if (!$paymentResult->getStatus()) {
+            // There's can be problems if wrong credentials of DirectLink user.
             $this->logger->debug(__CLASS__ . '::' . __METHOD__ . ' No status field.', $paymentResult->toArray());
-            throw new Exception('An error occurred. Please try to place the order again.');
+            $message = 'An error occurred. Please try to place the order again.';
+            $error = $paymentResult->getNcErrorPlus();
+            if (empty($error)) {
+                $message .= ' (' . $error . ')';
+            }
+
+            throw new Exception($message);
         }
 
         // Get Payment Status depend on Brand and Status Number
