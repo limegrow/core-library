@@ -1937,17 +1937,17 @@ class IngenicoCoreLibrary implements
         if (mb_strlen($info[OrderField::BILLING_ADDRESS1]) > 35) {
             $billingAddress1 = $info[OrderField::BILLING_ADDRESS1];
             $info[OrderField::BILLING_ADDRESS1] = mb_substr($billingAddress1, 0, 35, 'UTF-8');
-            $info[OrderField::BILLING_ADDRESS2] = trim(
+            $info[OrderField::BILLING_ADDRESS2] = mb_substr(trim(
                 mb_substr($billingAddress1, 35, null, 'UTF-8') . ' ' . $info[OrderField::BILLING_ADDRESS2]
-            );
+            ), 0, 35, 'UTF-8');
         }
 
         if (mb_strlen($info[OrderField::SHIPPING_ADDRESS1]) > 35) {
             $shippingAddress1 = $info[OrderField::SHIPPING_ADDRESS1];
             $info[OrderField::SHIPPING_ADDRESS1] = mb_substr($shippingAddress1, 0, 35, 'UTF-8');
-            $info[OrderField::SHIPPING_ADDRESS2] = trim(
+            $info[OrderField::SHIPPING_ADDRESS2] = mb_substr(trim(
                 mb_substr($shippingAddress1, 35, null, 'UTF-8') . ' ' . $info[OrderField::SHIPPING_ADDRESS2]
-            );
+            ), 0, 35, 'UTF-8');
         }
 
         return $info ? new Order($info) : false;
@@ -1969,17 +1969,17 @@ class IngenicoCoreLibrary implements
         if (mb_strlen($info[OrderField::BILLING_ADDRESS1]) > 35) {
             $billingAddress1 = $info[OrderField::BILLING_ADDRESS1];
             $info[OrderField::BILLING_ADDRESS1] = mb_substr($billingAddress1, 0, 35, 'UTF-8');
-            $info[OrderField::BILLING_ADDRESS2] = trim(
+            $info[OrderField::BILLING_ADDRESS2] = mb_substr(trim(
                 mb_substr($billingAddress1, 35, null, 'UTF-8') . ' ' . $info[OrderField::BILLING_ADDRESS2]
-            );
+            ), 0, 35, 'UTF-8');
         }
 
         if (mb_strlen($info[OrderField::SHIPPING_ADDRESS1]) > 35) {
             $shippingAddress1 = $info[OrderField::SHIPPING_ADDRESS1];
             $info[OrderField::SHIPPING_ADDRESS1] = mb_substr($shippingAddress1, 0, 35, 'UTF-8');
-            $info[OrderField::SHIPPING_ADDRESS2] = trim(
+            $info[OrderField::SHIPPING_ADDRESS2] = mb_substr(trim(
                 mb_substr($shippingAddress1, 35, null, 'UTF-8') . ' ' . $info[OrderField::SHIPPING_ADDRESS2]
-            );
+            ), 0, 35, 'UTF-8');
         }
 
         return $info ? new Order($info) : false;

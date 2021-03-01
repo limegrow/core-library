@@ -348,7 +348,7 @@ trait HostedCheckout
             $order->getBillingAddress3()
         ]);
 
-        if (mb_strlen($ownerAddress, 'UTF-8') <= 50) {
+        if (mb_strlen($ownerAddress, 'UTF-8') <= 35) {
             $request->setOwnerAddress($ownerAddress);
         }
 
