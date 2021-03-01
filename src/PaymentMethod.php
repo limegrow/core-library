@@ -159,7 +159,6 @@ class PaymentMethod implements \Countable, \IteratorAggregate
 
                 $country_payment_methods[$iso_code][$category][] = $payment_method->getId();
             }
-
         }
         return $country_payment_methods;
     }

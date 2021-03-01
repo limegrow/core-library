@@ -217,7 +217,8 @@ class Configuration extends Data
      * @param mixed|null $value
      * @return $this
      */
-    public function setData($key, $value = null) {
+    public function setData($key, $value = null)
+    {
         if (is_string($key)) {
             $key = str_replace('.', '_', strtolower($key));
         }
@@ -495,7 +496,7 @@ class Configuration extends Data
                 return $this->coreLibrary->__('validator.instalments.maximum_period');
             }
             if ($fieldKey === 'instalments_fixed_firstpayment' && ($fieldValue < 1 || $fieldValue > 99)) {
-                if ( $fieldValue < 1 || $fieldValue > 99 ) {
+                if ($fieldValue < 1 || $fieldValue > 99) {
                     // First payment must be between 1% - 99%.
                     return $this->coreLibrary->__('validator.instalments.first_payment');
                 }
@@ -503,14 +504,14 @@ class Configuration extends Data
         }
 
         if (in_array($fieldKey, ['connection_test_signature', 'connection_live_signature'])) {
-            if (!empty($fieldValue) && strlen($fieldValue) < 40 ) {
+            if (!empty($fieldValue) && strlen($fieldValue) < 40) {
                 return $this->coreLibrary->__('validator.short_signature');
             }
         }
 
         /** Validate template url */
         if ($fieldKey === 'paymentpage_template_externalurl') {
-            $url = strpos($fieldValue, 'http' ) !== 0 ? "http://{$fieldValue}" : $fieldValue;
+            $url = strpos($fieldValue, 'http') !== 0 ? "http://{$fieldValue}" : $fieldValue;
             if (!empty($fieldValue) && !filter_var($url, FILTER_VALIDATE_URL)) {
                 // Template file URL is not valid.
                 return $this->coreLibrary->__('validator.template_url_invalid');
@@ -549,7 +550,6 @@ class Configuration extends Data
                 } catch (\Exception $e) {
                     $errors[] = $e->getMessage();
                 }
-
             }
         }
 
@@ -575,8 +575,7 @@ class Configuration extends Data
         foreach ($testConf->getData() as $fieldKey => $fieldValue) {
             if (in_array($fieldKey, [
                     'connection_test_pspid', 'connection_test_dl_user',
-                    'connection_test_dl_password', 'connection_test_signature', 'connection_test_algorithm']
-            )) {
+                    'connection_test_dl_password', 'connection_test_signature', 'connection_test_algorithm'])) {
                 $testConf->setData(str_replace('test', 'live', $fieldKey), $fieldValue);
             }
         }
@@ -606,8 +605,7 @@ class Configuration extends Data
 
         // Remove sensitive data
         foreach (['test', 'production'] as $mode) {
-            foreach (
-                [
+            foreach ([
                     'connection_test_pspid',
                     'connection_test_signature',
                     'connection_test_dl_user',
@@ -616,8 +614,7 @@ class Configuration extends Data
                     'connection_live_signature',
                     'connection_live_dl_user',
                     'connection_live_dl_password',
-                ] as $key)
-            {
+                ] as $key) {
                 unset($conf[$mode][$key]);
             }
         }
