@@ -1,7 +1,7 @@
 {
     "name": "ingenico/ogone-client",
     "description": "Ingenico ePayments Core Library",
-    "version": "5.0.2",
+    "version": "5.0.3",
     "license": [
         "OSL-3.0"
     ],
