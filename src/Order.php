@@ -378,7 +378,10 @@ class Order extends Data
      */
     public function getBillingAddress()
     {
-        return array_filter([$this->getBillingAddress1(), $this->getBillingAddress2(), $this->getBillingAddress3()], 'strlen');
+        return array_filter(
+            [$this->getBillingAddress1(), $this->getBillingAddress2(), $this->getBillingAddress3()],
+            'strlen'
+        );
     }
 
     /**
@@ -398,7 +401,10 @@ class Order extends Data
      */
     public function getShippingAddress()
     {
-        return array_filter([$this->getShippingAddress1(), $this->getShippingAddress2(), $this->getShippingAddress3()], 'strlen');
+        return array_filter(
+            [$this->getShippingAddress1(), $this->getShippingAddress2(), $this->getShippingAddress3()],
+            'strlen'
+        );
     }
 
     /**

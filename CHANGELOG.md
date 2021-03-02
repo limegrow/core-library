@@ -1,4 +1,12 @@
 # Changelog
+## [5.0.3] - 2021-03-01
+### Added
+- Add Device parameter for Bancontact
+
+### Changed
+- Update length of billing and shipping addresses
+- Code improvements
+
 ## [5.0.2] - 2020-12-01
 ### Added
 - Added Sofort payment methods

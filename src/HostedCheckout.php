@@ -3,6 +3,7 @@
 namespace IngenicoClient;
 
 use IngenicoClient\PaymentMethod\Afterpay;
+use IngenicoClient\PaymentMethod\Bancontact;
 use IngenicoClient\PaymentMethod\Klarna;
 use IngenicoClient\PaymentMethod\KlarnaBankTransfer;
 use IngenicoClient\PaymentMethod\KlarnaDirectDebit;
@@ -115,6 +116,11 @@ trait HostedCheckout
             $request->setCn(str_replace(['"', "'"], '', $alias->getCn()));
         } else {
             $request->setCn(str_replace(['"', "'"], '', $order->getBillingFullName()));
+        }
+
+        // Parameters for BCMC
+        if ($paymentMethod && $paymentMethod->getId() === Bancontact::CODE) {
+            $request->setDevice((new DeviceDetect)->getDeviceType());
         }
 
         // Parameters for Klarna
@@ -348,7 +354,7 @@ trait HostedCheckout
             $order->getBillingAddress3()
         ]);
 
-        if (mb_strlen($ownerAddress, 'UTF-8') <= 50) {
+        if (mb_strlen($ownerAddress, 'UTF-8') <= 35) {
             $request->setOwnerAddress($ownerAddress);
         }
 

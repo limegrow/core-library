@@ -70,9 +70,10 @@ class Alias extends Data
     public function getName()
     {
         // @todo Translate that
-        return sprintf('%s ends with %s, expires on %s/%s',
+        return sprintf(
+            '%s ends with %s, expires on %s/%s',
             $this->getBrand(),
-            substr($this->getCardno(),-4,4),
+            substr($this->getCardno(), -4, 4),
             substr($this->getEd(), 0, 2),
             substr($this->getEd(), 2, 4)
         );
@@ -140,4 +141,3 @@ class Alias extends Data
         ))->setAliasOperation($this->getOperation());
     }
 }
-
