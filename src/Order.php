@@ -113,6 +113,8 @@ use InvalidArgumentException;
  * @method mixed getCompanyVat()
  * @method $this setCheckoutType($value)
  * @method mixed getCheckoutType()
+ * @method $this setAdditionalData(array $value)
+ * @method array getAdditionalData()
  * @package IngenicoClient
  */
 class Order extends Data

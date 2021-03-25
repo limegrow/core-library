@@ -173,6 +173,7 @@ trait OpenInvoice
         $additionalFields = $this->getSessionValue(
             $paymentMethod->getId() . '_' . self::PARAM_NAME_OPEN_INVOICE_FIELDS
         );
+
         if (!$additionalFields) {
             // Get Additional fields
             $additionalFields = $this->getMissingOrderFields($orderId, $paymentMethod, $previousFields);
@@ -288,6 +289,11 @@ trait OpenInvoice
         // Get order and add overridden fields
         $order = $this->getOrder($orderId);
         $order->setData($fields);
+
+        // There is the dirty soltion of the street number problem
+        if (isset($fields['billing_address_extra'])) {
+            $order->setBillingAddress1($fields['billing_address_extra']);
+        }
 
         // Initiate Redirect Payment
         $paymentRequest = $this->getHostedCheckoutPaymentRequest($order, $alias);

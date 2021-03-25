@@ -16,7 +16,7 @@ class DirectEbankingAT extends PaymentMethod implements PaymentMethodInterface
      * Name
      * @var string
      */
-    protected $name = 'Sofort Überweisung';
+    protected $name = 'Sofort Überweisung (AT)';
 
     /**
      * Logo
