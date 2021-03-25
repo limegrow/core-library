@@ -1,11 +1,12 @@
 # Changelog
-## [5.0.3] - 2021-03-01
+## [5.1.0] - 2021-03-25
 ### Added
-- Add Device parameter for Bancontact
+- Implemented bank selection for iDeal
+- Implemented additional order metadata feature
+- Allows to use custom PM and BRAND using additional order metadata
 
 ### Changed
-- Update length of billing and shipping addresses
-- Code improvements
+- Klarna: Fix street field issues
 
 ## [5.0.2] - 2020-12-01
 ### Added

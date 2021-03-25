@@ -16,7 +16,7 @@ class DirectEbankingDE extends PaymentMethod implements PaymentMethodInterface
      * Name
      * @var string
      */
-    protected $name = 'Sofort Überweisung';
+    protected $name = 'Sofort Überweisung (DE)';
 
     /**
      * Logo
@@ -34,13 +34,13 @@ class DirectEbankingDE extends PaymentMethod implements PaymentMethodInterface
      * Payment Method
      * @var string
      */
-    protected $pm = 'DirectEbankingCH';
+    protected $pm = 'DirectEbankingDE';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'DirectEbankingCH';
+    protected $brand = 'DirectEbankingDE';
 
     /**
      * Countries

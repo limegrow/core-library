@@ -50,6 +50,11 @@ class OrderField extends Data
     const IS_SHIPPING_SAME = 'is_shipping_same';
 
     /**
+     * Additional data or meta data
+     */
+    const ADDITIONAL_DATA = 'additional_data';
+
+    /**
      * Billing Address Fields
      */
     const BILLING_COUNTRY = 'billing_country';
@@ -152,7 +157,7 @@ class OrderField extends Data
         }
 
         if ($this->getRequired() && empty($value)) {
-            throw new Exception('Value is required');
+            throw new Exception(sprintf('Value %s is required', $this->getLabel()));
         }
 
         if ($this->getLength() && mb_strlen($value, 'UTF-8') > $this->getLength()) {

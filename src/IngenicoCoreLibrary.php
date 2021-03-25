@@ -7,6 +7,7 @@ use IngenicoClient\PaymentMethod\Klarna;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\PoFileLoader;
+use VIISON\AddressSplitter\AddressSplitter;
 
 class IngenicoCoreLibrary implements
     IngenicoCoreLibraryInterface,
@@ -1932,6 +1933,9 @@ class IngenicoCoreLibrary implements
         }
 
         $info = $this->extension->requestOrderInfo($orderId);
+        if (!$info) {
+            return false;
+        }
 
         // Word-wrap of street address
         if (mb_strlen($info[OrderField::BILLING_ADDRESS1]) > 35) {
@@ -1950,7 +1954,29 @@ class IngenicoCoreLibrary implements
             ), 0, 35, 'UTF-8');
         }
 
-        return $info ? new Order($info) : false;
+        // Substitute steet number
+        if (empty($info[OrderField::BILLING_STREET_NUMBER]) && !empty($info[OrderField::BILLING_ADDRESS1])) {
+            // @todo Split address automatically
+            try {
+                //$result = AddressSplitter::splitAddress($info[OrderField::BILLING_ADDRESS1]);
+                //$info[OrderField::BILLING_STREET_NUMBER] = $result['houseNumber'];
+            } catch (\Exception $e) {
+                // Ignore it
+            }
+        }
+
+        // Substitute steet number
+        if (empty($info[OrderField::SHIPPING_STREET_NUMBER]) && !empty($info[OrderField::SHIPPING_ADDRESS1])) {
+            // @todo Split address automatically
+            try {
+                //$result = AddressSplitter::splitAddress($info[OrderField::SHIPPING_ADDRESS1]);
+                //$info[OrderField::SHIPPING_STREET_NUMBER] = $result['houseNumber'];
+            } catch (\Exception $e) {
+                // Ignore it
+            }
+        }
+
+        return new Order($info);
     }
 
     /**
@@ -1964,6 +1990,9 @@ class IngenicoCoreLibrary implements
     private function getOrderBeforePlaceOrder($reservedOrderId)
     {
         $info = $this->extension->requestOrderInfoBeforePlaceOrder($reservedOrderId);
+        if (!$info) {
+            return false;
+        }
 
         // Word-wrap of street address
         if (mb_strlen($info[OrderField::BILLING_ADDRESS1]) > 35) {
@@ -1982,7 +2011,29 @@ class IngenicoCoreLibrary implements
             ), 0, 35, 'UTF-8');
         }
 
-        return $info ? new Order($info) : false;
+        // Substitute steet number
+        if (empty($info[OrderField::BILLING_STREET_NUMBER]) && !empty($info[OrderField::BILLING_ADDRESS1])) {
+            // @todo Split address automatically
+            try {
+                //$result = AddressSplitter::splitAddress($info[OrderField::BILLING_ADDRESS1]);
+                //$info[OrderField::BILLING_STREET_NUMBER] = $result['houseNumber'];
+            } catch (\Exception $e) {
+                // Ignore it
+            }
+        }
+
+        // Substitute steet number
+        if (empty($info[OrderField::SHIPPING_STREET_NUMBER]) && !empty($info[OrderField::SHIPPING_ADDRESS1])) {
+            // @todo Split address automatically
+            try {
+                //$result = AddressSplitter::splitAddress($info[OrderField::SHIPPING_ADDRESS1]);
+                //$info[OrderField::SHIPPING_STREET_NUMBER] = $result['houseNumber'];
+            } catch (\Exception $e) {
+                // Ignore it
+            }
+        }
+
+        return new Order($info);
     }
 
     /**

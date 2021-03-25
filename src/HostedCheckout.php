@@ -14,6 +14,7 @@ use Ogone\AbstractPaymentRequest;
 use Ogone\DirectLink\PaymentOperation;
 use Ogone\Ecommerce\EcommercePaymentRequest;
 use Ogone\Ecommerce\EcommercePaymentResponse;
+use VIISON\AddressSplitter\AddressSplitter;
 
 trait HostedCheckout
 {
@@ -52,19 +53,32 @@ trait HostedCheckout
      */
     public function getHostedCheckoutPaymentRequest(Order $order, Alias $alias)
     {
-        if ($this->configuration->getSettingsDirectsales()) {
-            $operation = new PaymentOperation(PaymentOperation::REQUEST_FOR_DIRECT_SALE);
-        } else {
+        // Get Payment Method
+        $paymentMethod = $alias->getPaymentMethod();
+
+        if ($paymentMethod &&
+            in_array($paymentMethod->getId(), [
+                Klarna::CODE,
+                KlarnaBankTransfer::CODE,
+                KlarnaDirectDebit::CODE,
+                KlarnaFinancing::CODE,
+                KlarnaPayLater::CODE,
+                KlarnaPayNow::CODE,
+            ])
+        ) {
+            // Klarna allows RES only
             $operation = new PaymentOperation(PaymentOperation::REQUEST_FOR_AUTHORISATION);
+        } else {
+            $operation = new PaymentOperation(
+                $this->configuration->getSettingsDirectsales() ? PaymentOperation::REQUEST_FOR_DIRECT_SALE :
+                    PaymentOperation::REQUEST_FOR_AUTHORISATION
+            );
         }
 
         // Redirect method require empty Alias name to generate new Alias
         if ($alias->getIsShouldStoredPermanently()) {
             $alias->setAlias('');
         }
-
-        // Get Payment Method
-        $paymentMethod = $alias->getPaymentMethod();
 
         // Build Payment Request
         $request = new EcommercePaymentRequest($this->getConfiguration()->getShaComposer('in'));
@@ -152,6 +166,30 @@ trait HostedCheckout
                 // Klarna doesn't support ECOM_BILLTO_POSTAL_STREET_LINE3
                 ->unsEcomBilltoPostalStreetLine3()
                 ->unsEcomShiptoPostalStreetLine3();
+
+            // Get rid of house number in a street field
+            // @todo Split address automatically
+            if ($order->hasData('billing_address1')) {
+                try {
+                    //$result = AddressSplitter::splitAddress($order->getBillingAddress1());
+                    //$request->setEcomBilltoPostalStreetNumber($result['houseNumber']);
+                    //$request->setEcomBilltoPostalStreetLine1($result['streetName']);
+                } catch (\Exception $e) {
+                    // Ignore it
+                }
+            }
+
+            // @todo Split address automatically
+            if ($order->hasData('shipping_address1')) {
+                try {
+                    //$result = AddressSplitter::splitAddress($order->getShippingAddress1());
+                    //$request->setEcomShiptoPostalStreetNumber($result['houseNumber']);
+                    //$request->setEcomShiptoPostalStreetLine1($result['streetName']);
+                } catch (\Exception $e) {
+                    // Ignore it
+                }
+            }
+
         }
 
         // Parameters for Klarna (deprecated)
@@ -224,6 +262,21 @@ trait HostedCheckout
                     }
                 }
             }
+
+            if ($paymentMethod->getId() === \IngenicoClient\PaymentMethod\Ideal::CODE) {
+                $additionalData = (array) $order->getAdditionalData();
+
+                if (isset($additionalData['issuer_id'])) {
+                    $request->setData('ISSUERID', $additionalData['issuer_id']);
+                }
+            }
+        }
+
+        // Override PM and BRAND for Blank payment method
+        $additionalData = (array) $order->getAdditionalData();
+        if (isset($additionalData['flex_pm']) && isset($additionalData['flex_brand'])) {
+            $request->setData('PM', $additionalData['flex_pm']);
+            $request->setData('BRAND', $additionalData['flex_brand']);
         }
 
         // Validate
