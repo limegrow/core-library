@@ -121,6 +121,12 @@ trait HostedCheckout
                 // no break
         }
 
+        // Set List Type
+        $listType = $this->getConfiguration()->getPaymentpageListType();
+        if ($listType) {
+            $request->setData('pmlisttype', $listType);
+        }
+
         /** @var EcommercePaymentRequest $request */
         $request = self::copyOrderDataToPaymentRequest($request, $order);
         $request = self::copyBrowserDataToPaymentRequest($request, $order);
@@ -153,13 +159,12 @@ trait HostedCheckout
                 ->setEcomConsumerGender($order->getCustomerGender())
                 ->setEcomShiptoPostalNamePrefix($order->getShippingCustomerTitle())
                 ->setEcomShiptoDob(
-                    $order->getCustomerDob() ? date('d/m/Y', $order->getCustomerDob()) : null
+                    $order->getCustomerDob() ? date('Y-m-d', $order->getCustomerDob()) : null
                 )
                 ->setEcomShiptoTelecomFaxNumber($order->getShippingFax())
                 ->setEcomShiptoTelecomPhoneNumber($order->getShippingPhone())
                 ->setEcomBilltoPostalStreetNumber($order->getBillingStreetNumber())
                 ->setEcomShiptoPostalStreetNumber($order->getShippingStreetNumber())
-                ->setEcomShiptoPostalState($order->getShippingState())
                 //->setEcomBilltoCompany($order->getCompanyName())
                 ->setEcomShiptoCompany($order->getCompanyName()) // Not required
 

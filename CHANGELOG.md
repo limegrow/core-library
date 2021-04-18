@@ -1,4 +1,16 @@
 # Changelog
+## [5.2.0] - 2021-04-18
+### Added
+- Implemented PMLISTTYPE option
+- Added ConfigurationInterface
+- ConnectorInterface: `getOrderPaymentMethod()`
+- ConnectorInterface: `getQuotePaymentMethod()`
+
+## Changed
+- Klarna: don't require ECOM_SHIPTO_POSTAL_STATE
+- Klarna: changed DoB format
+- Carte Bancaire fixes
+
 ## [5.1.0] - 2021-03-25
 ### Added
 - Implemented bank selection for iDeal
