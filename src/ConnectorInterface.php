@@ -128,6 +128,24 @@ interface ConnectorInterface
     public function requestOrderInfo($orderId = null);
 
     /**
+     * Get Payment Method Code of Order.
+     *
+     * @param mixed $orderId
+     *
+     * @return string|false
+     */
+    public function getOrderPaymentMethod($orderId);
+
+    /**
+     * Get Payment Method Code of Quote/Cart.
+     *
+     * @param mixed $quoteId
+     *
+     * @return string|false
+     */
+    public function getQuotePaymentMethod($quoteId = null);
+
+    /**
      * Get Field Label
      *
      * @param string $field

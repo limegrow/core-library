@@ -2,6 +2,7 @@
 
 namespace IngenicoClient;
 
+use IngenicoClient\PaymentMethod\CarteBancaire;
 use IngenicoClient\PaymentMethod\Afterpay;
 use IngenicoClient\PaymentMethod\Klarna;
 use Psr\Log\LoggerInterface;
@@ -1128,7 +1129,7 @@ class IngenicoCoreLibrary implements
 
         // Save Alias
         if ($this->configuration->getSettingsOneclick()) {
-            $this->processAlias($orderId, [
+            $aliasData = [
                 'ALIAS' => $_REQUEST[Payment::FIELD_ALIAS] ?? '',
                 'BRAND' => $_REQUEST[Payment::FIELD_BRAND] ?? '',
                 'CARDNO' => $_REQUEST[Payment::FIELD_CARD_NO] ?? '',
@@ -1136,7 +1137,14 @@ class IngenicoCoreLibrary implements
                 'BIN' => $_REQUEST[Payment::FIELD_BIN] ?? '',
                 'PM' => $_REQUEST[Payment::FIELD_PM] ?? '',
                 'ED' => $_REQUEST[Payment::FIELD_ED] ?? '',
-            ]);
+            ];
+
+            // Patch Alias data for Carte Bancaire
+            if ($this->extension->getOrderPaymentMethod($orderId) === CarteBancaire::CODE) {
+                $aliasData['BRAND'] = 'CB';
+            }
+
+            $this->processAlias($orderId, $aliasData);
         }
 
         // Check is Payment Successful
@@ -1219,7 +1227,7 @@ class IngenicoCoreLibrary implements
                 $_REQUEST[self::ALIAS_STOREPERMANENTLY] === 'Y' &&
                 in_array($_REQUEST[self::ALIAS_STATUS], [self::ALIAS_STATUS_OK, self::ALIAS_STATUS_UPDATED])
             ) {
-                $this->processAlias($orderId, [
+                $aliasData = [
                     'ALIAS' => $_REQUEST[self::ALIAS_ID] ?? '',
                     'BRAND' => $_REQUEST[self::CARD_BRAND] ?? '',
                     'CARDNO' => $_REQUEST[self::CARD_NUMBER] ?? '',
@@ -1227,7 +1235,20 @@ class IngenicoCoreLibrary implements
                     'BIN' => $_REQUEST[self::CARD_BIN] ?? '',
                     'PM' => 'CreditCard',
                     'ED' => $_REQUEST[self::CARD_EXPIRY_DATE] ?? '',
-                ]);
+                ];
+
+                // Patch Alias data for Carte Bancaire
+                if ($this->extension->isOrderCreated($orderId)) {
+                    if ($this->extension->getOrderPaymentMethod($orderId) === CarteBancaire::CODE) {
+                        $aliasData['BRAND'] = 'CB';
+                    }
+                } else {
+                    if ($this->extension->getQuotePaymentMethod(null) === CarteBancaire::CODE) {
+                        $aliasData['BRAND'] = 'CB';
+                    }
+                }
+
+                $this->processAlias($orderId, $aliasData);
             }
         }
 
@@ -1888,7 +1909,7 @@ class IngenicoCoreLibrary implements
                     if ($this->configuration->getSettingsOneclick() &&
                         $paymentResult->isPaymentSuccessful()
                     ) {
-                        $this->processAlias($orderId, [
+                        $aliasData = [
                             'ALIAS' => $paymentResult->getAlias(),
                             'BRAND' => $paymentResult->getBrand(),
                             'CARDNO' => $paymentResult->getCardNo(),
@@ -1896,7 +1917,14 @@ class IngenicoCoreLibrary implements
                             'BIN' => $paymentResult->getBin(),
                             'PM' => $paymentResult->getPm(),
                             'ED' => $paymentResult->getEd(),
-                        ]);
+                        ];
+
+                        // Patch Alias data for Carte Bancaire
+                        if ($this->extension->getOrderPaymentMethod($orderId) === CarteBancaire::CODE) {
+                            $aliasData['BRAND'] = 'CB';
+                        }
+
+                        $this->processAlias($orderId, $aliasData);
                     }
 
                     // Notify that order status changed from "cancelled" to "paid" order

@@ -69,10 +69,12 @@ class Alias extends Data
      */
     public function getName()
     {
+        $brand = $this->getBrand() === 'CB' ? 'Carte Bancaire' : $this->getBrand();
+
         // @todo Translate that
         return sprintf(
             '%s ends with %s, expires on %s/%s',
-            $this->getBrand(),
+            $brand,
             substr($this->getCardno(), -4, 4),
             substr($this->getEd(), 0, 2),
             substr($this->getEd(), 2, 4)
