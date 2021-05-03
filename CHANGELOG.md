@@ -1,4 +1,8 @@
 # Changelog
+## [5.2.1] - 2021-05-03
+## Changed
+- Trim owneraddress
+
 ## [5.2.0] - 2021-04-18
 ### Added
 - Implemented PMLISTTYPE option
