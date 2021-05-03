@@ -406,11 +406,11 @@ trait HostedCheckout
         //->setEcomShiptoPostalStreetLine3($order->getShippingAddress3());
 
         // Set owner address
-        $ownerAddress = implode(' ', [
-            $order->getBillingAddress1(),
-            $order->getBillingAddress2(),
-            $order->getBillingAddress3()
-        ]);
+        $ownerAddress = trim(implode(' ', [
+            trim($order->getBillingAddress1()),
+            trim($order->getBillingAddress2()),
+            trim($order->getBillingAddress3())
+        ]));
 
         if (mb_strlen($ownerAddress, 'UTF-8') <= 35) {
             $request->setOwnerAddress($ownerAddress);
