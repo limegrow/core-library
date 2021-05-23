@@ -120,7 +120,7 @@ class OrderItem extends Data
                     case self::ITEM_UNIT_PRICE:
                     case self::ITEM_UNIT_VAT:
                         // Round Price
-                        $result[$key] = round($result[$key], 2);
+                        $result[$key] = sprintf("%.2f", $result[$key]);
                         break;
                     case self::ITEM_VATCODE:
                         // Add Percent Suffix

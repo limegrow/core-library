@@ -290,11 +290,6 @@ trait OpenInvoice
         $order = $this->getOrder($orderId);
         $order->setData($fields);
 
-        // There is the dirty soltion of the street number problem
-        if (isset($fields['billing_address_extra'])) {
-            $order->setBillingAddress1($fields['billing_address_extra']);
-        }
-
         // Initiate Redirect Payment
         $paymentRequest = $this->getHostedCheckoutPaymentRequest($order, $alias);
 

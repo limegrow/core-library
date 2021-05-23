@@ -2,11 +2,9 @@
 
 namespace IngenicoClient\PaymentMethod;
 
-use IngenicoClient\PaymentMethod\Abstracts\Klarna as KlarnaAbstract;
-
-class KlarnaPayLater extends KlarnaAbstract
+class Ingenico extends PaymentMethod implements PaymentMethodInterface
 {
-    const CODE = 'klarna_paylater';
+    const CODE = 'ingenico';
 
     /**
      * ID Code
@@ -18,31 +16,31 @@ class KlarnaPayLater extends KlarnaAbstract
      * Name
      * @var string
      */
-    protected $name = 'Klarna Pay Later';
+    protected $name = 'Ingenico ePayments';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'https://x.klarnacdn.net/payment-method/assets/badges/generic/klarna.svg';
+    protected $logo = 'ingenico.gif';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'klarna';
+    protected $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'KLARNA_PAYLATER';
+    protected $pm = '';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'KLARNA_PAYLATER';
+    protected $brand = '';
 
     /**
      * Countries
@@ -55,30 +53,33 @@ class KlarnaPayLater extends KlarnaAbstract
         'BE' => [
             'popularity' => 100
         ],
-        'CH' => [
+        'FR' => [
             'popularity' => 100
         ],
         'DE' => [
             'popularity' => 100
         ],
-        'DK' => [
+        'IT' => [
             'popularity' => 100
         ],
-        'FI' => [
+        'LU' => [
             'popularity' => 100
         ],
         'NL' => [
+            'popularity' => 40
+        ],
+        'PT' => [
             'popularity' => 100
         ],
-        'NO' => [
+        'ES' => [
             'popularity' => 100
         ],
-        'SE' => [
+        'CH' => [
             'popularity' => 100
         ],
         'GB' => [
             'popularity' => 100
-        ],
+        ]
     ];
 
     /**
@@ -91,11 +92,5 @@ class KlarnaPayLater extends KlarnaAbstract
      * Defines if this payment method requires order line items to be sent with the request
      * @var bool
      */
-    protected $order_line_items_required = true;
-
-    /**
-     * Defines if this payment method requires additional data to be sent with the request.
-     * @var bool
-     */
-    protected $additional_data_required = true;
+    protected $order_line_items_required = false;
 }

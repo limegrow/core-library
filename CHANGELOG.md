@@ -1,4 +1,16 @@
 # Changelog
+## [5.3.0] - 2021-05-18
+### Added
+- Implemented Oney payment method
+- Implemented `Order::isVirtual()`
+- Add Generic Ingenico payment method
+- Rounding issue workaround
+
+## Changed
+- Klarna api updates
+- Improved order cancellation code
+- Rename "Bank transfer" to "Bank Transfer"
+
 ## [5.2.1] - 2021-05-03
 ## Changed
 - Trim owneraddress
