@@ -48,6 +48,7 @@ class OrderField extends Data
     const HTTP_USER_AGENT = 'http_user_agent';
 
     const IS_SHIPPING_SAME = 'is_shipping_same';
+    const IS_VIRTUAL = 'is_virtual';
 
     /**
      * Additional data or meta data

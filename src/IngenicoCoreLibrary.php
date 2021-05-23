@@ -1025,9 +1025,17 @@ class IngenicoCoreLibrary implements
             case self::RETURN_STATE_CANCEL:
             case self::RETURN_STATE_BACK:
                 // Or customer wants cancel.
+                $this->logger->debug(sprintf(
+                    '%s %s Order #%s triggered to be cancelled by customer.',
+                    __METHOD__,
+                    __LINE__,
+                    $_REQUEST['order_id']
+                ));
+
                 $this->extension->showCancellationTemplate(
                     [
-                        'order_id' => $_REQUEST['order_id']
+                        Connector::PARAM_NAME_ORDER_ID => $_REQUEST['order_id'],
+                        Connector::PARAM_NAME_MESSAGE => $this->__('checkout.payment_cancelled', [], 'messages')
                     ],
                     new Payment([
                         Payment::FIELD_ORDER_ID => $_REQUEST['order_id'],
@@ -1054,9 +1062,9 @@ class IngenicoCoreLibrary implements
                 if (!$payment->getPayId()) {
                     $this->extension->showPaymentErrorTemplate(
                         [
-                            'order_id' => null,
-                            'pay_id' => null,
-                            'message' => $this->__('checkout.payment_cancelled', [], 'messages')
+                            Connector::PARAM_NAME_ORDER_ID => null,
+                            Connector::PARAM_NAME_PAY_ID => null,
+                            Connector::PARAM_NAME_MESSAGE => $this->__('checkout.payment_cancelled', [], 'messages')
                         ],
                         $payment
                     );
@@ -1066,8 +1074,7 @@ class IngenicoCoreLibrary implements
 
                 // Debug log
                 $this->logger->debug(sprintf(
-                    '%s::%s %s An error occurred. PaymentID: %s. Status: %s. Details: %s %s.',
-                    __CLASS__,
+                    '%s %s An error occurred. PaymentID: %s. Status: %s. Details: %s %s.',
                     __METHOD__,
                     __LINE__,
                     $payment->getPayId(),
@@ -1078,9 +1085,9 @@ class IngenicoCoreLibrary implements
 
                 $this->extension->showPaymentErrorTemplate(
                     [
-                        'order_id' => $payment->getOrderId(),
-                        'pay_id' => $payment->getPayId(),
-                        'message' => $this->__('checkout.error', [
+                        Connector::PARAM_NAME_ORDER_ID => $payment->getOrderId(),
+                        Connector::PARAM_NAME_PAY_ID => $payment->getPayId(),
+                        Connector::PARAM_NAME_MESSAGE => $this->__('checkout.error', [
                             '%payment_id%' => (int) $payment->getPayId(),
                             '%status%' => $payment->getStatus(),
                             '%code%' => $payment->getErrorCode(),
@@ -1173,8 +1180,9 @@ class IngenicoCoreLibrary implements
             // Show "Order cancelled" page
             $this->extension->showCancellationTemplate(
                 [
-                    'order_id' => $orderId,
-                    'pay_id' => $payId,
+                    Connector::PARAM_NAME_ORDER_ID => $orderId,
+                    Connector::PARAM_NAME_PAY_ID => $payId,
+                    Connector::PARAM_NAME_MESSAGE => $this->__('checkout.payment_cancelled', [], 'messages')
                 ],
                 $paymentResult
             );
@@ -1183,9 +1191,9 @@ class IngenicoCoreLibrary implements
             // Payment error or declined.
             $this->extension->showPaymentErrorTemplate(
                 [
-                    'order_id' => $orderId,
-                    'pay_id' => $payId,
-                    'message' => $this->__('checkout.error', [
+                    Connector::PARAM_NAME_ORDER_ID => $orderId,
+                    Connector::PARAM_NAME_PAY_ID => $payId,
+                    Connector::PARAM_NAME_MESSAGE => $this->__('checkout.error', [
                         '%payment_id%' => (int) $paymentResult->getPayId(),
                         '%status%' => $paymentResult->getStatus(),
                         '%code%' => $paymentResult->getErrorCode(),
@@ -1358,8 +1366,7 @@ class IngenicoCoreLibrary implements
 
             $this->logger->debug(
                 sprintf(
-                    '%s::%s %s Error: An error occurred. PaymentID: %s. Status: %s. Details: %s %s.',
-                    __CLASS__,
+                    '%s %s Error: An error occurred. PaymentID: %s. Status: %s. Details: %s %s.',
                     __METHOD__,
                     __LINE__,
                     $paymentResult->getPayId(),
@@ -1685,8 +1692,7 @@ class IngenicoCoreLibrary implements
 
             $this->logger->debug(
                 sprintf(
-                    '%s::%s %s Error: An error occurred. PaymentID: %s. Status: %s. Details: %s %s.',
-                    __CLASS__,
+                    '%s %s Error: An error occurred. PaymentID: %s. Status: %s. Details: %s %s.',
                     __METHOD__,
                     __LINE__,
                     $paymentResult->getPayId(),
@@ -1727,6 +1733,7 @@ class IngenicoCoreLibrary implements
                 [
                     Connector::PARAM_NAME_ORDER_ID => $orderId,
                     Connector::PARAM_NAME_PAY_ID => $payId,
+                    Connector::PARAM_NAME_MESSAGE => $this->__('checkout.payment_cancelled', [], 'messages')
                 ],
                 $paymentResult
             );
@@ -1890,7 +1897,7 @@ class IngenicoCoreLibrary implements
                     } catch (\Exception $e) {
                         // No refund possible
                         $this->logger->debug(
-                            sprintf('%s::%s %s %s', __CLASS__, __METHOD__, __LINE__, $e->getMessage())
+                            sprintf('%s %s %s',  __METHOD__, __LINE__, $e->getMessage())
                         );
                     }
                     break;
@@ -1901,7 +1908,7 @@ class IngenicoCoreLibrary implements
                         $this->finaliseOrderPayment($orderId, $paymentResult);
                     } catch (\Exception $e) {
                         $this->logger->debug(
-                            sprintf('%s::%s %s %s', __CLASS__, __METHOD__, __LINE__, $e->getMessage())
+                            sprintf('%s %s %s', __METHOD__, __LINE__, $e->getMessage())
                         );
                     }
 
@@ -2480,7 +2487,7 @@ class IngenicoCoreLibrary implements
         // Payment result must have status
         if (!$paymentResult->getStatus()) {
             // There's can be problems if wrong credentials of DirectLink user.
-            $this->logger->debug(__CLASS__ . '::' . __METHOD__ . ' No status field.', $paymentResult->toArray());
+            $this->logger->debug(__METHOD__ . ' No status field.', $paymentResult->toArray());
             $message = 'An error occurred. Please try to place the order again.';
             $error = $paymentResult->getNcErrorPlus();
             if (empty($error)) {
@@ -2536,10 +2543,10 @@ class IngenicoCoreLibrary implements
                 ], 'messages');
 
                 $paymentResult->setMessage($message);
-                $this->logger->debug(__CLASS__ . '::' . __METHOD__ . ' Error: ' . $message, $paymentResult->toArray());
+                $this->logger->debug(__METHOD__ . ' Error: ' . $message, $paymentResult->toArray());
                 break;
             case self::STATUS_UNKNOWN:
-                $this->logger->debug(__CLASS__ . '::' . __METHOD__ . ' Unknown status', $paymentResult->toArray());
+                $this->logger->debug(__METHOD__ . ' Unknown status', $paymentResult->toArray());
                 break;
         }
 

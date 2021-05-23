@@ -18,7 +18,8 @@ class PaymentMethod implements \Countable, \IteratorAggregate
         'real_time_banking' => 'Real-time Banking',
         'e_wallet' => 'e-Wallet',
         'prepaid_vouchers' => 'Prepaid Vouchers',
-        'open_invoice' => 'Open Invoice'
+        'open_invoice' => 'Open Invoice',
+        'klarna' => 'Klarna'
     ];
 
     /**

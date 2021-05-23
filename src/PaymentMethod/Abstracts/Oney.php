@@ -5,15 +5,20 @@ namespace IngenicoClient\PaymentMethod\Abstracts;
 use IngenicoClient\OrderField;
 use IngenicoClient\PaymentMethod\PaymentMethod;
 
-abstract class Klarna extends PaymentMethod
+abstract class Oney extends PaymentMethod
 {
     /**
      * Common fields
      * @var array
      * @SuppressWarnings("Duplicates")
-     * @see https://epayments-support.ingenico.com/en/payment-methods/alternative-payment-methods/klarna
      */
     protected $common_fields = [
+        OrderField::BILLING_CUSTOMER_TITLE => [
+            'required' => true,
+            'field_type' => PaymentMethod::TYPE_RADIO,
+            'length' => 10,
+            'values' => ['Mr' => 'Mr', 'Mrs' => 'Mrs', 'Miss' => 'Miss']
+        ],
         OrderField::BILLING_COUNTRY => [
             'required' => true,
             'field_type' => PaymentMethod::TYPE_TEXT,
@@ -27,12 +32,12 @@ abstract class Klarna extends PaymentMethod
         OrderField::BILLING_ADDRESS1 => [
             'required' => true,
             'field_type' => PaymentMethod::TYPE_TEXT,
-            //'length' => 35
+            'length' => 35
         ],
         OrderField::BILLING_ADDRESS2 => [
-            'required' => false,
+            'required' => true,
             'field_type' => PaymentMethod::TYPE_TEXT,
-            //'length' => 35
+            'length' => 35
         ],
         OrderField::BILLING_CITY => [
             'required' => true,
@@ -69,6 +74,12 @@ abstract class Klarna extends PaymentMethod
             'field_type' => PaymentMethod::TYPE_TEXT,
             'length' => 10
         ],
+        OrderField::SHIPPING_CUSTOMER_TITLE => [
+            'required' => true,
+            'field_type' => PaymentMethod::TYPE_RADIO,
+            'length' => 10,
+            'values' => ['Mr' => 'Mr', 'Mrs' => 'Mrs', 'Miss' => 'Miss']
+        ],
         OrderField::SHIPPING_COUNTRY => [
             'required' => false,
             'field_type' => PaymentMethod::TYPE_TEXT,
@@ -80,14 +91,14 @@ abstract class Klarna extends PaymentMethod
             'length' => 2
         ],
         OrderField::SHIPPING_ADDRESS1 => [
-            'required' => false,
+            'required' => true,
             'field_type' => PaymentMethod::TYPE_TEXT,
-            //'length' => 35
+            'length' => 35
         ],
         OrderField::SHIPPING_ADDRESS2 => [
             'required' => false,
             'field_type' => PaymentMethod::TYPE_TEXT,
-            //'length' => 35
+            'length' => 35
         ],
         OrderField::SHIPPING_CITY => [
             'required' => false,
@@ -105,7 +116,7 @@ abstract class Klarna extends PaymentMethod
             'length' => 20
         ],
         OrderField::SHIPPING_EMAIL => [
-            'required' => false,
+            'required' => true,
             'field_type' => PaymentMethod::TYPE_TEXT,
             'length' => 50
         ],
@@ -129,16 +140,6 @@ abstract class Klarna extends PaymentMethod
             'field_type' => PaymentMethod::TYPE_TEXT,
             'length' => 50
         ],
-        OrderField::SHIPPING_CUSTOMER_TITLE => [
-            'required' => false,
-            'field_type' => PaymentMethod::TYPE_TEXT,
-            'length' => 10
-        ],
-        OrderField::SHIPPING_FAX => [
-            'required' => false,
-            'field_type' => PaymentMethod::TYPE_TEXT,
-            'length' => 20
-        ],
         OrderField::SHIPPING_METHOD => [
             'required' => false,
             'field_type' => PaymentMethod::TYPE_TEXT,
@@ -161,28 +162,5 @@ abstract class Klarna extends PaymentMethod
      * @var array
      * @SuppressWarnings("Duplicates")
      */
-    protected $additional_fields = [
-        OrderField::CUSTOMER_DOB => [
-            'required' => true,
-            'field_type' => PaymentMethod::TYPE_DATE,
-            'length' => 10,
-        ],
-        OrderField::CUSTOMER_GENDER => [
-            'required' => false,
-            'field_type' => PaymentMethod::TYPE_RADIO,
-            'length' => 1,
-            'values' => ['M' => 'Male', 'F' => 'Female']
-        ],
-        OrderField::CUSTOMER_REG_NUMBER => [
-            'required' => false,
-            'field_type' => PaymentMethod::TYPE_TEXT,
-            'length' => 50
-        ],
-        OrderField::CUSTOMER_CIVILITY => [
-            'required' => false,
-            'field_type' => PaymentMethod::TYPE_RADIO,
-            'length' => 1,
-            'values' => ['M' => 'Male', 'F' => 'Female']
-        ],
-    ];
+    protected $additional_fields = [];
 }

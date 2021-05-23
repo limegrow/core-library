@@ -35,6 +35,8 @@ use InvalidArgumentException;
  * @method mixed getCustomerGender()
  * @method $this setCustomerRegistrationNumber($value)
  * @method mixed getCustomerRegistrationNumber()
+ * @method bool getIsVirtual()
+ * @method $this setIsVirtual($value)
  * @method $this setIsShippingSame($value)
  * @method bool getIsShippingSame()
  * @method $this setBillingCustomerTitle($value)
@@ -520,5 +522,19 @@ class Order extends Data
     public function getReturnUrls($orderId, $paymentMode = null)
     {
         // @todo move from IngenicoCoreLibrary:requestReturnUrls()
+    }
+
+    /**
+     * Returns if an order is non-shippable (virtual) or shippable.
+     *
+     * @return bool
+     */
+    public function isVirtual()
+    {
+        if ($this->hasData(OrderField::IS_VIRTUAL)) {
+            return (bool) $this->getData(OrderField::IS_VIRTUAL);
+        }
+
+        return true;
     }
 }
