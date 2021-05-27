@@ -1,4 +1,8 @@
 # Changelog
+## [5.3.1] - 2021-05-27
+### Changed
+- Fixed: A non well formed numeric value encountered
+
 ## [5.3.0] - 2021-05-18
 ### Added
 - Implemented Oney payment method
