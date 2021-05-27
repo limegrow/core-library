@@ -58,6 +58,11 @@ trait HostedCheckout
      */
     public function getHostedCheckoutPaymentRequest(Order $order, Alias $alias)
     {
+        // Convert customer dob to timestamp if needs
+        if ($order->hasCustomerDob() && is_string($order->getCustomerDob())) {
+            $order->setCustomerDob((new \DateTime($order->getCustomerDob()))->getTimestamp());
+        }
+
         // Get Payment Method
         $paymentMethod = $alias->getPaymentMethod();
 
@@ -250,10 +255,6 @@ trait HostedCheckout
                 KlarnaPayNow::CODE,
             ])
         ) {
-            if (is_string($order->getCustomerDob())) {
-                $order->setCustomerDob((new \DateTime($order->getCustomerDob()))->getTimestamp());
-            }
-
             $request->setEcomConsumerGender($order->getCustomerGender())
                 ->setEcomShiptoPostalNamePrefix($order->getShippingCustomerTitle())
                 ->setEcomShiptoDob(
