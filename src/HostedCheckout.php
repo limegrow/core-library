@@ -20,7 +20,6 @@ use Ogone\AbstractPaymentRequest;
 use Ogone\DirectLink\PaymentOperation;
 use Ogone\Ecommerce\EcommercePaymentRequest;
 use Ogone\Ecommerce\EcommercePaymentResponse;
-use VIISON\AddressSplitter\AddressSplitter;
 
 trait HostedCheckout
 {
