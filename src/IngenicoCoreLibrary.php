@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\PoFileLoader;
 use VIISON\AddressSplitter\AddressSplitter;
+use VIISON\AddressSplitter\Exceptions\SplittingException;
 
 class IngenicoCoreLibrary implements
     IngenicoCoreLibraryInterface,
@@ -1986,8 +1987,14 @@ class IngenicoCoreLibrary implements
             // Split address automatically
             try {
                 $result = AddressSplitter::splitAddress($info[OrderField::BILLING_ADDRESS1]);
+                $info[OrderField::BILLING_ADDRESS1] = trim(sprintf('%s %s %s',
+                    $result['additionToAddress1'],
+                    $result['streetName'],
+                    $result['additionToAddress2']
+                ));
+
                 $info[OrderField::BILLING_STREET_NUMBER] = $result['houseNumber'];
-            } catch (\Exception $e) {
+            } catch (SplittingException $e) {
                 // Ignore it
             }
         }
@@ -1997,8 +2004,14 @@ class IngenicoCoreLibrary implements
             // Split address automatically
             try {
                 $result = AddressSplitter::splitAddress($info[OrderField::SHIPPING_ADDRESS1]);
+                $info[OrderField::SHIPPING_ADDRESS1] = trim(sprintf('%s %s %s',
+                    $result['additionToAddress1'],
+                    $result['streetName'],
+                    $result['additionToAddress2']
+                ));
+
                 $info[OrderField::SHIPPING_STREET_NUMBER] = $result['houseNumber'];
-            } catch (\Exception $e) {
+            } catch (SplittingException $e) {
                 // Ignore it
             }
         }
@@ -2043,8 +2056,14 @@ class IngenicoCoreLibrary implements
             // Split address automatically
             try {
                 $result = AddressSplitter::splitAddress($info[OrderField::BILLING_ADDRESS1]);
+                $info[OrderField::BILLING_ADDRESS1] = trim(sprintf('%s %s %s',
+                    $result['additionToAddress1'],
+                    $result['streetName'],
+                    $result['additionToAddress2']
+                ));
+
                 $info[OrderField::BILLING_STREET_NUMBER] = $result['houseNumber'];
-            } catch (\Exception $e) {
+            } catch (SplittingException $e) {
                 // Ignore it
             }
         }
@@ -2054,8 +2073,14 @@ class IngenicoCoreLibrary implements
             // Split address automatically
             try {
                 $result = AddressSplitter::splitAddress($info[OrderField::SHIPPING_ADDRESS1]);
+                $info[OrderField::SHIPPING_ADDRESS1] = trim(sprintf('%s %s %s',
+                    $result['additionToAddress1'],
+                    $result['streetName'],
+                    $result['additionToAddress2']
+                ));
+
                 $info[OrderField::SHIPPING_STREET_NUMBER] = $result['houseNumber'];
-            } catch (\Exception $e) {
+            } catch (SplittingException $e) {
                 // Ignore it
             }
         }

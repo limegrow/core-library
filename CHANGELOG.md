@@ -1,4 +1,8 @@
 # Changelog
+## [5.5.0] - 2021-06-29
+### Changed
+- Fixed: Street number is sent twice
+
 ## [5.4.0] - 2021-06-12
 ### Added
 - Add AirPlus payment method
