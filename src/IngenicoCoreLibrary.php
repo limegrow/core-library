@@ -5,6 +5,11 @@ namespace IngenicoClient;
 use IngenicoClient\PaymentMethod\CarteBancaire;
 use IngenicoClient\PaymentMethod\Afterpay;
 use IngenicoClient\PaymentMethod\Klarna;
+use IngenicoClient\PaymentMethod\KlarnaBankTransfer;
+use IngenicoClient\PaymentMethod\KlarnaDirectDebit;
+use IngenicoClient\PaymentMethod\KlarnaFinancing;
+use IngenicoClient\PaymentMethod\KlarnaPayLater;
+use IngenicoClient\PaymentMethod\KlarnaPayNow;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\PoFileLoader;
@@ -1983,36 +1988,44 @@ class IngenicoCoreLibrary implements
         }
 
         // Substitute street number
-        if (empty($info[OrderField::BILLING_STREET_NUMBER]) && !empty($info[OrderField::BILLING_ADDRESS1])) {
-            // Split address automatically
-            try {
-                $result = AddressSplitter::splitAddress($info[OrderField::BILLING_ADDRESS1]);
-                $info[OrderField::BILLING_ADDRESS1] = trim(sprintf('%s %s %s',
-                    $result['additionToAddress1'],
-                    $result['streetName'],
-                    $result['additionToAddress2']
-                ));
+        if (in_array($this->extension->getOrderPaymentMethod($orderId), [
+            KlarnaBankTransfer::CODE,
+            KlarnaDirectDebit::CODE,
+            KlarnaFinancing::CODE,
+            KlarnaPayLater::CODE,
+            KlarnaPayNow::CODE
+        ])) {
+            if (empty($info[OrderField::BILLING_STREET_NUMBER]) && !empty($info[OrderField::BILLING_ADDRESS1])) {
+                // Split address automatically
+                try {
+                    $result = AddressSplitter::splitAddress($info[OrderField::BILLING_ADDRESS1]);
+                    $info[OrderField::BILLING_ADDRESS1] = trim(sprintf('%s %s %s',
+                        $result['additionToAddress1'],
+                        $result['streetName'],
+                        $result['additionToAddress2']
+                    ));
 
-                $info[OrderField::BILLING_STREET_NUMBER] = $result['houseNumber'];
-            } catch (SplittingException $e) {
-                // Ignore it
+                    $info[OrderField::BILLING_STREET_NUMBER] = $result['houseNumber'];
+                } catch (SplittingException $e) {
+                    // Ignore it
+                }
             }
-        }
 
-        // Substitute street number
-        if (empty($info[OrderField::SHIPPING_STREET_NUMBER]) && !empty($info[OrderField::SHIPPING_ADDRESS1])) {
-            // Split address automatically
-            try {
-                $result = AddressSplitter::splitAddress($info[OrderField::SHIPPING_ADDRESS1]);
-                $info[OrderField::SHIPPING_ADDRESS1] = trim(sprintf('%s %s %s',
-                    $result['additionToAddress1'],
-                    $result['streetName'],
-                    $result['additionToAddress2']
-                ));
+            // Substitute street number
+            if (empty($info[OrderField::SHIPPING_STREET_NUMBER]) && !empty($info[OrderField::SHIPPING_ADDRESS1])) {
+                // Split address automatically
+                try {
+                    $result = AddressSplitter::splitAddress($info[OrderField::SHIPPING_ADDRESS1]);
+                    $info[OrderField::SHIPPING_ADDRESS1] = trim(sprintf('%s %s %s',
+                        $result['additionToAddress1'],
+                        $result['streetName'],
+                        $result['additionToAddress2']
+                    ));
 
-                $info[OrderField::SHIPPING_STREET_NUMBER] = $result['houseNumber'];
-            } catch (SplittingException $e) {
-                // Ignore it
+                    $info[OrderField::SHIPPING_STREET_NUMBER] = $result['houseNumber'];
+                } catch (SplittingException $e) {
+                    // Ignore it
+                }
             }
         }
 
@@ -2052,36 +2065,44 @@ class IngenicoCoreLibrary implements
         }
 
         // Substitute street number
-        if (empty($info[OrderField::BILLING_STREET_NUMBER]) && !empty($info[OrderField::BILLING_ADDRESS1])) {
-            // Split address automatically
-            try {
-                $result = AddressSplitter::splitAddress($info[OrderField::BILLING_ADDRESS1]);
-                $info[OrderField::BILLING_ADDRESS1] = trim(sprintf('%s %s %s',
-                    $result['additionToAddress1'],
-                    $result['streetName'],
-                    $result['additionToAddress2']
-                ));
+        if (in_array($this->extension->getQuotePaymentMethod(null), [
+            KlarnaBankTransfer::CODE,
+            KlarnaDirectDebit::CODE,
+            KlarnaFinancing::CODE,
+            KlarnaPayLater::CODE,
+            KlarnaPayNow::CODE
+        ])) {
+            if (empty($info[OrderField::BILLING_STREET_NUMBER]) && !empty($info[OrderField::BILLING_ADDRESS1])) {
+                // Split address automatically
+                try {
+                    $result = AddressSplitter::splitAddress($info[OrderField::BILLING_ADDRESS1]);
+                    $info[OrderField::BILLING_ADDRESS1] = trim(sprintf('%s %s %s',
+                        $result['additionToAddress1'],
+                        $result['streetName'],
+                        $result['additionToAddress2']
+                    ));
 
-                $info[OrderField::BILLING_STREET_NUMBER] = $result['houseNumber'];
-            } catch (SplittingException $e) {
-                // Ignore it
+                    $info[OrderField::BILLING_STREET_NUMBER] = $result['houseNumber'];
+                } catch (SplittingException $e) {
+                    // Ignore it
+                }
             }
-        }
 
-        // Substitute street number
-        if (empty($info[OrderField::SHIPPING_STREET_NUMBER]) && !empty($info[OrderField::SHIPPING_ADDRESS1])) {
-            // Split address automatically
-            try {
-                $result = AddressSplitter::splitAddress($info[OrderField::SHIPPING_ADDRESS1]);
-                $info[OrderField::SHIPPING_ADDRESS1] = trim(sprintf('%s %s %s',
-                    $result['additionToAddress1'],
-                    $result['streetName'],
-                    $result['additionToAddress2']
-                ));
+            // Substitute street number
+            if (empty($info[OrderField::SHIPPING_STREET_NUMBER]) && !empty($info[OrderField::SHIPPING_ADDRESS1])) {
+                // Split address automatically
+                try {
+                    $result = AddressSplitter::splitAddress($info[OrderField::SHIPPING_ADDRESS1]);
+                    $info[OrderField::SHIPPING_ADDRESS1] = trim(sprintf('%s %s %s',
+                        $result['additionToAddress1'],
+                        $result['streetName'],
+                        $result['additionToAddress2']
+                    ));
 
-                $info[OrderField::SHIPPING_STREET_NUMBER] = $result['houseNumber'];
-            } catch (SplittingException $e) {
-                // Ignore it
+                    $info[OrderField::SHIPPING_STREET_NUMBER] = $result['houseNumber'];
+                } catch (SplittingException $e) {
+                    // Ignore it
+                }
             }
         }
 
