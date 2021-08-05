@@ -1,4 +1,9 @@
 # Changelog
+## [5.6.0] - 2021-08-05
+### Changed
+- Fixed: address fixes for Oney
+- Don't use `OWNERADDRESS` if applicable
+
 ## [5.5.1] - 2021-07-08
 ### Changed
 - Fixed: Add Street number for Klarna payment methods only
