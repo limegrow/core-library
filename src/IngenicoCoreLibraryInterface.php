@@ -70,10 +70,11 @@ interface IngenicoCoreLibraryInterface
      *
      * @param $orderId
      * @param $payId
+     * @param $payIdSub
      *
      * @return Payment
      */
-    public function getPaymentInfo($orderId, $payId = null);
+    public function getPaymentInfo($orderId, $payId = null, $payIdSub = null);
 
     /**
      * Create Direct Link payment request.

@@ -1,4 +1,7 @@
 # Changelog
+## [6.0.0] - 2021-11-14
+### Changed: `getPaymentInfo($orderId, $payId = null, $payIdSub = null)`
+
 ## [5.6.0] - 2021-08-05
 ### Changed
 - Fixed: address fixes for Oney

@@ -222,13 +222,15 @@ class DirectLink
      * @param Configuration $configuration
      * @param $orderId
      * @param $payId
+     * @param $payIdSub
      *
      * @return Payment
      */
     public function createStatusRequest(
         Configuration $configuration,
         $orderId,
-        $payId
+        $payId,
+        $payIdSub
     ) {
         $queryRequest = new DirectLinkQueryRequest($configuration->getShaComposer());
         $queryRequest->setOgoneUri($configuration->getApiQuerydirect());
@@ -243,6 +245,10 @@ class DirectLink
 
         if ($payId) {
             $queryRequest->setPayId($payId);
+        }
+
+        if ($payIdSub) {
+            $queryRequest->setPayIdSub($payIdSub);
         }
 
         $params = $queryRequest->toArray();

@@ -1131,7 +1131,8 @@ class IngenicoCoreLibrary implements
         // Get Payment status
         $orderId = $_REQUEST['orderID'];
         $payId = $_REQUEST['PAYID'];
-        $paymentResult = $this->getPaymentInfo($orderId, $payId);
+        $payIdSub = $_REQUEST['PAYIDSUB'] ?? null;
+        $paymentResult = $this->getPaymentInfo($orderId, $payId, $payIdSub);
 
         // Save payment results and update order status
         $this->finaliseOrderPayment($orderId, $paymentResult);
@@ -1827,15 +1828,16 @@ class IngenicoCoreLibrary implements
      *
      * @param $orderId
      * @param $payId
+     * @param $payIdSub
      *
      * @return Payment
      */
-    public function getPaymentInfo($orderId, $payId = null)
+    public function getPaymentInfo($orderId, $payId = null, $payIdSub = null)
     {
         $directLink = new DirectLink();
         $directLink->setLogger($this->getLogger());
 
-        $paymentResult = $directLink->createStatusRequest($this->configuration, $orderId, $payId);
+        $paymentResult = $directLink->createStatusRequest($this->configuration, $orderId, $payId, $payIdSub);
         if ($paymentResult) {
             // Set payment status using IngenicoCoreLibarary::getPaymentStatus()
             $paymentResult->setPaymentStatus(
