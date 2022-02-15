@@ -733,33 +733,6 @@ class IngenicoCoreLibrary implements
 
         $this->request = new Request($_REQUEST);
 
-        // Initialize translations
-        $locale = $this->extension->getLocale();
-        $this->translator = new Translator($locale);
-        $this->translator->addLoader('po', new PoFileLoader());
-        $this->translator->setFallbackLocales(['en_US']);
-        $this->translator->setLocale($locale);
-
-        // Load translations
-        $directory = __DIR__ . '/../translations';
-        $files = scandir($directory);
-        foreach ($files as $file) {
-            $file = $directory . DIRECTORY_SEPARATOR . $file;
-            $info = pathinfo($file);
-            if ($info['extension'] !== 'po') {
-                continue;
-            }
-
-            $filename = $info['filename'];
-            list($domain, $locale) = explode('.', $filename);
-            $this->translator->addResource(
-                'po',
-                $directory . DIRECTORY_SEPARATOR . $info['basename'],
-                $locale,
-                $domain
-            );
-        }
-
         // Load environment
         $env = parse_ini_file(__DIR__ . '/../environments.ini', true);
         $environment = $env[$extension->getPlatformEnvironment()];
@@ -826,7 +799,28 @@ class IngenicoCoreLibrary implements
      */
     public function __($id, array $parameters = [], $domain = null, $locale = null)
     {
-        return $this->translator->trans($id, $parameters, $domain, $locale);
+        // Get current locale
+        $currentLocale = setlocale(LC_ALL, 0);
+
+        // Set locale
+        putenv('LC_ALL=' . $locale);
+        setlocale(LC_ALL, $locale);
+
+        bindtextdomain($domain, __DIR__ . '/../translations');
+        textdomain($domain);
+
+        // Translate
+        $message = gettext('checkout.error');
+        if (count($parameters) > 0) {
+            // Format
+            $message = str_replace(array_keys($parameters), array_values($parameters), $id);
+        }
+
+        // Set previous locale
+        putenv('LC_ALL=' . $currentLocale);
+        setlocale(LC_ALL, $currentLocale);
+
+        return $message;
     }
 
     /**
@@ -839,16 +833,57 @@ class IngenicoCoreLibrary implements
     public function getAllTranslations($locale, $domain = null)
     {
         if (!$domain) {
-            $result = [];
-            $catalogue = $this->translator->getCatalogue($locale)->all();
-            foreach ($catalogue as $domain => $translations) {
-                $result = array_merge($result, $translations);
+            $translations = [];
+
+            // Scan po files
+            $domains = glob(__DIR__ . '/../translations/' . $locale . '/LC_MESSAGES/*.po');
+            foreach ($domains as $domain) {
+                $domain = basename($domain, '.po');
+                $translations = array_merge(
+                    $translations,
+                    $this->getAllTranslations($locale, $domain)
+                );
             }
 
-            return $result;
+            return $translations;
         }
 
-        return $this->translator->getCatalogue($locale)->all($domain);
+        // Parse po file and extract translations
+        $messages = [];
+        $file = __DIR__ . '/../translations/' . $locale . '/LC_MESSAGES/' . $domain . '.po';
+        if (!file_exists($file)) {
+            return $messages;
+        }
+
+        $id = null;
+        $stream = fopen($file, 'r');
+        while ($line = fgets($stream)) {
+            $line = trim($line);
+
+            if ('' === $line) {
+                // Skip it
+            } elseif ('#,' === substr($line, 0, 2)) {
+                // Skip it
+            } elseif ('msgid "' === substr($line, 0, 7)) {
+                $id = substr($line, 7, -1);
+            } elseif ('msgstr "' === substr($line, 0, 8)) {
+                if ($id) {
+                    $messages[$id] = substr($line, 8, -1);
+                }
+
+                $id = null;
+            } elseif ('"' === $line[0]) {
+                // Skip it
+            } elseif ('msgid_plural "' === substr($line, 0, 14)) {
+                // Skip it
+            } elseif ('msgstr[' === substr($line, 0, 7)) {
+                // Skip it
+            }
+        }
+
+        fclose($stream);
+
+        return $messages;
     }
 
     /**

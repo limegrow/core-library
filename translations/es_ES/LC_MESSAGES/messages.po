@@ -8,128 +8,128 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2019-04-08T16:14:20+00:00\n"
-"PO-Revision-Date: 2019-04-08 22:18+0600\n"
-"Language: en_US\n"
+"PO-Revision-Date: 2022-02-14 22:52+0600\n"
+"Language: es_ES\n"
 "X-Domain: messages\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 3.0\n"
 "X-Poedit-KeywordsList: $this->__;__\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ../src\n"
 
 msgid "checkout.error"
-msgstr "An error occurred. Please try to place the order again. PaymentID: %payment_id%. Status: %status%. Details: %code% %message%."
+msgstr "Se ha producido un error. Pruebe a volver a hacer el pedido. PaymentID: %payment_id%. Estado: %status%. Detalles: %code% %message%."
 
 msgid "checkout.payment_info"
-msgstr "Payment is %status%. Status: %status_code%. PayID: %payment_id%."
+msgstr "Estado del pago: %status%. Estado: %status_code%. PayID: %payment_id%."
 
 msgid "checkout.payment_cancelled"
-msgstr "Payment has been cancelled."
+msgstr "Su proceso de pago se ha cancelado."
 
 msgid "exceptions.alias_none"
-msgstr "Alias doesn't exist."
+msgstr "El alias no existe."
 
 msgid "exceptions.access_denied"
-msgstr "Access denied."
+msgstr "Acceso denegado."
 
 msgid "exceptions.refund_unavailable"
-msgstr "Refund unavailable"
+msgstr "Reembolso no disponible"
 
 msgid "exceptions.refund_failed"
-msgstr "Refund failed. Error %code% %message%"
+msgstr "Reembolso fallido. Error %code% %message%"
 
 msgid "exceptions.capture_unavailable"
-msgstr "Capture unavailable"
+msgstr "Reembolso no disponible"
 
 msgid "exceptions.capture_failed"
-msgstr "Capture failed. Error %code% %message%"
+msgstr "Captura fallida. Error %code% %message%"
 
 msgid "exceptions.cancellation_unavailable"
-msgstr "Cancellation unavailable"
+msgstr "Cancelación no disponible"
 
 msgid "exceptions.cancellation_failed"
-msgstr "Cancellation failed. Error %code% %message%"
+msgstr "Cancelación fallida. Error %code% %message%"
 
 msgid "exceptions.upload_filed"
-msgstr "There was an error uploading your file."
+msgstr "Se ha producido un error al cargar su archivo."
 
 msgid "validator.mime_html_only"
-msgstr "Only \"text/html\" mime type is allowed."
+msgstr "Solo se permite \"text/html\" como tipo de mime."
 
 msgid "validator.extension_html_only"
-msgstr "Only html files are allowed."
+msgstr "Solo se permiten archivos html."
 
 msgid "validator.instalments.negative_values"
-msgstr "Negative installment values are not valid."
+msgstr "Los valores de pagos negativos no son válidos."
 
 msgid "validator.instalments.too_much"
-msgstr "Order can be split into up to 24 installments."
+msgstr "El pedido se puede dividir hasta en 24 pagos."
 
 msgid "validator.instalments.maximum_period"
-msgstr "Maximum period between each installment is 90 days."
+msgstr "El período máximo entre cada pago es de 90 días."
 
 msgid "validator.instalments.first_payment"
-msgstr "First payment must be between 1% - 99%."
+msgstr "El primero pago debe ser del 1% - 99%."
 
 msgid "validator.request_timeout"
-msgstr "Request timeout is not valid."
+msgstr "Tiempo de espera de la solicitud no válido."
 
 msgid "validator.short_signature"
-msgstr "You need to use a signature value that is exactly 40 characters long. We recommend that you generate it and insert it into Backoffice as shown in the help window."
+msgstr "Debe usar un valor de firma que tenga exactamente 40 caracteres de longitud. Recomendamos generarlo e insertarlo en la administración de, tal como se muestra en la ventana de ayuda."
 
 msgid "validator.template_url_invalid"
-msgstr "Template file URL is not valid."
+msgstr "URL del archivo de plantilla no válida."
 
 msgid "validator.settings.reminderemail.negative_values"
-msgstr "Delay value is not valid."
+msgstr "El valor de retardo no es válido."
 
 msgid "core.authorization_usage"
-msgstr "Save card for future payments on this store"
+msgstr "Guardar tarjeta para pagos futuros en esta tienda"
 
 msgid "Cards"
-msgstr "Cards"
+msgstr "Tarjetas"
 
 msgid "Real-time Banking"
-msgstr "Real-time Banking"
+msgstr "Banca en tiempo real"
 
 msgid "e-Wallet"
 msgstr "e-Wallet"
 
 msgid "Prepaid Vouchers"
-msgstr "Prepaid Vouchers"
+msgstr "Vales de prepago"
 
 msgid "France"
-msgstr "France"
+msgstr "Francia"
 
 msgid "Belgium"
-msgstr "Belgium"
+msgstr "Bélgica"
 
 msgid "Germany"
-msgstr "Germany"
+msgstr "Alemania"
 
 msgid "Italy"
-msgstr "Italy"
+msgstr "Italia"
 
 msgid "Luxembourg"
-msgstr "Luxembourg"
+msgstr "Luxemburgo"
 
 msgid "Netherlands"
-msgstr "Netherlands"
+msgstr "Países Bajos"
 
 msgid "Portugal"
 msgstr "Portugal"
 
 msgid "Spain"
-msgstr "Spain"
+msgstr "España"
 
 msgid "Switzerland"
-msgstr "Switzerland"
+msgstr "Suiza"
 
 msgid "United Kingdom of Great Britain and Northern Ireland"
-msgstr "United Kingdom"
+msgstr "Reino Unido"
 
 msgid "Value is required"
-msgstr "Value is required"
+msgstr "Valor obligatorio"
 
 msgid "Value must not exceed %s characters"
 msgstr "Value must not exceed %s characters"
@@ -144,7 +144,7 @@ msgid "Invalid value"
 msgstr "Invalid value"
 
 msgid "Male"
-msgstr "Male"
+msgstr "Hombre"
 
 msgid "Female"
-msgstr "Female"
+msgstr "Mujer"
