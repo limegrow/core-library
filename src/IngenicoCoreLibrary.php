@@ -799,26 +799,44 @@ class IngenicoCoreLibrary implements
      */
     public function __($id, array $parameters = [], $domain = null, $locale = null)
     {
+        if (!$locale) {
+            $locale = 'en_US';
+        }
+
+        if (!$domain) {
+            $domain = 'messages';
+        }
+
         // Get current locale
-        $currentLocale = setlocale(LC_ALL, 0);
+        $currentLocale = setlocale(LC_MESSAGES, 0);
 
-        // Set locale
-        putenv('LC_ALL=' . $locale);
-        setlocale(LC_ALL, $locale);
+        putenv('LC_MESSAGES=' . $locale);
+        $result = setlocale(LC_MESSAGES, $locale);
+        if (!$result && !stristr(PHP_OS, 'WIN')) {
+            // Unable to set locale, so unable to use gettext
+            // Use failback mode
+            $message = $id;
+            $messages = $this->getAllTranslations($locale, $domain);
+            if (isset($messages[$id])) {
+                $message = $messages[$id];
+            }
+        } else {
+            bindtextdomain($domain, realpath(__DIR__ . '/../translations'));
+            bind_textdomain_codeset($domain, 'UTF-8');
+            textdomain($domain);
 
-        bindtextdomain($domain, __DIR__ . '/../translations');
-        textdomain($domain);
+            // Translate
+            $message = gettext($id);
 
-        // Translate
-        $message = gettext('checkout.error');
+            // Set previous locale
+            putenv('LC_MESSAGES=' . $currentLocale);
+            setlocale(LC_ALL, $currentLocale);
+        }
+
         if (count($parameters) > 0) {
             // Format
             $message = str_replace(array_keys($parameters), array_values($parameters), $id);
         }
-
-        // Set previous locale
-        putenv('LC_ALL=' . $currentLocale);
-        setlocale(LC_ALL, $currentLocale);
 
         return $message;
     }
