@@ -14,11 +14,11 @@ use IngenicoClient\PaymentMethod\FacilyPay3x;
 use IngenicoClient\PaymentMethod\FacilyPay3xnf;
 use IngenicoClient\PaymentMethod\FacilyPay4x;
 use IngenicoClient\PaymentMethod\FacilyPay4xnf;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Translation\Translator;
-use Symfony\Component\Translation\Loader\PoFileLoader;
 use VIISON\AddressSplitter\AddressSplitter;
 use VIISON\AddressSplitter\Exceptions\SplittingException;
+use IngenicoClient\Logger\AdapterInterface;
+use IngenicoClient\Logger\MonologAdapter;
+use IngenicoClient\Logger\FileAdapter;
 
 class IngenicoCoreLibrary implements
     IngenicoCoreLibraryInterface,
@@ -639,18 +639,15 @@ class IngenicoCoreLibrary implements
      */
     private $configuration;
 
-    /** @var LoggerInterface */
+    /**
+     * @var Logger
+     */
     private $logger;
 
     /**
      * @var Request
      */
     private $request;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
 
     /**
      * @var string
@@ -724,7 +721,7 @@ class IngenicoCoreLibrary implements
      */
     public function __construct(ConnectorInterface $extension)
     {
-        $this->logger = new \Psr\Log\NullLogger();
+        $this->logger = new Logger(new FileAdapter(['file' => sys_get_temp_dir() . '/ingenico_core.log']));
         $this->extension = $extension;
 
         // Initialize settings
@@ -764,26 +761,43 @@ class IngenicoCoreLibrary implements
 
     /**
      * Gets Logger.
+     * @deprecated
      *
-     * @return LoggerInterface|null
+     * @return \Psr\Log\LoggerInterface|null
      */
     public function getLogger()
     {
-        return $this->logger;
+        return null;
     }
 
     /**
      * Sets Logger.
+     * @deprecated Use setLogAdapter() method instead of
      *
-     * @param LoggerInterface|null $logger
+     * @param \Psr\Log\LoggerInterface|null $logger
      *
      * @return $this
      */
-    public function setLogger(LoggerInterface $logger = null)
+    public function setLogger($logger = null)
     {
         if ($logger) {
-            $this->logger = $logger;
+            return $this->setLogAdapter(new MonologAdapter([
+                'logger' => $logger
+            ]));
         }
+
+        return $this;
+    }
+
+    /**
+     * Set Log Adapter.
+     *
+     * @param AdapterInterface $adapter
+     * @return $this
+     */
+    public function setLogAdapter(AdapterInterface $adapter)
+    {
+        $this->logger = new Logger($adapter);
 
         return $this;
     }

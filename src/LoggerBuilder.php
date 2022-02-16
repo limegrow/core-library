@@ -19,6 +19,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class LoggerBuilder.
+ * @deprecated
  */
 class LoggerBuilder
 {
@@ -27,6 +28,7 @@ class LoggerBuilder
 
     /**
      * Gets Logger.
+     * @deprecated
      *
      * @return LoggerInterface
      */
@@ -37,6 +39,7 @@ class LoggerBuilder
 
     /**
      * build logger.
+     * @deprecated
      *
      * @param string $channel
      * @param string $path
@@ -57,6 +60,7 @@ class LoggerBuilder
 
     /**
      * build Gelf logger
+     * @deprecated
      *
      * @param string $channel
      * @param string $host

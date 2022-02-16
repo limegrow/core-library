@@ -2,8 +2,8 @@
 
 namespace IngenicoClient;
 
+use IngenicoClient\Logger\AdapterInterface;
 use Ogone\Ecommerce\EcommercePaymentRequest;
-use Psr\Log\LoggerInterface;
 
 interface IngenicoCoreLibraryInterface
 {
@@ -666,16 +666,24 @@ interface IngenicoCoreLibraryInterface
     /**
      * Set Logger.
      *
-     * @param LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface $logger
      *
      * @return $this
      */
-    public function setLogger(LoggerInterface $logger = null);
+    public function setLogger($logger = null);
 
     /**
      * Gets Logger.
      *
-     * @return LoggerInterface|null
+     * @return \Psr\Log\LoggerInterface|null
      */
     public function getLogger();
+
+    /**
+     * Set Log Adapter.
+     *
+     * @param AdapterInterface $adapter
+     * @return $this
+     */
+    public function setLogAdapter(AdapterInterface $adapter);
 }

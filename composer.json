@@ -27,9 +27,7 @@
         "ext-bcmath": "*",
         "ext-gettext": "*",
         "ingenico/ogone-sdk-php": "^3.1.0",
-        "monolog/monolog": "*",
         "league/iso3166": "*",
-        "graylog2/gelf-php": "~1.5",
         "mobiledetect/mobiledetectlib": "~2.8.0",
         "viison/address-splitter": "~0.3.4"
     },
