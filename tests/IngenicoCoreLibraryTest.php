@@ -61,4 +61,13 @@ class IngenicoCoreLibraryTest  extends TestCase
 
         return $this;
     }
+
+    public function testErrorDescription()
+    {
+        $result = IngenicoCoreLibrary::getErrorDescription('0050001005');
+        $this->assertEquals('Expiry date error', $result);
+
+        $result = IngenicoCoreLibrary::getErrorDescription('WRONG');
+        $this->assertEquals('Unknown', $result);
+    }
 }
