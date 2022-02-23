@@ -285,7 +285,7 @@ class IngenicoCoreLibrary implements
      * Gets Logger.
      * @deprecated
      *
-     * @return \Psr\Log\LoggerInterface|null
+     * @return null
      */
     public function getLogger()
     {
@@ -294,32 +294,26 @@ class IngenicoCoreLibrary implements
 
     /**
      * Sets Logger.
-     * @deprecated Use setLogAdapter() method instead of
      *
-     * @param \Psr\Log\LoggerInterface|null $logger
+     * @param AdapterInterface $logger
      *
      * @return $this
      */
-    public function setLogger($logger = null)
+    public function setLogger($logger)
     {
-        if ($logger) {
-            return $this->setLogAdapter(new MonologAdapter([
-                'logger' => $logger
-            ]));
+        if (interface_exists('\Psr\Log\LoggerInterface') &&
+            $logger instanceof \Psr\Log\LoggerInterface
+        ) {
+            $this->logger = new Logger(
+                new MonologAdapter(['logger' => $logger])
+            );
         }
 
-        return $this;
-    }
+        if (!$logger instanceof AdapterInterface) {
+            throw new \Exception('Argument $logger must be instance of AdapterInterface.');
+        }
 
-    /**
-     * Set Log Adapter.
-     *
-     * @param AdapterInterface $adapter
-     * @return $this
-     */
-    public function setLogAdapter(AdapterInterface $adapter)
-    {
-        $this->logger = new Logger($adapter);
+        $this->logger = new Logger($logger);
 
         return $this;
     }
@@ -1429,7 +1423,7 @@ class IngenicoCoreLibrary implements
     public function getPaymentInfo($orderId, $payId = null, $payIdSub = null)
     {
         $directLink = new DirectLink();
-        $directLink->setLogger($this->getLogger());
+        $directLink->setLogger($this->logger);
 
         $paymentResult = $directLink->createStatusRequest($this->configuration, $orderId, $payId, $payIdSub);
         if ($paymentResult) {
@@ -2417,7 +2411,7 @@ class IngenicoCoreLibrary implements
         }
 
         $directLink = new DirectLink();
-        $directLink->setLogger($this->getLogger());
+        $directLink->setLogger($this->logger);
 
         $response = $directLink->createVoid($this->configuration, $orderId, $payId, $amount, $isPartially);
         if (!$response->isTransactionSuccessful()) {
@@ -2464,7 +2458,7 @@ class IngenicoCoreLibrary implements
         }
 
         $directLink = new DirectLink();
-        $directLink->setLogger($this->getLogger());
+        $directLink->setLogger($this->logger);
 
         $response = $directLink->createCapture($this->configuration, $orderId, $payId, $amount, $isPartially);
         if (!$response->isTransactionSuccessful()) {
@@ -2511,7 +2505,7 @@ class IngenicoCoreLibrary implements
         }
 
         $directLink = new DirectLink();
-        $directLink->setLogger($this->getLogger());
+        $directLink->setLogger($this->logger);
 
         $response = $directLink->createRefund($this->configuration, $orderId, $payId, $amount, $isPartially);
         if (!$response->isTransactionSuccessful()) {

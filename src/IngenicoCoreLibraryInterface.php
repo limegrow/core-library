@@ -666,24 +666,9 @@ interface IngenicoCoreLibraryInterface
     /**
      * Set Logger.
      *
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param Logger $logger
      *
      * @return $this
      */
-    public function setLogger($logger = null);
-
-    /**
-     * Gets Logger.
-     *
-     * @return \Psr\Log\LoggerInterface|null
-     */
-    public function getLogger();
-
-    /**
-     * Set Log Adapter.
-     *
-     * @param AdapterInterface $adapter
-     * @return $this
-     */
-    public function setLogAdapter(AdapterInterface $adapter);
+    public function setLogger($logger);
 }

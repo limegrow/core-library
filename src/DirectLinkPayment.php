@@ -26,7 +26,7 @@ trait DirectLinkPayment
 
         $dlPaymentRequest = $this->getDirectLinkPaymentRequest($order, $alias);
 
-        $client = new Client($this->getLogger());
+        $client = new Client($this->logger);
         $response = $client->post(
             $dlPaymentRequest->toArray(),
             $dlPaymentRequest->getOgoneUri(),

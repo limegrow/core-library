@@ -2,22 +2,20 @@
 
 namespace IngenicoClient;
 
-use Psr\Log\LoggerInterface;
-
 /**
  * Class Client.
  */
 class Client
 {
-    /** @var LoggerInterface|null */
-    protected $logger;
+    /** @var Logger */
+    private $logger;
 
     /**
      * Request constructor.
      *
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
-    public function __construct(LoggerInterface $logger = null)
+    public function __construct(Logger $logger)
     {
         $this->logger = $logger;
     }
@@ -61,17 +59,15 @@ class Client
 
         curl_close($ch);
 
-        if ($this->logger) {
-            $this->logger->debug(sprintf('Post request to: %s', $url), [
-                'url' => $url,
-                'shasign' => $shaSign,
-                'params' => $body,
-                'response' => $response,
-                'http_code' => $info['http_code'],
-                'error' => $error,
-                'errno' => $errno
-            ]);
-        }
+        $this->logger->debug(sprintf('Post request to: %s', $url), [
+            'url' => $url,
+            'shasign' => $shaSign,
+            'params' => $body,
+            'response' => $response,
+            'http_code' => $info['http_code'],
+            'error' => $error,
+            'errno' => $errno
+        ]);
 
         return $response;
     }
