@@ -2813,6 +2813,10 @@ class IngenicoCoreLibrary implements
             $amount = $orderAmount;
         }
 
+        // Initialize settings
+        $this->configuration = new Configuration($this->extension, $this);
+        $this->configuration->load($this->extension->requestSettings($this->extension->requestSettingsMode()));
+
         if (!$this->canVoid($orderId, $payId, $amount)) {
             throw new Exception($this->__('exceptions.cancellation_unavailable', [], 'messages'));
         }
@@ -2860,6 +2864,10 @@ class IngenicoCoreLibrary implements
             $amount = $order->getAmount();
         }
 
+        // Initialize settings
+        $this->configuration = new Configuration($this->extension, $this);
+        $this->configuration->load($this->extension->requestSettings($this->extension->requestSettingsMode()));
+
         if (!$this->canCapture($orderId, $payId, $amount)) {
             throw new Exception($this->__('exceptions.capture_unavailable', [], 'messages'));
         }
@@ -2906,6 +2914,10 @@ class IngenicoCoreLibrary implements
         if (!$amount) {
             $amount = $order->getAmount();
         }
+
+        // Initialize settings
+        $this->configuration = new Configuration($this->extension, $this);
+        $this->configuration->load($this->extension->requestSettings($this->extension->requestSettingsMode()));
 
         if (!$this->canRefund($orderId, $payId, $amount)) {
             throw new Exception($this->__('exceptions.refund_unavailable'));
