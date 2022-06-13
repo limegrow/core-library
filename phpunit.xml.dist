@@ -5,14 +5,17 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.5/phpunit.xsd"
          backupGlobals="false"
          colors="true"
-         bootstrap="vendor/autoload.php"
+         bootstrap="tests/bootstrap.php"
 >
     <php>
         <ini name="error_reporting" value="-1"/>
         <env name="SHELL_VERBOSITY" value="-1"/>
 
-        <env name="PSPID" value="xxxxx"/>
         <!-- define your env variables for the test env here -->
+        <env name="PSPID" value="xxxxx"/>
+        <env name="SIGNATURE" value="xxxxx"/>
+        <env name="USER" value="xxxxx"/>
+        <env name="PASSWORD" value="xxxxx"/>
     </php>
 
     <testsuites>
@@ -27,7 +30,7 @@
         </whitelist>
     </filter>
 
-    <listeners>
+    <!-- <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
-    </listeners>
+    </listeners> -->
 </phpunit>

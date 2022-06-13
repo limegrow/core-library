@@ -2,7 +2,6 @@
 
 namespace IngenicoClient;
 
-use Psr\Log\LoggerInterface;
 use Ogone\DirectLink\DirectLinkQueryRequest;
 use Ogone\DirectLink\DirectLinkQueryResponse;
 use Ogone\DirectLink\DirectLinkMaintenanceRequest;
@@ -19,30 +18,20 @@ class DirectLink
     const ITEM_PRICE = 'itemprice';
     const ITEM_VATCODE = 'itemvatcode';
 
-    /** @var LoggerInterface|null */
+    /** @var Logger */
     private $logger;
 
     /**
      * Set Logger.
      *
-     * @param LoggerInterface|null $logger
+     * @param Logger $logger
      * @return $this
      */
-    public function setLogger(LoggerInterface $logger = null)
+    public function setLogger(Logger $logger)
     {
         $this->logger = $logger;
 
         return $this;
-    }
-
-    /**
-     * Get Logger.
-     *
-     * @return LoggerInterface|null
-     */
-    public function getLogger()
-    {
-        return $this->logger;
     }
 
     /**
