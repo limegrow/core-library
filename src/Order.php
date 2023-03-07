@@ -130,7 +130,7 @@ class Order extends Data
      * Allowed currencies
      * @var array
      */
-    public $allowedCurrencies = [
+    public array $allowedCurrencies = [
         'AED',
         'ANG',
         'ARS',
@@ -183,7 +183,7 @@ class Order extends Data
      * Allowed Languages
      * @var array
      */
-    public $allowedLanguages = [
+    public array $allowedLanguages = [
         'en_US' => 'English',
         'cs_CZ' => 'Czech',
         'de_DE' => 'German',
@@ -206,7 +206,6 @@ class Order extends Data
 
     /**
      * Order constructor.
-     * @param array $data
      */
     public function __construct(array $data = [])
     {
@@ -217,14 +216,13 @@ class Order extends Data
      * Get Order ID
      *
      * @param $orderId
-     * @return Order
      */
-    public function setOrderId($orderId)
+    public function setOrderId($orderId): Order
     {
-        if (strlen($orderId) > 40) {
+        if (strlen((string) $orderId) > 40) {
             throw new InvalidArgumentException("Orderid cannot be longer than 40 characters");
         }
-        if (preg_match('/[^a-zA-Z0-9_-]/', $orderId)) {
+        if (preg_match('/[^a-zA-Z0-9_-]/', (string) $orderId)) {
             throw new InvalidArgumentException("Order id cannot contain special characters");
         }
 
@@ -235,9 +233,8 @@ class Order extends Data
      * Set Amount
      *
      * @param $amount
-     * @return Order
      */
-    public function setAmount($amount)
+    public function setAmount($amount): Order
     {
         if ($amount < 0) {
             throw new InvalidArgumentException("Amount must be a positive number or 0");
@@ -252,10 +249,8 @@ class Order extends Data
 
     /**
      * Get Amount In Cents.
-     *
-     * @return int
      */
-    public function getAmountInCents()
+    public function getAmountInCents(): int
     {
         if (!$amount = $this->getAmount()) {
             return 0;
@@ -267,10 +262,9 @@ class Order extends Data
     /**
      * Set Locale.
      *
-     * @param string $locale
      * @return $this
      */
-    public function setLocale($locale)
+    public function setLocale(string $locale): static
     {
         if (!array_key_exists($locale, $this->allowedLanguages)) {
             throw new InvalidArgumentException('Invalid language ISO code');
@@ -282,10 +276,9 @@ class Order extends Data
     /**
      * Get Locale.
      *
-     * @return string
      * @SuppressWarnings("Duplicates")
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         if (!$this->hasData('locale')) {
             $this->setData('locale', self::DEFAULT_LOCALE);
@@ -301,30 +294,24 @@ class Order extends Data
 
     /**
      * Get Available amount for Refund.
-     *
-     * @return float
      */
-    public function getAvailableAmountForRefund()
+    public function getAvailableAmountForRefund(): float
     {
         return (float) bcsub($this->getAmount(), $this->getTotalRefunded(), 2);
     }
 
     /**
      * Get Available amount for Capture.
-     *
-     * @return float
      */
-    public function getAvailableAmountForCapture()
+    public function getAvailableAmountForCapture(): float
     {
         return (float) bcsub($this->getAmount(), $this->getTotalCaptured(), 2);
     }
 
     /**
      * Get Available amount for Cancel.
-     *
-     * @return float
      */
-    public function getAvailableAmountForCancel()
+    public function getAvailableAmountForCancel(): float
     {
         return (float) bcsub($this->getAmount(), $this->getTotalCancelled(), 2);
     }
@@ -333,11 +320,10 @@ class Order extends Data
      * Set Currency.
      *
      * @param $currency
-     * @return Order
      */
-    public function setCurrency($currency)
+    public function setCurrency($currency): Order
     {
-        if (!in_array(strtoupper($currency), $this->allowedCurrencies)) {
+        if (!in_array(strtoupper((string) $currency), $this->allowedCurrencies)) {
             throw new InvalidArgumentException("Unknown currency");
         }
 
@@ -349,7 +335,7 @@ class Order extends Data
      * @deprecated
      * @return $this
      */
-    public function getUserId()
+    public function getUserId(): static
     {
         return $this->getCustomerId();
     }
@@ -360,27 +346,23 @@ class Order extends Data
      * @param $userId
      * @return $this
      */
-    public function setUserId($userId)
+    public function setUserId($userId): static
     {
         return $this->setCustomerId($userId);
     }
 
     /**
      * Get Billing Full name.
-     *
-     * @return string
      */
-    public function getBillingFullName()
+    public function getBillingFullName(): string
     {
         return join(' ', [$this->getBillingFirstName(), $this->getBillingLastName()]);
     }
 
     /**
      * Get Billing Full address.
-     *
-     * @return array
      */
-    public function getBillingAddress()
+    public function getBillingAddress(): array
     {
         return array_filter(
             [$this->getBillingAddress1(), $this->getBillingAddress2(), $this->getBillingAddress3()],
@@ -390,20 +372,16 @@ class Order extends Data
 
     /**
      * Get Shipping Full name.
-     *
-     * @return string
      */
-    public function getShippingFullName()
+    public function getShippingFullName(): string
     {
         return join(' ', [$this->getShippingFirstName(), $this->getShippingLastName()]);
     }
 
     /**
      * Get Shipping Full address.
-     *
-     * @return array
      */
-    public function getShippingAddress()
+    public function getShippingAddress(): array
     {
         return array_filter(
             [$this->getShippingAddress1(), $this->getShippingAddress2(), $this->getShippingAddress3()],
@@ -413,10 +391,8 @@ class Order extends Data
 
     /**
      * Get Billing Country Code.
-     *
-     * @return mixed
      */
-    public function getBillingCountryCode()
+    public function getBillingCountryCode(): mixed
     {
         if (!$this->hasData('billing_country_code')) {
             // For backward compatibility
@@ -428,10 +404,8 @@ class Order extends Data
 
     /**
      * Get Shipping Country Code.
-     *
-     * @return mixed
      */
-    public function getShippingCountryCode()
+    public function getShippingCountryCode(): mixed
     {
         if (!$this->hasData('shipping_country_code')) {
             // For backward compatibility
@@ -444,21 +418,20 @@ class Order extends Data
     /**
      * Get Browser's HTTP_ACCEPT value.
      *
-     * @return string
      * @SuppressWarnings("Duplicates")
      */
-    public function getHttpAccept()
+    public function getHttpAccept(): string
     {
         if (!$this->hasData('http_accept')) {
-            $this->setData('http_accept', isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : null);
+            $this->setData('http_accept', $_SERVER['HTTP_ACCEPT'] ?? null);
         }
 
         $value = $this->getData('http_accept');
 
         // Workaround: Ingenico doesn't accept values like "application/json, text/javascript, */*; q=0.01"
         // Ingenico returns HTML with "Page not found" text
-        if (mb_stripos($value, 'application/json', 0, 'UTF-8') !== false ||
-            mb_stripos($value, 'text/javascript', 0, 'UTF-8') !== false
+        if (mb_stripos((string) $value, 'application/json', 0, 'UTF-8') !== false ||
+            mb_stripos((string) $value, 'text/javascript', 0, 'UTF-8') !== false
         ) {
             $value = '*/*';
         }
@@ -469,13 +442,12 @@ class Order extends Data
     /**
      * Get Browser's HTTP_USER_AGENT value.
      *
-     * @return string
      * @SuppressWarnings("Duplicates")
      */
-    public function getHttpUserAgent()
+    public function getHttpUserAgent(): string
     {
         if (!$this->hasData('http_user_agent')) {
-            $this->setData('http_user_agent', isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null);
+            $this->setData('http_user_agent', $_SERVER['HTTP_USER_AGENT'] ?? null);
         }
 
         return $this->getData('http_user_agent');
@@ -484,20 +456,17 @@ class Order extends Data
     /**
      * Set Order Items
      *
-     * @param array $items
      * @return $this
      */
-    public function setItems(array $items = [])
+    public function setItems(array $items = []): static
     {
         return $this->setData('items', $items);
     }
 
     /**
      * Get Order Items
-     *
-     * @return array
      */
-    public function getItems()
+    public function getItems(): array
     {
         $result = [];
         $items = $this->getData('items');
@@ -515,21 +484,17 @@ class Order extends Data
      * Returns array with cancel, accept,
      * exception and back url.
      *
-     * @param mixed $orderId
      * @param string|null $paymentMode
-     * @return ReturnUrl
      */
-    public function getReturnUrls($orderId, $paymentMode = null)
+    public function getReturnUrls(mixed $orderId, string $paymentMode = null): ReturnUrl
     {
         // @todo move from IngenicoCoreLibrary:requestReturnUrls()
     }
 
     /**
      * Returns if an order is non-shippable (virtual) or shippable.
-     *
-     * @return bool
      */
-    public function isVirtual()
+    public function isVirtual(): bool
     {
         if ($this->hasData(OrderField::IS_VIRTUAL)) {
             return (bool) $this->getData(OrderField::IS_VIRTUAL);

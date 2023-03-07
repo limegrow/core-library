@@ -21,7 +21,7 @@
         "email": "support.ecom@ingenico.com"
     },
     "require": {
-        "php": ">=7.0",
+        "php": ">=8.1",
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-bcmath": "*",
@@ -31,7 +31,10 @@
         "graylog2/gelf-php": "~1.5",
         "symfony/translation": "~4.2",
         "mobiledetect/mobiledetectlib": "~2.8.0",
-        "viison/address-splitter": "~0.3.4"
+        "viison/address-splitter": "~0.3.4",
+        "ext-simplexml": "*",
+        "ext-libxml": "*",
+        "ext-fileinfo": "*"
     },
     "autoload": {
         "psr-4": {

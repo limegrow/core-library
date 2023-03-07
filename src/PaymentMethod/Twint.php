@@ -10,43 +10,43 @@ class Twint extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected $id = self::CODE;
+    protected string $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected $name = 'Twint';
+    protected string $name = 'Twint';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'twint.svg';
+    protected string $logo = 'twint.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'real_time_banking';
+    protected string $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'TWINT';
+    protected string $pm = 'TWINT';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'TWINT';
+    protected string $brand = 'TWINT';
 
     /**
      * Countries
      * @var array
      */
-    protected $countries = [
+    protected array $countries = [
         'BE' => [
             'popularity' => 80
         ],
@@ -83,11 +83,11 @@ class Twint extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected $is_redirect_only = true;
+    protected bool $is_redirect_only = true;
 
     /**
      * Is support Two phase flow
      * @var bool
      */
-    protected $two_phase_flow = false;
+    protected bool $two_phase_flow = false;
 }

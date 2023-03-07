@@ -74,7 +74,7 @@ class OrderItem extends Data
     /**
      * Mapping: Ingenico's field => OrderItem's field
      */
-    private static $map = [
+    private static array $map = [
         'ITEMATTRIBUTES' => self::ITEM_ATTRIBUTES,
         'ITEMCATEGORY' => self::ITEM_CATEGORY,
         'ITEMCOMMENTS' => self::ITEM_COMMENTS,
@@ -94,8 +94,6 @@ class OrderItem extends Data
 
     /**
      * OrderItem constructor.
-     *
-     * @param array $data
      */
     public function __construct(array $data = [])
     {
@@ -104,10 +102,8 @@ class OrderItem extends Data
 
     /**
      * Get item array with Ingenico specific data
-     *
-     * @return array
      */
-    public function exchange()
+    public function exchange(): array
     {
         $result = [];
         foreach (self::$map as $key => $value) {
@@ -131,23 +127,23 @@ class OrderItem extends Data
                     case self::ITEM_QTY:
                     case self::ITEM_QTY_ORIG:
                     case self::ITEM_UNITOFMEASURE:
-                        $result[$key] = mb_strimwidth($result[$key], 0, 50, '...', 'UTF-8');
+                        $result[$key] = mb_strimwidth((string) $result[$key], 0, 50, '...', 'UTF-8');
                         break;
                     case self::ITEM_COMMENTS:
-                        $result[$key] = mb_strimwidth($result[$key], 0, 255, '...', 'UTF-8');
+                        $result[$key] = mb_strimwidth((string) $result[$key], 0, 255, '...', 'UTF-8');
                         break;
                     case self::ITEM_DESCRIPTION:
-                        $result[$key] = mb_strimwidth($result[$key], 0, 16, '...', 'UTF-8');
+                        $result[$key] = mb_strimwidth((string) $result[$key], 0, 16, '...', 'UTF-8');
                         break;
                     case self::ITEM_DISCOUNT:
                     case self::ITEM_WEIGHT:
-                        $result[$key] = mb_strimwidth($result[$key], 0, 10, '...', 'UTF-8');
+                        $result[$key] = mb_strimwidth((string) $result[$key], 0, 10, '...', 'UTF-8');
                         break;
                     case self::ITEM_ID:
-                        $result[$key] = mb_strimwidth($result[$key], 0, 15, '...', 'UTF-8');
+                        $result[$key] = mb_strimwidth((string) $result[$key], 0, 15, '...', 'UTF-8');
                         break;
                     case self::ITEM_NAME:
-                        $result[$key] = mb_strimwidth($result[$key], 0, 40, '...', 'UTF-8');
+                        $result[$key] = mb_strimwidth((string) $result[$key], 0, 40, '...', 'UTF-8');
                         break;
                     case self::ITEM_VAT_INCLUDED:
                         $result[$key] = !in_array((int) $result[$key], [0, 1]) ? 0 : $result[$key];

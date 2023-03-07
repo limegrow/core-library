@@ -13,7 +13,7 @@ trait FlexCheckout
      * @param Alias $alias
      * @return string
      */
-    public function getInlineIFrameUrl($orderId, Alias $alias)
+    public function getInlineIFrameUrl($orderId, Alias $alias): string
     {
         $order = $this->getOrder($orderId);
 
@@ -27,14 +27,12 @@ trait FlexCheckout
     /**
      * Get Flex Checkout Payment Request Instance
      *
-     * @return FlexCheckoutPaymentRequest
      */
-    public function getFlexCheckoutPaymentRequest(Order $order, Alias $alias)
+    public function getFlexCheckoutPaymentRequest(Order $order, Alias $alias): FlexCheckoutPaymentRequest
     {
         $request = new FlexCheckoutPaymentRequest($this->getConfiguration()->getShaComposer('in'));
         $request->setOgoneUri($this->getConfiguration()->getApiFlexcheckout());
 
-        /** @var ReturnUrl $urls */
         $urls = $this->requestReturnUrls($order->getOrderId());
 
         $request->setPspId($this->getConfiguration()->getPspid())

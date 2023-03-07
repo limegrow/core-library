@@ -10,43 +10,43 @@ class Paypal extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected $id = self::CODE;
+    protected string $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected $name = 'PayPal';
+    protected string $name = 'PayPal';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'paypal.svg';
+    protected string $logo = 'paypal.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'e_wallet';
+    protected string $category = 'e_wallet';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'PAYPAL';
+    protected string $pm = 'PAYPAL';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'PAYPAL';
+    protected string $brand = 'PAYPAL';
 
     /**
      * Countries
      * @var array
      */
-    protected $countries = [
+    protected array $countries = [
         'AT' => [
             'popularity' => 40
         ],
@@ -86,17 +86,17 @@ class Paypal extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected $is_redirect_only = true;
+    protected bool $is_redirect_only = true;
 
     /**
      * Transaction codes that indicate capturing.
      * @var array
      */
-    protected $direct_sales_success_code = [9];
+    protected array $direct_sales_success_code = [9];
 
     /**
      * Transaction codes that indicate authorization.
      * @var array
      */
-    protected $auth_mode_success_code = [5];
+    protected array $auth_mode_success_code = [5];
 }

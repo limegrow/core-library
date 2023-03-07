@@ -10,43 +10,43 @@ class Discover extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected $id = self::CODE;
+    protected string $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected $name = 'Discover';
+    protected string $name = 'Discover';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'discover.svg';
+    protected string $logo = 'discover.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'card';
+    protected string $category = 'card';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'CreditCard';
+    protected string $pm = 'CreditCard';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'DISCOVER';
+    protected string $brand = 'DISCOVER';
 
     /**
      * Countries
      * @var array
      */
-    protected $countries = [
+    protected array $countries = [
         'AT' => [
             'popularity' => 20
         ],

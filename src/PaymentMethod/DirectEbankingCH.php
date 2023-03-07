@@ -10,43 +10,43 @@ class DirectEbankingCH extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected $id = self::CODE;
+    protected string $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected $name = 'Sofort Überweisung (CH)';
+    protected string $name = 'Sofort Überweisung (CH)';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'sofort_uberweisung.svg';
+    protected string $logo = 'sofort_uberweisung.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'real_time_banking';
+    protected string $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'DirectEbankingCH';
+    protected string $pm = 'DirectEbankingCH';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'DirectEbankingCH';
+    protected string $brand = 'DirectEbankingCH';
 
     /**
      * Countries
      * @var array
      */
-    protected $countries = [
+    protected array $countries = [
         'CH' => [
             'popularity' => 20
         ]
@@ -56,5 +56,5 @@ class DirectEbankingCH extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected $is_redirect_only = true;
+    protected bool $is_redirect_only = true;
 }

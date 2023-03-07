@@ -10,43 +10,43 @@ class Paysafecard extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected $id = self::CODE;
+    protected string $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected $name = 'Paysafecard';
+    protected string $name = 'Paysafecard';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'paysafecard.svg';
+    protected string $logo = 'paysafecard.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'prepaid_vouchers';
+    protected string $category = 'prepaid_vouchers';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'paysafecard';
+    protected string $pm = 'paysafecard';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'paysafecard';
+    protected string $brand = 'paysafecard';
 
     /**
      * Countries
      * @var array
      */
-    protected $countries = [
+    protected array $countries = [
         'AT' => [
             'popularity' => 20
         ],
@@ -83,17 +83,17 @@ class Paysafecard extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected $is_redirect_only = true;
+    protected bool $is_redirect_only = true;
 
     /**
      * Transaction codes that indicate capturing.
      * @var array
      */
-    protected $direct_sales_success_code = [9];
+    protected array $direct_sales_success_code = [9];
 
     /**
      * Transaction codes that indicate authorization.
      * @var array
      */
-    protected $auth_mode_success_code = [];
+    protected array $auth_mode_success_code = [];
 }

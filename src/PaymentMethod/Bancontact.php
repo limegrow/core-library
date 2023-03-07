@@ -10,44 +10,44 @@ class Bancontact extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected $id = self::CODE;
+    protected string $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected $name = 'Bancontact';
+    protected string $name = 'Bancontact';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'bancontact.svg';
+    protected string $logo = 'bancontact.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'card';
+    protected string $category = 'card';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'CreditCard';
+    protected string $pm = 'CreditCard';
 
     /**
      * Brand
      * @var string
      */
     // @todo Bancontact returns BRAND="Bancontact/Mister Cash". Expects: "BCMC"
-    protected $brand = 'BCMC';
+    protected string $brand = 'BCMC';
 
     /**
      * Countries
      * @var array
      */
-    protected $countries = [
+    protected array $countries = [
         'BE' => [
             'popularity' => 100
         ]
@@ -57,11 +57,11 @@ class Bancontact extends PaymentMethod implements PaymentMethodInterface
      * Is Security Mandatory
      * @var bool
      */
-    protected $is_security_mandatory = true;
+    protected bool $is_security_mandatory = true;
 
     /**
      * Is support Two phase flow
      * @var bool
      */
-    protected $two_phase_flow = false;
+    protected bool $two_phase_flow = false;
 }

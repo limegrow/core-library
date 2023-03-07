@@ -104,12 +104,10 @@ class Payment extends Data
 
     /**
      * Payment constructor.
-     *
-     * @param array $data
      */
     public function __construct(array $data = [])
     {
-        $class = new \ReflectionClass(__CLASS__);
+        $class = new \ReflectionClass(self::class);
         $constants = $class->getConstants();
 
         foreach ($data as $key => $value) {
@@ -128,18 +126,16 @@ class Payment extends Data
 
     /**
      * Check is transaction was successful
-     * @return bool
      */
-    public function isTransactionSuccessful()
+    public function isTransactionSuccessful(): bool
     {
         return $this->getNcError() === '0' || empty($this->getNcError());
     }
 
     /**
      * Check is payment was successful
-     * @return bool
      */
-    public function isPaymentSuccessful()
+    public function isPaymentSuccessful(): bool
     {
         return in_array($this->getPaymentStatus(), [
             IngenicoCoreLibrary::STATUS_PENDING,
@@ -151,45 +147,40 @@ class Payment extends Data
 
     /**
      * Check if payment was cancelled
-     * @return bool
      */
-    public function isPaymentCancelled()
+    public function isPaymentCancelled(): bool
     {
         return $this->getPaymentStatus() === IngenicoCoreLibrary::STATUS_CANCELLED;
     }
 
     /**
      * Get Status
-     * @return int|false
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return (int) $this->getData(strtolower(self::FIELD_STATUS));
     }
 
     /**
      * Check is 3DS required
-     * @return bool
      */
-    public function isSecurityCheckRequired()
+    public function isSecurityCheckRequired(): bool
     {
         return $this->getStatus() === 46;
     }
 
     /**
      * Pseudo for getNCError()
-     * @return string
      */
-    public function getErrorCode()
+    public function getErrorCode(): string
     {
         return $this->getNcError();
     }
 
     /**
      * Pseudo for getNCErrorPlus()
-     * @return string
      */
-    public function getErrorMessage()
+    public function getErrorMessage(): string
     {
         $message = $this->getNcErrorPlus();
         if (empty($message)) {
@@ -201,26 +192,24 @@ class Payment extends Data
 
     /**
      * Get HTML Code that use for 3DS
-     * @return string
      */
-    public function getSecurityHTML()
+    public function getSecurityHTML(): string
     {
         return base64_decode($this->getHtmlAnswer());
     }
 
     /**
      * Set Payment Status (string).
-     * @see IngenicoCoreLibrary::STATUS_PENDING
-     * @see IngenicoCoreLibrary::STATUS_AUTHORIZED
-     * @see IngenicoCoreLibrary::STATUS_CAPTURED
+     * @return $this
+     *@see IngenicoCoreLibrary::STATUS_CAPTURED
      * @see IngenicoCoreLibrary::STATUS_CANCELLED
      * @see IngenicoCoreLibrary::STATUS_REFUNDED
      * @see IngenicoCoreLibrary::STATUS_ERROR
      * @see IngenicoCoreLibrary::STATUS_UNKNOWN
-     * @param string $paymentStatus
-     * @return $this
+     * @see IngenicoCoreLibrary::STATUS_PENDING
+     * @see IngenicoCoreLibrary::STATUS_AUTHORIZED
      */
-    public function setPaymentStatus($paymentStatus)
+    public function setPaymentStatus(string $paymentStatus): static
     {
         $this->setData('payment_status', $paymentStatus);
 
@@ -229,9 +218,8 @@ class Payment extends Data
 
     /**
      * Get Payment Status (string).
-     * @return string
      */
-    public function getPaymentStatus()
+    public function getPaymentStatus(): string
     {
         if ($this->hasData('payment_status')) {
             return $this->getData('payment_status');

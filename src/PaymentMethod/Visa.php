@@ -10,43 +10,43 @@ class Visa extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected $id = self::CODE;
+    protected string $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected $name = 'Visa';
+    protected string $name = 'Visa';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'visa.svg';
+    protected string $logo = 'visa.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'card';
+    protected string $category = 'card';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'CreditCard';
+    protected string $pm = 'CreditCard';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'VISA';
+    protected string $brand = 'VISA';
 
     /**
      * Countries
      * @var array
      */
-    protected $countries = [
+    protected array $countries = [
         'AT' => [
             'popularity' => 100
         ],
@@ -86,5 +86,5 @@ class Visa extends PaymentMethod implements PaymentMethodInterface
      * Is Security Mandatory
      * @var bool
      */
-    protected $is_security_mandatory = false;
+    protected bool $is_security_mandatory = false;
 }

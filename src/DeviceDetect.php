@@ -24,7 +24,7 @@ class DeviceDetect
     /**
      * @var MobileDetect
      */
-    private $mobileDetect;
+    private MobileDetect $mobileDetect;
 
     /**
      * Constructor.
@@ -39,7 +39,7 @@ class DeviceDetect
      *
      * @return string
      */
-    public function getDeviceType()
+    public function getDeviceType(): string
     {
         if ($this->mobileDetect->isMobile()) {
             return self::DEVICE_TYPE_MOBILE;

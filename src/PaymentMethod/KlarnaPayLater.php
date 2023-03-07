@@ -12,43 +12,43 @@ class KlarnaPayLater extends KlarnaAbstract
      * ID Code
      * @var string
      */
-    protected $id = self::CODE;
+    protected string $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected $name = 'Klarna Pay Later';
+    protected string $name = 'Klarna Pay Later';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'https://x.klarnacdn.net/payment-method/assets/badges/generic/klarna.svg';
+    protected string $logo = 'https://x.klarnacdn.net/payment-method/assets/badges/generic/klarna.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'klarna';
+    protected string $category = 'klarna';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'KLARNA_PAYLATER';
+    protected string $pm = 'KLARNA_PAYLATER';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'KLARNA_PAYLATER';
+    protected string $brand = 'KLARNA_PAYLATER';
 
     /**
      * Countries
      * @var array
      */
-    protected $countries = [
+    protected array $countries = [
         'AT' => [
             'popularity' => 100
         ],
@@ -85,17 +85,17 @@ class KlarnaPayLater extends KlarnaAbstract
      * Is support Redirect only
      * @var bool
      */
-    protected $is_redirect_only = true;
+    protected bool $is_redirect_only = true;
 
     /**
      * Defines if this payment method requires order line items to be sent with the request
      * @var bool
      */
-    protected $order_line_items_required = true;
+    protected bool $order_line_items_required = true;
 
     /**
      * Defines if this payment method requires additional data to be sent with the request.
      * @var bool
      */
-    protected $additional_data_required = true;
+    protected bool $additional_data_required = true;
 }
