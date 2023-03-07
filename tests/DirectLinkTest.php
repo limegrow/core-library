@@ -34,7 +34,7 @@ class DirectLinkTest extends TestCase
         $configuration = $this->getConfiguration();
         $directLink = new \IngenicoClient\DirectLink();
         $directLinkResponse = $directLink->createRefund($configuration, '200008999', null, 1000);
-        $this->assertInstanceOf('Ogone\\DirectLink\\DirectLinkMaintenanceResponse', $directLinkResponse);
+        $this->assertInstanceOf(\Ogone\DirectLink\DirectLinkMaintenanceResponse::class, $directLinkResponse);
     }
 
     public function testCreateCapture()
@@ -42,7 +42,7 @@ class DirectLinkTest extends TestCase
         $configuration = $this->getConfiguration();
         $directLink = new \IngenicoClient\DirectLink();
         $directLinkResponse = $directLink->createCapture($configuration, '200008999', null, null);
-        $this->assertInstanceOf('Ogone\\DirectLink\\DirectLinkMaintenanceResponse', $directLinkResponse);
+        $this->assertInstanceOf(\Ogone\DirectLink\DirectLinkMaintenanceResponse::class, $directLinkResponse);
     }
 
     public function testCreateVoid()
@@ -50,19 +50,17 @@ class DirectLinkTest extends TestCase
         $configuration = $this->getConfiguration();
         $directLink = new \IngenicoClient\DirectLink();
         $directLinkResponse = $directLink->createVoid($configuration, '200008999', null);
-        $this->assertInstanceOf('Ogone\\DirectLink\\DirectLinkMaintenanceResponse', $directLinkResponse);
+        $this->assertInstanceOf(\Ogone\DirectLink\DirectLinkMaintenanceResponse::class, $directLinkResponse);
     }
 
-    public function getConfiguration()
+    public function getConfiguration(): \IngenicoClient\Configuration
     {
-        $configuration = new \IngenicoClient\Configuration(
+        return new \IngenicoClient\Configuration(
             PSPID,
             USER,
             PASSWORD,
             PASSPHRASE,
             'sha512'
         );
-
-        return $configuration;
     }
 }

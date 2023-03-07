@@ -13,7 +13,7 @@ abstract class Klarna extends PaymentMethod
      * @SuppressWarnings("Duplicates")
      * @see https://epayments-support.ingenico.com/en/payment-methods/alternative-payment-methods/klarna
      */
-    protected $common_fields = [
+    protected array $common_fields = [
         OrderField::BILLING_COUNTRY => [
             'required' => true,
             'field_type' => PaymentMethod::TYPE_TEXT,
@@ -161,7 +161,7 @@ abstract class Klarna extends PaymentMethod
      * @var array
      * @SuppressWarnings("Duplicates")
      */
-    protected $additional_fields = [
+    protected array $additional_fields = [
         OrderField::CUSTOMER_DOB => [
             'required' => true,
             'field_type' => PaymentMethod::TYPE_DATE,

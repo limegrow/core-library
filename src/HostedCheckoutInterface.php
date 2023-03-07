@@ -15,7 +15,7 @@ interface HostedCheckoutInterface
      * @param Alias $alias
      * @return Data
      */
-    public function initiateRedirectPayment($orderId, Alias $alias);
+    public function initiateRedirectPayment($orderId, Alias $alias): Data;
 
     /**
      * Get Hosted Checkout Payment Request
@@ -25,7 +25,7 @@ interface HostedCheckoutInterface
      * @return EcommercePaymentRequest
      * @throws \Exception
      */
-    public function getHostedCheckoutPaymentRequest(Order $order, Alias $alias);
+    public function getHostedCheckoutPaymentRequest(Order $order, Alias $alias): EcommercePaymentRequest;
 
     /**
      * Copy Order data to Payment request
@@ -34,7 +34,7 @@ interface HostedCheckoutInterface
      * @param Order $order
      * @return AbstractPaymentRequest
      */
-    public static function copyOrderDataToPaymentRequest(AbstractPaymentRequest $request, Order $order);
+    public static function copyOrderDataToPaymentRequest(AbstractPaymentRequest $request, Order $order): AbstractPaymentRequest;
 
     /**
      * Copy Browser data (from Cookies) to Order
@@ -51,5 +51,5 @@ interface HostedCheckoutInterface
      * @param Order $order
      * @return AbstractPaymentRequest
      */
-    public static function copyBrowserDataToPaymentRequest(AbstractPaymentRequest $request, Order $order);
+    public static function copyBrowserDataToPaymentRequest(AbstractPaymentRequest $request, Order $order): AbstractPaymentRequest;
 }

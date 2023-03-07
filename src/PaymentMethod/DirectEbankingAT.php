@@ -10,43 +10,43 @@ class DirectEbankingAT extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected $id = self::CODE;
+    protected string $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected $name = 'Sofort Überweisung (AT)';
+    protected string $name = 'Sofort Überweisung (AT)';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'sofort_uberweisung.svg';
+    protected string $logo = 'sofort_uberweisung.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'real_time_banking';
+    protected string $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'DirectEbankingAT';
+    protected string $pm = 'DirectEbankingAT';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'DirectEbankingAT';
+    protected string $brand = 'DirectEbankingAT';
 
     /**
      * Countries
      * @var array
      */
-    protected $countries = [
+    protected array $countries = [
         'AT' => [
             'popularity' => 20
         ]
@@ -56,5 +56,5 @@ class DirectEbankingAT extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected $is_redirect_only = true;
+    protected bool $is_redirect_only = true;
 }

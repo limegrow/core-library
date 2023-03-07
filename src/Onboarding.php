@@ -13,12 +13,10 @@ namespace IngenicoClient;
  */
 class Onboarding
 {
-    protected $emails;
+    protected mixed $emails;
 
     /**
      * Onboarding constructor.
-     * @param ConnectorInterface $extension
-     * @param IngenicoCoreLibraryInterface $coreLibrary
      * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -48,11 +46,9 @@ class Onboarding
      * get array of emails by country code.
      *
      * @param string $countryCode - 2-chars country code
-     *
-     * @return array
      */
-    public function getOnboardingEmailsByCountry($countryCode)
+    public function getOnboardingEmailsByCountry(string $countryCode): array
     {
-        return isset($this->emails[$countryCode]) ? $this->emails[$countryCode] : array();
+        return $this->emails[$countryCode] ?? [];
     }
 }

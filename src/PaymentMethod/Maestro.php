@@ -10,43 +10,43 @@ class Maestro extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected $id = self::CODE;
+    protected string $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected $name = 'Maestro';
+    protected string $name = 'Maestro';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'maestro.svg';
+    protected string $logo = 'maestro.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'card';
+    protected string $category = 'card';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'CreditCard';
+    protected string $pm = 'CreditCard';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'Maestro';
+    protected string $brand = 'Maestro';
 
     /**
      * Countries
      * @var array
      */
-    protected $countries = [
+    protected array $countries = [
         'AT' => [
             'popularity' => 20
         ],

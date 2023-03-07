@@ -8,59 +8,59 @@ interface PaymentMethodInterface
      * Get ID
      * @return string
      */
-    public function getId();
+    public function getId(): string;
 
     /**
      * Get Name
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Get Category
      * @return string
      */
-    public function getCategory();
+    public function getCategory(): string;
 
     /**
      * Get Category Name
      * @return string
      */
-    public function getCategoryName();
+    public function getCategoryName(): string;
 
     /**
      * Get PM
      * @return string
      */
-    public function getPM();
+    public function getPM(): string;
 
     /**
      * Get Brand
      * @return string
      */
-    public function getBrand();
+    public function getBrand(): string;
 
     /**
      * Get Countries
      * @return array
      */
-    public function getCountries();
+    public function getCountries(): array;
 
     /**
      * Is Security Mandatory
      * @return bool
      */
-    public function isSecurityMandatory();
+    public function isSecurityMandatory(): bool;
 
     /**
      * Get Credit Debit Flag
      * @return string
      */
-    public function getCreditDebit();
+    public function getCreditDebit(): string;
 
     /**
      * Is support Redirect only
      * @return bool
      */
-    public function isRedirectOnly();
+    public function isRedirectOnly(): bool;
 }

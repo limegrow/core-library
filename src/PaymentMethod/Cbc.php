@@ -10,43 +10,43 @@ class Cbc extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected $id = self::CODE;
+    protected string $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected $name = 'CBC';
+    protected string $name = 'CBC';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'cbc.svg';
+    protected string $logo = 'cbc.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'real_time_banking';
+    protected string $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'CBC Online';
+    protected string $pm = 'CBC Online';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'CBC Online';
+    protected string $brand = 'CBC Online';
 
     /**
      * Countries
      * @var array
      */
-    protected $countries = [
+    protected array $countries = [
         'BE' => [
             'popularity' => 20
         ]
@@ -56,5 +56,5 @@ class Cbc extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected $is_redirect_only = true;
+    protected bool $is_redirect_only = true;
 }

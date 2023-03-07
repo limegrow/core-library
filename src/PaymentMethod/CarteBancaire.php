@@ -10,43 +10,43 @@ class CarteBancaire extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected $id = self::CODE;
+    protected string $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected $name = 'Carte Bancaire';
+    protected string $name = 'Carte Bancaire';
 
     /**
      * Logo
      * @var string
      */
-    protected $logo = 'carte_bancaire.svg';
+    protected string $logo = 'carte_bancaire.svg';
 
     /**
      * Category
      * @var string
      */
-    protected $category = 'card';
+    protected string $category = 'card';
 
     /**
      * Payment Method
      * @var string
      */
-    protected $pm = 'CreditCard';
+    protected string $pm = 'CreditCard';
 
     /**
      * Brand
      * @var string
      */
-    protected $brand = 'CB';
+    protected string $brand = 'CB';
 
     /**
      * Countries
      * @var array
      */
-    protected $countries = [
+    protected array $countries = [
         'FR' => [
             'popularity' => 20
         ],
@@ -56,5 +56,5 @@ class CarteBancaire extends PaymentMethod implements PaymentMethodInterface
      * Is Security Mandatory
      * @var bool
      */
-    protected $is_security_mandatory = true;
+    protected bool $is_security_mandatory = true;
 }

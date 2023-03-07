@@ -20,7 +20,7 @@ class DirectLink
     const ITEM_VATCODE = 'itemvatcode';
 
     /** @var LoggerInterface|null */
-    private $logger;
+    private ?LoggerInterface $logger;
 
     /**
      * Set Logger.
@@ -28,7 +28,7 @@ class DirectLink
      * @param LoggerInterface|null $logger
      * @return $this
      */
-    public function setLogger(LoggerInterface $logger = null)
+    public function setLogger(LoggerInterface $logger = null): static
     {
         $this->logger = $logger;
 
@@ -40,7 +40,7 @@ class DirectLink
      *
      * @return LoggerInterface|null
      */
-    public function getLogger()
+    public function getLogger(): ?LoggerInterface
     {
         return $this->logger;
     }
@@ -49,20 +49,21 @@ class DirectLink
      * Create Refund Request.
      *
      * @param Configuration $configuration
-     * @param string        $orderId
-     * @param string        $payId
-     * @param int           $amount
-     * @param bool          $isPartially
+     * @param string $orderId
+     * @param string $payId
+     * @param int $amount
+     * @param bool $isPartially
      *
      * @return Payment
      */
     public function createRefund(
         Configuration $configuration,
-        $orderId,
-        $payId,
-        $amount,
-        $isPartially
-    ) {
+        string        $orderId,
+        string        $payId,
+        int           $amount,
+        bool          $isPartially
+    ): Payment
+    {
         $operation = $isPartially ?
             MaintenanceOperation::OPERATION_REFUND_PARTIAL : MaintenanceOperation::OPERATION_REFUND_LAST_OR_FULL;
 
@@ -80,20 +81,21 @@ class DirectLink
      * Create Capture Request.
      *
      * @param Configuration $configuration
-     * @param string        $orderId
-     * @param string        $payId
-     * @param int           $amount
-     * @param bool          $isPartially
+     * @param string $orderId
+     * @param string $payId
+     * @param int $amount
+     * @param bool $isPartially
      *
      * @return Payment
      */
     public function createCapture(
         Configuration $configuration,
-        $orderId,
-        $payId,
-        $amount,
-        $isPartially
-    ) {
+        string        $orderId,
+        string        $payId,
+        int           $amount,
+        bool          $isPartially
+    ): Payment
+    {
         $operation = $isPartially ?
             MaintenanceOperation::OPERATION_CAPTURE_PARTIAL : MaintenanceOperation::OPERATION_CAPTURE_LAST_OR_FULL;
 
@@ -111,20 +113,21 @@ class DirectLink
      * Create Void Request.
      *
      * @param Configuration $configuration
-     * @param string        $orderId
-     * @param string        $payId
-     * @param int           $amount
-     * @param bool          $isPartially
+     * @param string $orderId
+     * @param string $payId
+     * @param int $amount
+     * @param bool $isPartially
      *
      * @return Payment
      */
     public function createVoid(
         Configuration $configuration,
-        $orderId,
-        $payId,
-        $amount,
-        $isPartially
-    ) {
+        string        $orderId,
+        string        $payId,
+        int           $amount,
+        bool          $isPartially
+    ): Payment
+    {
         $operation = $isPartially ?
             MaintenanceOperation::OPERATION_AUTHORISATION_DELETE :
             MaintenanceOperation::OPERATION_AUTHORISATION_DELETE_AND_CLOSE;
@@ -145,25 +148,27 @@ class DirectLink
      * Items array should contain item with keys like:
      * ['itemid', 'itemname', 'itemprice', 'itemquant', 'itemvatcode', 'taxincluded']
      *
-     * @param Configuration        $configuration
-     * @param string               $orderId
-     * @param string               $payId
-     * @param int                  $amount
-     * @param array                $items
+     * @param Configuration $configuration
+     * @param string $orderId
+     * @param string $payId
+     * @param int $amount
+     * @param array $items
      * @param MaintenanceOperation $operation
      *
      * @return Payment
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings("cognitive-complexity")
+     * @throws \Exception
      */
     public function createMaintenanceRequest(
-        Configuration $configuration,
-        $orderId,
-        $payId,
-        $amount,
-        array $items,
+        Configuration        $configuration,
+        string               $orderId,
+        string               $payId,
+        int                  $amount,
+        array                $items,
         MaintenanceOperation $operation
-    ) {
+    ): Payment
+    {
         $maintenanceRequest = new DirectLinkMaintenanceRequest($configuration->getShaComposer());
         $maintenanceRequest->setOgoneUri($configuration->getApiMaintenancedirect());
 
@@ -225,13 +230,15 @@ class DirectLink
      * @param $payIdSub
      *
      * @return Payment
+     * @throws \Exception
      */
     public function createStatusRequest(
         Configuration $configuration,
         $orderId,
         $payId,
         $payIdSub
-    ) {
+    ): Payment
+    {
         $queryRequest = new DirectLinkQueryRequest($configuration->getShaComposer());
         $queryRequest->setOgoneUri($configuration->getApiQuerydirect());
 

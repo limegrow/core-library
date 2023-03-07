@@ -14,7 +14,7 @@ interface ConnectorInterface
      *
      * @return string
      */
-    public function requestShoppingCartExtensionId();
+    public function requestShoppingCartExtensionId(): string;
 
     /**
      * Returns activated Ingenico environment mode.
@@ -23,7 +23,7 @@ interface ConnectorInterface
      *
      * @return bool
      */
-    public function requestSettingsMode();
+    public function requestSettingsMode(): bool;
 
     /**
      * Returns the complete list of all settings as an array.
@@ -32,14 +32,14 @@ interface ConnectorInterface
      *
      * @return array
      */
-    public function requestSettings($mode);
+    public function requestSettings(bool $mode): array;
 
     /**
      * Retrieves orderId from checkout session.
      *
      * @return mixed
      */
-    public function requestOrderId();
+    public function requestOrderId(): mixed;
 
     /**
      * Retrieves Customer (buyer) ID on the platform side.
@@ -48,7 +48,7 @@ interface ConnectorInterface
      *
      * @return int
      */
-    public function requestCustomerId();
+    public function requestCustomerId(): int;
 
     /**
      * Returns callback URLs where Ingenico must call after the payment processing.
@@ -64,7 +64,7 @@ interface ConnectorInterface
      *
      * @return string
      */
-    public function buildPlatformUrl($type, array $params = []);
+    public function buildPlatformUrl($type, array $params = []): string;
 
     /**
      * This method is a generic callback gate.
@@ -74,7 +74,7 @@ interface ConnectorInterface
      *
      * @return void
      */
-    public function processSuccessUrls();
+    public function processSuccessUrls(): void;
 
     /**
      * Executed on the moment when a buyer submits checkout form with an intention to start the payment process.
@@ -83,7 +83,7 @@ interface ConnectorInterface
      *
      * @return void
      */
-    public function processPayment();
+    public function processPayment(): void;
 
     /**
      * Matches Ingenico payment statuses to the platform's order statuses.
@@ -93,7 +93,7 @@ interface ConnectorInterface
      * @param string|null $message
      * @return void
      */
-    public function updateOrderStatus($orderId, $paymentStatus, $message = null);
+    public function updateOrderStatus(mixed $orderId, Payment|string $paymentStatus, string $message = null): void;
 
     /**
      * Check if Shopping Cart has orders that were paid (via other payment integrations, i.e. PayPal module)
@@ -104,7 +104,7 @@ interface ConnectorInterface
      *
      * @return bool
      */
-    public function isCartPaid($orderId);
+    public function isCartPaid($orderId): bool;
 
     /**
      * Delegates to the CL the complete processing of the onboarding data and dispatching email to the corresponding
@@ -116,16 +116,16 @@ interface ConnectorInterface
      *
      * @throws \IngenicoClient\Exception
      */
-    public function submitOnboardingRequest($companyName, $email, $countryCode);
+    public function submitOnboardingRequest(string $companyName, string $email, string $countryCode);
 
     /**
      * Returns an array with the order details in a standardised way for all connectors.
      * Matches platform specific fields to the fields that are understood by the CL.
      *
-     * @param mixed $orderId
+     * @param mixed|null $orderId
      * @return array
      */
-    public function requestOrderInfo($orderId = null);
+    public function requestOrderInfo(mixed $orderId = null): array;
 
     /**
      * Get Payment Method Code of Order.
@@ -134,16 +134,16 @@ interface ConnectorInterface
      *
      * @return string|false
      */
-    public function getOrderPaymentMethod($orderId);
+    public function getOrderPaymentMethod(mixed $orderId): bool|string;
 
     /**
      * Get Payment Method Code of Quote/Cart.
      *
-     * @param mixed $quoteId
+     * @param mixed|null $quoteId
      *
      * @return string|false
      */
-    public function getQuotePaymentMethod($quoteId = null);
+    public function getQuotePaymentMethod(mixed $quoteId = null): bool|string;
 
     /**
      * Get Field Label
@@ -151,7 +151,7 @@ interface ConnectorInterface
      * @param string $field
      * @return string
      */
-    public function getOrderFieldLabel($field);
+    public function getOrderFieldLabel(string $field): string;
 
     /**
      * Save Platform's setting (key-value couple depending on the mode).
@@ -161,7 +161,7 @@ interface ConnectorInterface
      * @param mixed $value
      * @return void
      */
-    public function saveSetting($mode, $key, $value);
+    public function saveSetting(bool $mode, string $key, mixed $value): void;
 
     /**
      * Sends an e-mail using platform's email engine.
@@ -176,14 +176,14 @@ interface ConnectorInterface
      * @return bool|int
      */
     public function sendMail(
-        $template,
-        $to,
-        $toName,
-        $from,
-        $fromName,
-        $subject,
-        array $attachedFiles = []
-    );
+        MailTemplate $template,
+        string       $to,
+        string       $toName,
+        string       $from,
+        string       $fromName,
+        string       $subject,
+        array        $attachedFiles = []
+    ): bool|int;
 
     /**
      * Get the platform's actual locale code.
@@ -192,7 +192,7 @@ interface ConnectorInterface
      * @param int|null $orderId
      * @return string
      */
-    public function getLocale($orderId = null);
+    public function getLocale(int $orderId = null): string;
 
     /**
      * Adds cancelled amount to the order which is used for identifying full or partial operation.
@@ -201,7 +201,7 @@ interface ConnectorInterface
      * @param $canceledAmount
      * @return void
      */
-    public function addCancelledAmount($orderId, $canceledAmount);
+    public function addCancelledAmount($orderId, $canceledAmount): void;
 
     /**
      * Adds captured amount to the order which is used for identifying full or partial operation.
@@ -210,7 +210,7 @@ interface ConnectorInterface
      * @param $capturedAmount
      * @return void
      */
-    public function addCapturedAmount($orderId, $capturedAmount);
+    public function addCapturedAmount($orderId, $capturedAmount): void;
 
     /**
      * Adds refunded amount to the order which is used for identifying full or partial operation.
@@ -219,7 +219,7 @@ interface ConnectorInterface
      * @param $refundedAmount
      * @return void
      */
-    public function addRefundedAmount($orderId, $refundedAmount);
+    public function addRefundedAmount($orderId, $refundedAmount): void;
 
     /**
      * Send "Order paid" email to the buyer (customer).
@@ -227,7 +227,7 @@ interface ConnectorInterface
      * @param $orderId
      * @return bool
      */
-    public function sendOrderPaidCustomerEmail($orderId);
+    public function sendOrderPaidCustomerEmail($orderId): bool;
 
     /**
      * Send "Order paid" email to the merchant.
@@ -235,7 +235,7 @@ interface ConnectorInterface
      * @param $orderId
      * @return bool
      */
-    public function sendOrderPaidAdminEmail($orderId);
+    public function sendOrderPaidAdminEmail($orderId): bool;
 
     /**
      * Send "Payment Authorized" email to the buyer (customer).
@@ -243,7 +243,7 @@ interface ConnectorInterface
      * @param $orderId
      * @return bool
      */
-    public function sendNotificationAuthorization($orderId);
+    public function sendNotificationAuthorization($orderId): bool;
 
     /**
      * Send "Payment Authorized" email to the merchant.
@@ -251,7 +251,7 @@ interface ConnectorInterface
      * @param $orderId
      * @return bool
      */
-    public function sendNotificationAdminAuthorization($orderId);
+    public function sendNotificationAdminAuthorization($orderId): bool;
 
     /**
      * Sends payment reminder email to the buyer (customer).
@@ -259,7 +259,7 @@ interface ConnectorInterface
      * @param $orderId
      * @return bool
      */
-    public function sendReminderNotificationEmail($orderId);
+    public function sendReminderNotificationEmail($orderId): bool;
 
     /**
      * Send "Refund failed" email to the buyer (customer).
@@ -267,7 +267,7 @@ interface ConnectorInterface
      * @param $orderId
      * @return bool
      */
-    public function sendRefundFailedCustomerEmail($orderId);
+    public function sendRefundFailedCustomerEmail($orderId): bool;
 
     /**
      * Send "Refund failed" email to the merchant.
@@ -275,7 +275,7 @@ interface ConnectorInterface
      * @param $orderId
      * @return bool
      */
-    public function sendRefundFailedAdminEmail($orderId);
+    public function sendRefundFailedAdminEmail($orderId): bool;
 
     /**
      * Send "Request Support" email to Ingenico Support
@@ -290,7 +290,7 @@ interface ConnectorInterface
         $subject,
         array $fields = [],
         $file = null
-    );
+    ): bool;
 
     /**
      * Save Payment data.
@@ -301,7 +301,7 @@ interface ConnectorInterface
      *
      * @return bool
      */
-    public function logIngenicoPayment($orderId, Payment $data);
+    public function logIngenicoPayment($orderId, Payment $data): bool;
 
     /**
      * Retrieves payment log for the specified order ID.
@@ -310,7 +310,7 @@ interface ConnectorInterface
      *
      * @return \IngenicoClient\Payment
      */
-    public function getIngenicoPaymentLog($orderId);
+    public function getIngenicoPaymentLog($orderId): Payment;
 
     /**
      * Retrieves payment log entry by the specified Pay ID (PAYID).
@@ -319,7 +319,7 @@ interface ConnectorInterface
      *
      * @return \IngenicoClient\Payment
      */
-    public function getIngenicoPaymentById($payId);
+    public function getIngenicoPaymentById($payId): Payment;
 
     /**
      * Retrieves Ingenico Pay ID by the specified platform order ID.
@@ -327,7 +327,7 @@ interface ConnectorInterface
      * @param $orderId
      * @return string|false
      */
-    public function getIngenicoPayIdByOrderId($orderId);
+    public function getIngenicoPayIdByOrderId($orderId): bool|string;
 
     /**
      * Retrieves buyer (customer) aliases by the platform's customer ID.
@@ -335,7 +335,7 @@ interface ConnectorInterface
      * @param $customerId
      * @return array
      */
-    public function getCustomerAliases($customerId);
+    public function getCustomerAliases($customerId): array;
 
     /**
      * Retrieves an Alias object with the fields as an array by the Alias ID (platform's entity identifier).
@@ -344,7 +344,7 @@ interface ConnectorInterface
      * @param $aliasId
      * @return array|false
      */
-    public function getAlias($aliasId);
+    public function getAlias($aliasId): bool|array;
 
     /**
      * Saves the buyer (customer) Alias entity.
@@ -354,7 +354,7 @@ interface ConnectorInterface
      * @param array $data
      * @return bool
      */
-    public function saveAlias($customerId, array $data);
+    public function saveAlias(int $customerId, array $data): bool;
 
     /**
      * Renders the template of the payment success page.
@@ -364,7 +364,7 @@ interface ConnectorInterface
      *
      * @return void
      */
-    public function showSuccessTemplate(array $fields, Payment $payment);
+    public function showSuccessTemplate(array $fields, Payment $payment): void;
 
     /**
      * Renders the template with 3Ds Security Check.
@@ -374,7 +374,7 @@ interface ConnectorInterface
      *
      * @return void
      */
-    public function showSecurityCheckTemplate(array $fields, Payment $payment);
+    public function showSecurityCheckTemplate(array $fields, Payment $payment): void;
 
     /**
      * Renders the template with the order cancellation.
@@ -384,7 +384,7 @@ interface ConnectorInterface
      *
      * @return void
      */
-    public function showCancellationTemplate(array $fields, Payment $payment);
+    public function showCancellationTemplate(array $fields, Payment $payment): void;
 
     /**
      * Renders page with Inline's Loader template.
@@ -393,7 +393,7 @@ interface ConnectorInterface
      * @param array $fields
      * @return void
      */
-    public function showInlineLoaderTemplate(array $fields);
+    public function showInlineLoaderTemplate(array $fields): void;
 
     /**
      * In case of error, display error page.
@@ -401,7 +401,7 @@ interface ConnectorInterface
      * @param $message
      * @return void
      */
-    public function setOrderErrorPage($message);
+    public function setOrderErrorPage($message): void;
 
     /**
      * Renders the template with the payment error.
@@ -411,7 +411,7 @@ interface ConnectorInterface
      *
      * @return void
      */
-    public function showPaymentErrorTemplate(array $fields, Payment $payment);
+    public function showPaymentErrorTemplate(array $fields, Payment $payment): void;
 
     /**
      * Renders the template of payment methods list for the redirect mode.
@@ -420,7 +420,7 @@ interface ConnectorInterface
      *
      * @return void
      */
-    public function showPaymentListRedirectTemplate(array $fields);
+    public function showPaymentListRedirectTemplate(array $fields): void;
 
     /**
      * Renders the template with the payment methods list for the inline mode.
@@ -429,7 +429,7 @@ interface ConnectorInterface
      *
      * @return void
      */
-    public function showPaymentListInlineTemplate(array $fields);
+    public function showPaymentListInlineTemplate(array $fields): void;
 
     /**
      * Renders the template with the payment methods list for the alias selection.
@@ -439,7 +439,7 @@ interface ConnectorInterface
      *
      * @return void
      */
-    public function showPaymentListAliasTemplate(array $fields);
+    public function showPaymentListAliasTemplate(array $fields): void;
 
     /**
      * Retrieves the list of orders that have no payment status at all or have an error payment status.
@@ -448,7 +448,7 @@ interface ConnectorInterface
      *
      * @return array
      */
-    public function getNonactualisedOrdersPaidWithIngenico();
+    public function getNonactualisedOrdersPaidWithIngenico(): array;
 
     /**
      * Sets PaymentStatus.Actualised Flag.
@@ -458,14 +458,14 @@ interface ConnectorInterface
      * @param bool $value
      * @return bool
      */
-    public function setIsPaymentStatusActualised($orderId, $value);
+    public function setIsPaymentStatusActualised($orderId, bool $value): bool;
 
     /**
      * Retrieves the list of orders for the reminder email.
      *
      * @return array
      */
-    public function getPendingReminders();
+    public function getPendingReminders(): array;
 
     /**
      * Sets order reminder flag as "Sent".
@@ -474,7 +474,7 @@ interface ConnectorInterface
      *
      * @return void
      */
-    public function setReminderSent($orderId);
+    public function setReminderSent($orderId): void;
 
     /**
      * Enqueues the reminder for the specified order.
@@ -483,14 +483,14 @@ interface ConnectorInterface
      * @param mixed $orderId
      * @return void
      */
-    public function enqueueReminder($orderId);
+    public function enqueueReminder(mixed $orderId): void;
 
     /**
      * Initiates payment page from the reminder email link.
      *
      * @return void
      */
-    public function showReminderPayOrderPage();
+    public function showReminderPayOrderPage(): void;
 
     /**
      * Retrieves the list of orders that are candidates for the reminder email.
@@ -498,14 +498,14 @@ interface ConnectorInterface
      *
      * @return array
      */
-    public function getOrdersForReminding();
+    public function getOrdersForReminding(): array;
 
     /**
      * Returns categories of the payment methods.
      *
      * @return array
      */
-    public function getPaymentCategories();
+    public function getPaymentCategories(): array;
 
     /**
      * Returns all payment methods with the indicated category.
@@ -513,7 +513,7 @@ interface ConnectorInterface
      * @param $category
      * @return array
      */
-    public function getPaymentMethodsByCategory($category);
+    public function getPaymentMethodsByCategory($category): array;
 
     /**
      * Returns all supported countries with their popular payment methods mapped
@@ -521,14 +521,14 @@ interface ConnectorInterface
      *
      * @return array
      */
-    public function getAllCountries();
+    public function getAllCountries(): array;
 
     /**
      * Returns all payment methods as PaymentMethod objects.
      *
      * @return array
      */
-    public function getPaymentMethods();
+    public function getPaymentMethods(): array;
 
     /**
      * Get Unused Payment Methods (not selected ones).
@@ -537,7 +537,7 @@ interface ConnectorInterface
      *
      * @return array
      */
-    public function getUnusedPaymentMethods();
+    public function getUnusedPaymentMethods(): array;
 
     /**
      * Filters countries based on the search string.
@@ -546,7 +546,7 @@ interface ConnectorInterface
      * @param $selected_countries array of selected countries iso codes
      * @return array
      */
-    public function filterCountries($query, $selected_countries);
+    public function filterCountries($query, array $selected_countries): array;
 
     /**
      * Filters payment methods based on the search string.
@@ -554,7 +554,7 @@ interface ConnectorInterface
      * @param $query
      * @return array
      */
-    public function filterPaymentMethods($query);
+    public function filterPaymentMethods($query): array;
 
     /**
      * Retrieves payment method by Brand value.
@@ -562,14 +562,14 @@ interface ConnectorInterface
      * @param $brand
      * @return PaymentMethod|false
      */
-    public function getPaymentMethodByBrand($brand);
+    public function getPaymentMethodByBrand($brand): bool|PaymentMethod;
 
     /**
      * Delegates cron jobs handling to the CL.
      *
      * @return void
      */
-    public function cronHandler();
+    public function cronHandler(): void;
 
     /**
      * Handles incoming requests from Ingenico.
@@ -579,14 +579,14 @@ interface ConnectorInterface
      *
      * @return void
      */
-    public function webhookListener();
+    public function webhookListener(): void;
 
     /**
      * Empty Shopping Cart and reset session.
      *
      * @return void
      */
-    public function emptyShoppingCart();
+    public function emptyShoppingCart(): void;
 
     /**
      * Restore Shopping Cart.
@@ -601,7 +601,7 @@ interface ConnectorInterface
      * @param array $fields Form fields
      * @return void
      */
-    public function processOpenInvoicePayment($orderId, \IngenicoClient\Alias $alias, array $fields = []);
+    public function processOpenInvoicePayment(mixed $orderId, \IngenicoClient\Alias $alias, array $fields = []): void;
 
     /**
      * Process if have invalid fields of OpenInvoice.
@@ -617,7 +617,7 @@ interface ConnectorInterface
      *
      * @return array
      */
-    public function getSessionValues();
+    public function getSessionValues(): array;
 
     /**
      * Get value from Session.
@@ -625,7 +625,7 @@ interface ConnectorInterface
      * @param string $key
      * @return mixed
      */
-    public function getSessionValue($key);
+    public function getSessionValue(string $key): mixed;
 
     /**
      * Store value in Session.
@@ -634,7 +634,7 @@ interface ConnectorInterface
      * @param mixed $value
      * @return void
      */
-    public function setSessionValue($key, $value);
+    public function setSessionValue(string $key, mixed $value): void;
 
     /**
      * Remove value from Session.
@@ -642,7 +642,7 @@ interface ConnectorInterface
      * @param $key
      * @return void
      */
-    public function unsetSessionValue($key);
+    public function unsetSessionValue($key): void;
 
     /**
      * Check whether an order with given ID is created in Magento
@@ -650,7 +650,7 @@ interface ConnectorInterface
      * @param $orderId
      * @return bool
      */
-    public function isOrderCreated($orderId);
+    public function isOrderCreated($orderId): bool;
 
     /**
      * Same As requestOrderInfo()
@@ -659,12 +659,12 @@ interface ConnectorInterface
      * @param mixed $reservedOrderId
      * @return array
      */
-    public function requestOrderInfoBeforePlaceOrder($reservedOrderId);
+    public function requestOrderInfoBeforePlaceOrder(mixed $reservedOrderId): array;
 
     /**
      * Get Platform Environment.
      *
      * @return string
      */
-    public function getPlatformEnvironment();
+    public function getPlatformEnvironment(): string;
 }
