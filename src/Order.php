@@ -366,7 +366,7 @@ class Order extends Data
     {
         return array_filter(
             [$this->getBillingAddress1(), $this->getBillingAddress2(), $this->getBillingAddress3()],
-            'strlen'
+            fn($value) => !empty($value)
         );
     }
 
@@ -385,7 +385,7 @@ class Order extends Data
     {
         return array_filter(
             [$this->getShippingAddress1(), $this->getShippingAddress2(), $this->getShippingAddress3()],
-            'strlen'
+            fn($value) => !empty($value)
         );
     }
 
