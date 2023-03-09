@@ -12,43 +12,43 @@ class KlarnaFinancing extends KlarnaAbstract
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'Klarna Financing';
+    protected $name = 'Klarna Financing';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'https://x.klarnacdn.net/payment-method/assets/badges/generic/klarna.svg';
+    protected $logo = 'https://x.klarnacdn.net/payment-method/assets/badges/generic/klarna.svg';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'klarna';
+    protected $category = 'klarna';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'KLARNA_FINANCING';
+    protected $pm = 'KLARNA_FINANCING';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'KLARNA_FINANCING';
+    protected $brand = 'KLARNA_FINANCING';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'AT' => [
             'popularity' => 100
         ],
@@ -73,17 +73,17 @@ class KlarnaFinancing extends KlarnaAbstract
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 
     /**
      * Defines if this payment method requires order line items to be sent with the request
      * @var bool
      */
-    protected bool $order_line_items_required = true;
+    protected $order_line_items_required = true;
 
     /**
      * Defines if this payment method requires additional data to be sent with the request.
      * @var bool
      */
-    protected bool $additional_data_required = true;
+    protected $additional_data_required = true;
 }

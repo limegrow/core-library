@@ -10,43 +10,43 @@ class Giropay extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = 'giropay';
+    protected $id = 'giropay';
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'Giropay';
+    protected $name = 'Giropay';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'giropay.svg';
+    protected $logo = 'giropay.svg';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'real_time_banking';
+    protected $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'giropay';
+    protected $pm = 'giropay';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'giropay';
+    protected $brand = 'giropay';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'DE' => [
             'popularity' => 20
         ]
@@ -56,5 +56,5 @@ class Giropay extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 }

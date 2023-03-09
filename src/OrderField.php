@@ -124,8 +124,11 @@ class OrderField extends Data
 
     /**
      * OrderField constructor.
+     *
+     * @param string $name
+     * @param array $options
      */
-    public function __construct(string $name, array $options = [])
+    public function __construct($name, array $options = [])
     {
         // Set defaults
         $this->setData([
@@ -144,10 +147,11 @@ class OrderField extends Data
     /**
      * Validate value
      *
-     * @param mixed|null $value Optional
+     * @param mixed $value Optional
+     * @return bool
      * @throws Exception
      */
-    public function validate(mixed $value = null): bool
+    public function validate($value = null)
     {
         if (!$value) {
             $value = $this->getValue();

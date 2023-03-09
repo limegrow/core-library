@@ -10,43 +10,43 @@ class InterSolve extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'InterSolve';
+    protected $name = 'InterSolve';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'intersolve.png';
+    protected $logo = 'intersolve.png';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'prepaid_vouchers';
+    protected $category = 'prepaid_vouchers';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'Intersolve';
+    protected $pm = 'Intersolve';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'Intersolve';
+    protected $brand = 'Intersolve';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'NL' => [
             'popularity' => 20
         ],
@@ -56,5 +56,5 @@ class InterSolve extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 }

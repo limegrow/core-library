@@ -10,43 +10,43 @@ class Aurore extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'Aurore';
+    protected $name = 'Aurore';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'aurore.png';
+    protected $logo = 'aurore.png';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'card';
+    protected $category = 'card';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'CreditCard';
+    protected $pm = 'CreditCard';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'Aurore';
+    protected $brand = 'Aurore';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'FR' => [
             'popularity' => 100
         ],
@@ -56,17 +56,17 @@ class Aurore extends PaymentMethod implements PaymentMethodInterface
      * Is Security Mandatory
      * @var bool
      */
-    protected bool $is_security_mandatory = true;
+    protected $is_security_mandatory = true;
 
     /**
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 
     /**
      * Is support Two phase flow
      * @var bool
      */
-    protected bool $two_phase_flow = false;
+    protected $two_phase_flow = false;
 }

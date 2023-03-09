@@ -17,9 +17,8 @@ trait OpenInvoice
      * @param PaymentMethodInterface $paymentMethod PaymentMethod Instance
      * @param array $fields Order fields
      * @return array
-     * @throws Exception
      */
-    public function getMissingOrderFields(mixed $orderId, PaymentMethodInterface $paymentMethod, array $fields = []): array
+    public function getMissingOrderFields($orderId, PaymentMethodInterface $paymentMethod, array $fields = [])
     {
         if (!$paymentMethod->getAdditionalDataRequired()) {
             throw new Exception(sprintf('Unable to use "%s" as Open Invoice method.', $paymentMethod->getId()));
@@ -29,7 +28,7 @@ trait OpenInvoice
         $order = $this->getOrder($orderId);
 
         // Order items are required
-        if (count($order->getItems()) === 0) {
+        if (count((array) $order->getItems()) === 0) {
             $this->logger->debug(__METHOD__ . ' Open Invoice requires order items',
                 [
                     $order->getData(),
@@ -45,8 +44,7 @@ trait OpenInvoice
         $orderFields = array_merge($order->getData(), $fields);
 
         // Get Expected Fields
-        $checkoutType = $order->getCheckoutType() ? $order->getCheckoutType()
-            : PaymentMethod\PaymentMethod::CHECKOUT_B2C;
+        $checkoutType = $order->getCheckoutType() ?: PaymentMethod\PaymentMethod::CHECKOUT_B2C;
         $expectedFields = (array) $paymentMethod->getExpectedFields($checkoutType);
 
         // Get Missing or Invalid parameters
@@ -95,10 +93,10 @@ trait OpenInvoice
      * @param array $fields
      * @return array
      */
-    private function validateAdditionalFields(array $additionalFields, array $fields = []): array
+    private function validateAdditionalFields(array $additionalFields, array $fields = [])
     {
         // Check Open Invoice fields
-        foreach ($additionalFields as $field) {
+        foreach ($additionalFields as &$field) {
             /** @var OrderField $field */
             $fieldName = $field->getFieldName();
             $value = $fields[$fieldName] ?? null;
@@ -136,9 +134,9 @@ trait OpenInvoice
      * @param array $additionalFields
      * @return bool
      */
-    private function haveInvalidAdditionalFields(array $additionalFields): bool
+    private function haveInvalidAdditionalFields(array $additionalFields)
     {
-        foreach ($additionalFields as $field) {
+        foreach ($additionalFields as &$field) {
             if (!$field->getIsValid()) {
                 return false;
             }
@@ -155,7 +153,7 @@ trait OpenInvoice
      * @return array
      * @throws Exception
      */
-    public function validateOpenInvoiceCheckoutAdditionalFields($orderId, PaymentMethodInterface $paymentMethod): array
+    public function validateOpenInvoiceCheckoutAdditionalFields($orderId, PaymentMethodInterface $paymentMethod)
     {
         if (!$paymentMethod->getAdditionalDataRequired()) {
             throw new Exception(sprintf('Unable to use "%s" as Open Invoice method.', $paymentMethod->getId()));
@@ -186,7 +184,9 @@ trait OpenInvoice
             );
         }
 
-        return $this->validateAdditionalFields($additionalFields, $previousFields);
+        $additionalFields = $this->validateAdditionalFields($additionalFields, $previousFields);
+
+        return $additionalFields;
     }
 
     /**
@@ -197,14 +197,14 @@ trait OpenInvoice
      * @param array $fields Checkout Fields
      * @throws \Exception
      */
-    public function initiateOpenInvoicePayment(mixed $orderId, Alias $alias, array $fields = []): void
+    public function initiateOpenInvoicePayment($orderId, $alias, array $fields = [])
     {
         $paymentMethod = $alias->getPaymentMethod();
         if (!$paymentMethod->getAdditionalDataRequired()) {
             throw new Exception(sprintf(
                 'Unable to use %s as Open Invoice method. Use %s::initiateRedirectPayment() instead of.',
                 $alias->getPaymentId(),
-                __CLASS__
+                self::class
             ));
         }
 
@@ -234,7 +234,7 @@ trait OpenInvoice
         $order = $this->getOrder($orderId);
 
         // Order items are required
-        if (count($order->getItems()) === 0) {
+        if (count((array) $order->getItems()) === 0) {
             $this->logger->debug(__METHOD__ . ' Open Invoice requires order items', [
                 $order->getData(),
                 $alias->getData(),
@@ -295,7 +295,9 @@ trait OpenInvoice
         $result = $paymentRequest->toArray();
         $result['SHASIGN'] = $paymentRequest->getShaSign();
 
-        $this->logger->debug(__METHOD__, $result);
+        if ($this->logger) {
+            $this->logger->debug(__METHOD__, $result);
+        }
 
         // Show page with list of payment methods
         $this->extension->showPaymentListRedirectTemplate([

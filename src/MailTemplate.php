@@ -26,12 +26,23 @@ class MailTemplate
     /**
      * @var string
      */
-    private string $templates_directory;
+    private $locale = 'en_US';
 
     /**
-     * @var Translator
+     * @var string
      */
-    private readonly Translator $translator;
+    private $layout = 'default';
+
+    /**
+     * @var string
+     */
+    private $template;
+
+    private ?string $templates_directory = null;
+
+    private array $fields = [];
+
+    private \Symfony\Component\Translation\Translator $translator;
 
     /**
      * MailTemplate constructor.
@@ -39,12 +50,15 @@ class MailTemplate
      * @param $locale
      * @param $layout
      * @param $template
-     * @param string $locale
-     * @param string $layout
-     * @param string $template
+     * @param array $fields
      */
-    public function __construct(private $locale, private $layout, private $template, private readonly array $fields = [])
+    public function __construct($locale, $layout, $template, array $fields = array())
     {
+        $this->locale = $locale;
+        $this->layout = $layout;
+        $this->template = $template;
+        $this->fields = $fields;
+
         // Initialize translations
         $this->translator = new Translator($this->locale);
         $this->translator->addLoader('po', new PoFileLoader());
@@ -76,9 +90,10 @@ class MailTemplate
     /**
      * Set Templates Directory
      *
+     * @param string $templates_directory
      * @return $this
      */
-    public function setTemplatesDirectory(string $templates_directory): static
+    public function setTemplatesDirectory($templates_directory)
     {
         $this->templates_directory = $templates_directory;
 
@@ -89,11 +104,13 @@ class MailTemplate
      * Get Message.
      *
      * @param $type
+     * @param bool $includeLayout
      *
+     * @return false|string
      *
      * @throws Exception
      */
-    private function getMessage($type, bool $includeLayout = true): bool|string
+    private function getMessage($type, $includeLayout = true)
     {
         if (!in_array($type, [self::TYPE_HTML, self::TYPE_PLAIN_TEXT])) {
             throw new Exception('Wrong type argument');
@@ -110,10 +127,12 @@ class MailTemplate
     /**
      * Get HTML.
      *
+     * @param bool $includeLayout
+     * @return false|string
      *
      * @throws Exception
      */
-    public function getHtml(bool $includeLayout = true): bool|string
+    public function getHtml($includeLayout = true)
     {
         return $this->getMessage(self::TYPE_HTML, $includeLayout);
     }
@@ -121,19 +140,24 @@ class MailTemplate
     /**
      * Get Plain Text.
      *
+     * @param bool $includeLayout
+     * @return false|string
      *
      * @throws Exception
      */
-    public function getPlainText(bool $includeLayout = true): bool|string
+    public function getPlainText($includeLayout = true)
     {
         return $this->getMessage(self::TYPE_PLAIN_TEXT, $includeLayout);
     }
 
     /**
      * Lookup Template
+     * @param string $template
+     * @param string $type
+     * @return string
      * @throws Exception
      */
-    private function lookupTemplate(string $template, string $type): string
+    private function lookupTemplate($template, $type)
     {
         // Clean up variables
         $template = preg_replace('/[^a-zA-Z0-9_-]+/', '', $template);
@@ -153,7 +177,7 @@ class MailTemplate
         }
 
         if (!file_exists($templateFile)) {
-            throw new Exception("Template $template doesn't exist");
+            throw new Exception("Template {$template} doesn't exist");
         }
 
         return $templateFile;
@@ -161,9 +185,12 @@ class MailTemplate
 
     /**
      * Lookup Layout
+     * @param string $layout
+     * @param string $type
+     * @return string
      * @throws Exception
      */
-    private function lookupLayout(string $layout, string $type): string
+    private function lookupLayout($layout, $type)
     {
         // Clean up variables
         $layout = preg_replace('/[^a-zA-Z0-9_-]+/', '', $layout);
@@ -183,7 +210,7 @@ class MailTemplate
         }
 
         if (!file_exists($templateFile)) {
-            throw new Exception("Layout $layout doesn't exist");
+            throw new Exception("Layout {$layout} doesn't exist");
         }
 
         return $templateFile;
@@ -192,11 +219,16 @@ class MailTemplate
     /**
      * Render template.
      *
+     * @param string|false $layout
+     * @param string $template
+     * @param string $type
+     * @param array $fields
      *
+     * @return false|string
      *
      * @throws Exception
      */
-    public function renderTemplate(bool|string $layout, string $template, string $type, array $fields): bool|string
+    public function renderTemplate($layout, $template, $type, array $fields)
     {
         $template = preg_replace('/[^a-zA-Z0-9_-]+/', '', $template);
         $type = preg_replace('/[^a-zA-Z0-9_-]+/', '', $type);
@@ -239,11 +271,13 @@ class MailTemplate
      * Translate.
      *
      * @param $id
+     * @param array $parameters
      * @param string|null $domain
      * @param string|null $locale
      *
+     * @return string
      */
-    public function __($id, array $parameters = [], string $domain = null, string $locale = null): string
+    public function __($id, $parameters = [], $domain = null, $locale = null)
     {
         return $this->translator->trans($id, $parameters, $domain, $locale);
     }
@@ -252,8 +286,10 @@ class MailTemplate
      * Embed Image.
      *
      * @param $file
+     *
+     * @return string
      */
-    public function embedImage($file): bool|string
+    public function embedImage($file)
     {
         $size = getimagesize($file);
         if ($size) {

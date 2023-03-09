@@ -94,6 +94,8 @@ class OrderItem extends Data
 
     /**
      * OrderItem constructor.
+     *
+     * @param array $data
      */
     public function __construct(array $data = [])
     {
@@ -102,8 +104,10 @@ class OrderItem extends Data
 
     /**
      * Get item array with Ingenico specific data
+     *
+     * @return array
      */
-    public function exchange(): array
+    public function exchange()
     {
         $result = [];
         foreach (self::$map as $key => $value) {

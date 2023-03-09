@@ -26,13 +26,12 @@ trait HostedCheckout
     /**
      * Get Hosted Checkout parameters to generate the payment form.
      *
+     * @deprecated Use IngenicoCoreLibrary::getHostedCheckoutPaymentRequest() instead of
      * @param $orderId
      * @param Alias $alias
      * @return Data
-     * @throws \Exception
-     * @deprecated Use IngenicoCoreLibrary::getHostedCheckoutPaymentRequest() instead of
      */
-    public function initiateRedirectPayment($orderId, Alias $alias): Data
+    public function initiateRedirectPayment($orderId, Alias $alias)
     {
         $order = $this->getOrder($orderId);
 
@@ -41,7 +40,9 @@ trait HostedCheckout
         $params = $paymentRequest->toArray();
         $params['SHASIGN'] = $paymentRequest->getShaSign();
 
-        $this->logger->debug(__METHOD__, $params);
+        if ($this->logger) {
+            $this->logger->debug(__METHOD__, $params);
+        }
 
         return (new Data())->setUrl($paymentRequest->getOgoneUri())
             ->setFields($params);
@@ -51,12 +52,12 @@ trait HostedCheckout
      * Get Hosted Checkout Payment Request
      * @see https://epayments-support.ingenico.com/en/integration-solutions/integrations/hosted-payment-page
      *
-     * @param Order $order
-     * @param Alias $alias
+     * @param \IngenicoClient\Order $order
+     * @param \IngenicoClient\Alias $alias
      * @return EcommercePaymentRequest
      * @throws \Exception
      */
-    public function getHostedCheckoutPaymentRequest(Order $order, Alias $alias): EcommercePaymentRequest
+    public function getHostedCheckoutPaymentRequest(Order $order, Alias $alias)
     {
         // Convert customer dob to timestamp if needs
         if ($order->hasCustomerDob() && is_string($order->getCustomerDob())) {
@@ -67,7 +68,7 @@ trait HostedCheckout
         $paymentMethod = $alias->getPaymentMethod();
 
         // Payment ID
-        $paymentId = $paymentMethod->getId();
+        $paymentId = $paymentMethod ? $paymentMethod->getId() : null;
 
         // Operation Code
         if (in_array($paymentId, [
@@ -90,8 +91,8 @@ trait HostedCheckout
 
         // Get Items
         $items = [];
-        if ($paymentMethod->getOrderLineItemsRequired()) {
-            $items = $order->getItems();
+        if ($paymentMethod && $paymentMethod->getOrderLineItemsRequired()) {
+            $items = (array) $order->getItems();
 
             // Workaround for the rounding issue
             // Checking for the rounding issue
@@ -135,10 +136,12 @@ trait HostedCheckout
                     ]
                 );
 
-                $this->logger->warn(
-                    sprintf('Rounding issue. Amount %s vs %s', $amount, $calculated),
-                    [$order->getOrderId()]
-                );
+                if ($this->logger) {
+                    $this->logger->warn(
+                        sprintf('Rounding issue. Amount %s vs %s', $amount, $calculated),
+                        [$order->getOrderId()]
+                    );
+                }
             }
 
             // Add Fee
@@ -166,10 +169,12 @@ trait HostedCheckout
                     ]
                 );
 
-                $this->logger->warn(
-                    sprintf('Rounding issue. Amount %s vs %s', $amount, $calculated),
-                    [$order->getOrderId()]
-                );
+                if ($this->logger) {
+                    $this->logger->warn(
+                        sprintf('Rounding issue. Amount %s vs %s', $amount, $calculated),
+                        [$order->getOrderId()]
+                    );
+                }
             }
         }
 
@@ -182,6 +187,7 @@ trait HostedCheckout
         $request = new EcommercePaymentRequest($this->getConfiguration()->getShaComposer('in'));
         $request->setOgoneUri($this->getConfiguration()->getApiEcommerce());
 
+        /** @var ReturnUrl $urls */
         $urls = $this->requestReturnUrls($order->getOrderId());
 
         $request->setOrig($this->getConfiguration()->getShoppingCartExtensionId())
@@ -205,13 +211,13 @@ trait HostedCheckout
 
         // Set up templates
         switch ($this->getConfiguration()->getPaymentpageTemplate()) {
-            case ConfigurationInterface::PAYMENT_PAGE_TEMPLATE_INGENICO:
+            case Configuration::PAYMENT_PAGE_TEMPLATE_INGENICO:
                 $request->setTp($this->getConfiguration()->getPaymentpageTemplateName());
                 break;
-            case ConfigurationInterface::PAYMENT_PAGE_TEMPLATE_STORE:
+            case Configuration::PAYMENT_PAGE_TEMPLATE_STORE:
                 $request->setTp($this->getConfiguration()->getRedirectPaymentPageTemplateUrl());
                 break;
-            case ConfigurationInterface::PAYMENT_PAGE_TEMPLATE_EXTERNAL:
+            case Configuration::PAYMENT_PAGE_TEMPLATE_EXTERNAL:
                 $request->setTp($this->getConfiguration()->getPaymentpageTemplateExternalurl());
                 break;
             default:
@@ -416,7 +422,7 @@ trait HostedCheckout
         }
 
         // Generate the list of items for the PMs that are requiring it (i.e. Klarna)
-        if ($paymentMethod->getOrderLineItemsRequired()) {
+        if ($paymentMethod && $paymentMethod->getOrderLineItemsRequired()) {
             /** @var OrderItem $item */
             foreach ($items as $id => $item) {
                 $fields = $item->exchange();
@@ -428,7 +434,7 @@ trait HostedCheckout
         }
 
         // Override PM and BRAND for Blank payment method
-        $additionalData = $order->getAdditionalData();
+        $additionalData = (array) $order->getAdditionalData();
         if (isset($additionalData['flex_pm']) && isset($additionalData['flex_brand'])) {
             $request->setData('PM', $additionalData['flex_pm']);
             $request->setData('BRAND', $additionalData['flex_brand']);
@@ -439,7 +445,9 @@ trait HostedCheckout
             $request->setData('ISSUERID', $additionalData['issuer_id']);
         }
 
-        $this->logger->debug(__METHOD__, $request->toArray());
+        if ($this->logger) {
+            $this->logger->debug(__METHOD__, $request->toArray());
+        }
 
         // Validate
         $request->validate();
@@ -449,6 +457,8 @@ trait HostedCheckout
 
     /**
      * Get "Redirect" Payment Request with specified PaymentMethod and Brand.
+     * @see \IngenicoClient\PaymentMethod\PaymentMethod
+     *
      * @param mixed $orderId
      * @param mixed|null $aliasId
      * @param string $paymentMethod
@@ -457,18 +467,14 @@ trait HostedCheckout
      *
      * @return Data Data with url and fields keys
      * @throws Exception
-     * @throws \Exception
-     * @see \IngenicoClient\PaymentMethod\PaymentMethod
-     *
      */
     public function getSpecifiedRedirectPaymentRequest(
-        mixed  $orderId,
-        mixed  $aliasId,
-        string $paymentMethod,
-        string $brand,
-        string $paymentId = null
-    ): Data
-    {
+        $orderId,
+        $aliasId,
+        $paymentMethod,
+        $brand,
+        $paymentId = null
+    ) {
         $order = $this->getOrder($orderId);
 
         if (!$paymentMethod || !$brand) {
@@ -518,7 +524,9 @@ trait HostedCheckout
         $params = $paymentRequest->toArray();
         $params['SHASIGN'] = $paymentRequest->getShaSign();
 
-        $this->logger->debug(__METHOD__, $params);
+        if ($this->logger) {
+            $this->logger->debug(__METHOD__, $params);
+        }
 
         return (new Data())->setUrl($paymentRequest->getOgoneUri())
                            ->setFields($params);
@@ -531,7 +539,7 @@ trait HostedCheckout
      * @param Order $order
      * @return AbstractPaymentRequest
      */
-    public static function copyOrderDataToPaymentRequest(AbstractPaymentRequest $request, Order $order): AbstractPaymentRequest
+    public static function copyOrderDataToPaymentRequest(AbstractPaymentRequest $request, Order $order)
     {
         // Set values for Request instance
         $request->setOrderId($order->getOrderId())
@@ -578,7 +586,7 @@ trait HostedCheckout
      * @param Order $order
      * @return AbstractPaymentRequest
      */
-    public static function copyBrowserDataToPaymentRequest(AbstractPaymentRequest $request, Order $order): AbstractPaymentRequest
+    public static function copyBrowserDataToPaymentRequest(AbstractPaymentRequest $request, Order $order)
     {
         $request->setBrowseracceptheader($order->getHttpAccept());
         $request->setBrowseruseragent($order->getHttpUserAgent());
@@ -607,9 +615,9 @@ trait HostedCheckout
      *
      * @param $response
      *
-     * @return bool
+     * @return mixed
      */
-    public function validateHostedCheckoutResponse($response): bool
+    public function validateHostedCheckoutResponse($response)
     {
         $ecommercePaymentResponse = new EcommercePaymentResponse($response);
 

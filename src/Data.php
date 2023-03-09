@@ -6,24 +6,24 @@ use InvalidArgumentException;
 
 class Data implements \ArrayAccess
 {
-    protected array $data = [];
+    protected $data = [];
 
     /**
      * Check is data exists
      * @param $key
      * @return bool
      */
-    public function hasData($key): bool
+    public function hasData($key)
     {
         return isset($this->data[$key]);
     }
 
     /**
      * Get Data
-     * @param mixed|null $key
+     * @param mixed $key
      * @return array|mixed
      */
-    public function getData(mixed $key = null): mixed
+    public function getData($key = null)
     {
         if (!$key) {
             return $this->data;
@@ -38,7 +38,7 @@ class Data implements \ArrayAccess
      * @param mixed|null $value
      * @return $this
      */
-    public function setData($key, mixed $value = null): static
+    public function setData($key, $value = null)
     {
         if (is_array($key)) {
             foreach ($key as $key1 => $value1) {
@@ -60,7 +60,7 @@ class Data implements \ArrayAccess
      * @param $key
      * @return $this
      */
-    public function unsData($key): static
+    public function unsData($key)
     {
         if ($this->hasData($key)) {
             unset($this->data[$key]);
@@ -73,7 +73,7 @@ class Data implements \ArrayAccess
      * Get Data as array
      * @return array
      */
-    public function toArray(): array
+    public function toArray()
     {
         return $this->data;
     }
@@ -81,12 +81,11 @@ class Data implements \ArrayAccess
     /**
      * Set/Get attribute wrapper
      *
-     * @param string $method
-     * @param array $args
+     * @param   string $method
+     * @param   array $args
      * @return  mixed
-     * @throws Exception
      */
-    public function __call(string $method, array $args)
+    public function __call($method, $args)
     {
         switch (substr($method, 0, 3)) {
             case 'get':
@@ -105,7 +104,7 @@ class Data implements \ArrayAccess
                 return $this->hasData($key);
         }
 
-        throw new Exception(sprintf('Invalid method %s::%s', get_class($this), $method));
+        throw new Exception(sprintf('Invalid method %s::%s', $this::class, $method));
     }
 
     /**
@@ -116,7 +115,8 @@ class Data implements \ArrayAccess
      * @return void
      * @link http://www.php.net/manual/en/arrayaccess.offsetset.php
      */
-    public function offsetSet(string $offset, mixed $value): void
+    #[\ReturnTypeWillChange]
+    public function offsetSet($offset, $value)
     {
         $this->data[$offset] = $value;
     }
@@ -128,7 +128,8 @@ class Data implements \ArrayAccess
      * @return bool
      * @link http://www.php.net/manual/en/arrayaccess.offsetexists.php
      */
-    public function offsetExists(string $offset): bool
+    #[\ReturnTypeWillChange]
+    public function offsetExists($offset)
     {
         return $this->hasData($offset);
     }
@@ -140,7 +141,8 @@ class Data implements \ArrayAccess
      * @return void
      * @link http://www.php.net/manual/en/arrayaccess.offsetunset.php
      */
-    public function offsetUnset(string $offset): void
+    #[\ReturnTypeWillChange]
+    public function offsetUnset($offset)
     {
         $this->unsData($offset);
     }
@@ -152,7 +154,8 @@ class Data implements \ArrayAccess
      * @return mixed
      * @link http://www.php.net/manual/en/arrayaccess.offsetget.php
      */
-    public function offsetGet($offset): mixed
+    #[\ReturnTypeWillChange]
+    public function offsetGet($offset)
     {
         return $this->getData($offset);
     }
@@ -163,7 +166,7 @@ class Data implements \ArrayAccess
      * @param string $name
      * @return string
      */
-    protected function underscore(string $name): string
+    protected function underscore($name)
     {
         return strtolower(preg_replace('/(.)([A-Z])/', '$1_$2', $name));
     }

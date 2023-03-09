@@ -13,11 +13,12 @@ interface FlexCheckoutInterface
      * @param Alias $alias
      * @return string
      */
-    public function getInlineIFrameUrl($orderId, Alias $alias): string;
+    public function getInlineIFrameUrl($orderId, Alias $alias);
 
     /**
      * Get Flex Checkout Payment Request Instance
      *
+     * @return FlexCheckoutPaymentRequest
      */
-    public function getFlexCheckoutPaymentRequest(Order $order, Alias $alias): FlexCheckoutPaymentRequest;
+    public function getFlexCheckoutPaymentRequest(Order $order, Alias $alias);
 }

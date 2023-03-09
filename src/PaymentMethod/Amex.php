@@ -10,43 +10,43 @@ class Amex extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'American Express';
+    protected $name = 'American Express';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'amex.svg';
+    protected $logo = 'amex.svg';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'card';
+    protected $category = 'card';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'CreditCard';
+    protected $pm = 'CreditCard';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'American Express';
+    protected $brand = 'American Express';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'AT' => [
             'popularity' => 40
         ],
@@ -86,5 +86,5 @@ class Amex extends PaymentMethod implements PaymentMethodInterface
      * Is Security Mandatory
      * @var bool
      */
-    protected bool $is_security_mandatory = false;
+    protected $is_security_mandatory = false;
 }

@@ -21,10 +21,7 @@ class DeviceDetect
      */
     const DEVICE_TYPE_TABLET = 'tablet';
 
-    /**
-     * @var MobileDetect
-     */
-    private MobileDetect $mobileDetect;
+    private \Detection\MobileDetect $mobileDetect;
 
     /**
      * Constructor.
@@ -39,7 +36,7 @@ class DeviceDetect
      *
      * @return string
      */
-    public function getDeviceType(): string
+    public function getDeviceType()
     {
         if ($this->mobileDetect->isMobile()) {
             return self::DEVICE_TYPE_MOBILE;
