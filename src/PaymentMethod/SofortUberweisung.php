@@ -10,43 +10,43 @@ class SofortUberweisung extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'Sofort Überweisung';
+    protected $name = 'Sofort Überweisung';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'sofort_uberweisung.svg';
+    protected $logo = 'sofort_uberweisung.svg';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'real_time_banking';
+    protected $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'DirectEbanking';
+    protected $pm = 'DirectEbanking';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'Sofort Uberweisung';
+    protected $brand = 'Sofort Uberweisung';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'DE' => [
             'popularity' => 20
         ]
@@ -56,5 +56,5 @@ class SofortUberweisung extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 }

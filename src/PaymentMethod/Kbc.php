@@ -10,43 +10,43 @@ class Kbc extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'KBC';
+    protected $name = 'KBC';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'kbc.svg';
+    protected $logo = 'kbc.svg';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'real_time_banking';
+    protected $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'KBC Online';
+    protected $pm = 'KBC Online';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'KBC Online';
+    protected $brand = 'KBC Online';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'BE' => [
             'popularity' => 40
         ]
@@ -56,5 +56,5 @@ class Kbc extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 }

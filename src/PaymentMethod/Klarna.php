@@ -16,43 +16,43 @@ class Klarna extends PaymentMethod
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'Klarna';
+    protected $name = 'Klarna';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'klarna.svg';
+    protected $logo = 'klarna.svg';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'open_invoice';
+    protected $category = 'open_invoice';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = '';
+    protected $pm = '';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = '';
+    protected $brand = '';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'DE' => [
             'popularity' => 80
         ],
@@ -65,25 +65,25 @@ class Klarna extends PaymentMethod
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 
     /**
      * Defines if this payment method requires order line items to be sent with the request
      * @var bool
      */
-    protected bool $order_line_items_required = true;
+    protected $order_line_items_required = true;
 
     /**
      * Defines if this payment method requires additional data to be sent with the request.
      * @var bool
      */
-    protected bool $additional_data_required = true;
+    protected $additional_data_required = true;
 
     /**
      * Different PM values per different countries
      * @var array
      */
-    protected array $pm_per_country = [
+    protected $pm_per_country = [
         'SE' => 'Open Invoice SE',
         'FI' => 'Open Invoice FI',
         'DK' => 'Open Invoice DK',
@@ -96,7 +96,7 @@ class Klarna extends PaymentMethod
      * Different Brand values per different countries
      * @var array
      */
-    protected array $brand_per_country = [
+    protected $brand_per_country = [
         'SE' => 'Open Invoice SE',
         'FI' => 'Open Invoice FI',
         'DK' => 'Open Invoice DK',
@@ -110,7 +110,7 @@ class Klarna extends PaymentMethod
      * @var array
      * @SuppressWarnings("Duplicates")
      */
-    protected array $common_fields = [
+    protected $common_fields = [
         OrderField::BILLING_COUNTRY => [
             'required' => true,
             'field_type' => PaymentMethod::TYPE_TEXT,
@@ -268,7 +268,7 @@ class Klarna extends PaymentMethod
      * @var array
      * @SuppressWarnings("Duplicates")
      */
-    protected array $additional_fields = [
+    protected $additional_fields = [
         OrderField::CUSTOMER_DOB => [
             'required' => true,
             'field_type' => PaymentMethod::TYPE_DATE,

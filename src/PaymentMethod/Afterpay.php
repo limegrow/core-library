@@ -12,43 +12,43 @@ class Afterpay extends PaymentMethod
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'Afterpay';
+    protected $name = 'Afterpay';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'afterpay.svg';
+    protected $logo = 'afterpay.svg';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'open_invoice';
+    protected $category = 'open_invoice';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = '';
+    protected $pm = '';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = '';
+    protected $brand = '';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'DE' => [
             'popularity' => 80
         ],
@@ -61,25 +61,25 @@ class Afterpay extends PaymentMethod
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 
     /**
      * Defines if this payment method requires order line items to be sent with the request
      * @var bool
      */
-    protected bool $order_line_items_required = true;
+    protected $order_line_items_required = true;
 
     /**
      * Defines if this payment method requires additional data to be sent with the request.
      * @var bool
      */
-    protected bool $additional_data_required = true;
+    protected $additional_data_required = true;
 
     /**
      * Different PM values per different countries
      * @var array
      */
-    protected array $pm_per_country = [
+    protected $pm_per_country = [
         'DE' => 'Open Invoice DE',
         'NL' => 'Open Invoice NL'
     ];
@@ -88,7 +88,7 @@ class Afterpay extends PaymentMethod
      * Different Brand values per different countries
      * @var array
      */
-    protected array $brand_per_country = [
+    protected $brand_per_country = [
         'DE' => 'Open Invoice DE',
         'NL' => 'Open Invoice NL'
     ];
@@ -98,7 +98,7 @@ class Afterpay extends PaymentMethod
      * @var array
      * @SuppressWarnings("Duplicates")
      */
-    protected array $common_fields = [
+    protected $common_fields = [
         OrderField::BILLING_COUNTRY_CODE => [
             'required' => true,
             'field_type' => PaymentMethod::TYPE_TEXT,
@@ -251,7 +251,7 @@ class Afterpay extends PaymentMethod
      * @var array
      * @SuppressWarnings("Duplicates")
      */
-    protected array $additional_fields = [
+    protected $additional_fields = [
         PaymentMethod::CHECKOUT_B2C => [
             OrderField::CUSTOMER_DOB => [
                 'required' => true,
@@ -300,7 +300,7 @@ class Afterpay extends PaymentMethod
      * @param array $fields
      * @return $this
      */
-    public function setAdditionalFields($checkout_type, array $fields = []): static
+    public function setAdditionalFields($checkout_type, array $fields = [])
     {
         $this->additional_fields[$checkout_type] = $fields;
 
@@ -312,7 +312,7 @@ class Afterpay extends PaymentMethod
      * @param string $checkout_type
      * @return array
      */
-    public function getAdditionalFields(string $checkout_type): array
+    public function getAdditionalFields($checkout_type)
     {
         return $this->additional_fields[$checkout_type] ?? [];
     }

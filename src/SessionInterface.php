@@ -9,7 +9,7 @@ interface SessionInterface
      *
      * @return array
      */
-    public function getSessionValues(): array;
+    public function getSessionValues();
 
     /**
      * Get value from Session.
@@ -17,7 +17,7 @@ interface SessionInterface
      * @param string $key
      * @return mixed
      */
-    public function getSessionValue(string $key): mixed;
+    public function getSessionValue($key);
 
     /**
      * Store value in Session.
@@ -26,7 +26,7 @@ interface SessionInterface
      * @param mixed $value
      * @return void
      */
-    public function setSessionValue(string $key, mixed $value): void;
+    public function setSessionValue($key, $value);
 
     /**
      * Remove value from Session.
@@ -34,5 +34,5 @@ interface SessionInterface
      * @param $key
      * @return void
      */
-    public function unsetSessionValue($key): void;
+    public function unsetSessionValue($key);
 }

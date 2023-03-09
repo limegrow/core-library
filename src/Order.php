@@ -130,7 +130,7 @@ class Order extends Data
      * Allowed currencies
      * @var array
      */
-    public array $allowedCurrencies = [
+    public $allowedCurrencies = [
         'AED',
         'ANG',
         'ARS',
@@ -183,7 +183,7 @@ class Order extends Data
      * Allowed Languages
      * @var array
      */
-    public array $allowedLanguages = [
+    public $allowedLanguages = [
         'en_US' => 'English',
         'cs_CZ' => 'Czech',
         'de_DE' => 'German',
@@ -206,6 +206,7 @@ class Order extends Data
 
     /**
      * Order constructor.
+     * @param array $data
      */
     public function __construct(array $data = [])
     {
@@ -216,8 +217,9 @@ class Order extends Data
      * Get Order ID
      *
      * @param $orderId
+     * @return Order
      */
-    public function setOrderId($orderId): Order
+    public function setOrderId($orderId)
     {
         if (strlen((string) $orderId) > 40) {
             throw new InvalidArgumentException("Orderid cannot be longer than 40 characters");
@@ -233,8 +235,9 @@ class Order extends Data
      * Set Amount
      *
      * @param $amount
+     * @return Order
      */
-    public function setAmount($amount): Order
+    public function setAmount($amount)
     {
         if ($amount < 0) {
             throw new InvalidArgumentException("Amount must be a positive number or 0");
@@ -249,8 +252,10 @@ class Order extends Data
 
     /**
      * Get Amount In Cents.
+     *
+     * @return int
      */
-    public function getAmountInCents(): int
+    public function getAmountInCents()
     {
         if (!$amount = $this->getAmount()) {
             return 0;
@@ -262,9 +267,10 @@ class Order extends Data
     /**
      * Set Locale.
      *
+     * @param string $locale
      * @return $this
      */
-    public function setLocale(string $locale): static
+    public function setLocale($locale)
     {
         if (!array_key_exists($locale, $this->allowedLanguages)) {
             throw new InvalidArgumentException('Invalid language ISO code');
@@ -276,9 +282,10 @@ class Order extends Data
     /**
      * Get Locale.
      *
+     * @return string
      * @SuppressWarnings("Duplicates")
      */
-    public function getLocale(): string
+    public function getLocale()
     {
         if (!$this->hasData('locale')) {
             $this->setData('locale', self::DEFAULT_LOCALE);
@@ -294,24 +301,30 @@ class Order extends Data
 
     /**
      * Get Available amount for Refund.
+     *
+     * @return float
      */
-    public function getAvailableAmountForRefund(): float
+    public function getAvailableAmountForRefund()
     {
         return (float) bcsub($this->getAmount(), $this->getTotalRefunded(), 2);
     }
 
     /**
      * Get Available amount for Capture.
+     *
+     * @return float
      */
-    public function getAvailableAmountForCapture(): float
+    public function getAvailableAmountForCapture()
     {
         return (float) bcsub($this->getAmount(), $this->getTotalCaptured(), 2);
     }
 
     /**
      * Get Available amount for Cancel.
+     *
+     * @return float
      */
-    public function getAvailableAmountForCancel(): float
+    public function getAvailableAmountForCancel()
     {
         return (float) bcsub($this->getAmount(), $this->getTotalCancelled(), 2);
     }
@@ -320,8 +333,9 @@ class Order extends Data
      * Set Currency.
      *
      * @param $currency
+     * @return Order
      */
-    public function setCurrency($currency): Order
+    public function setCurrency($currency)
     {
         if (!in_array(strtoupper((string) $currency), $this->allowedCurrencies)) {
             throw new InvalidArgumentException("Unknown currency");
@@ -335,7 +349,7 @@ class Order extends Data
      * @deprecated
      * @return $this
      */
-    public function getUserId(): static
+    public function getUserId()
     {
         return $this->getCustomerId();
     }
@@ -346,53 +360,63 @@ class Order extends Data
      * @param $userId
      * @return $this
      */
-    public function setUserId($userId): static
+    public function setUserId($userId)
     {
         return $this->setCustomerId($userId);
     }
 
     /**
      * Get Billing Full name.
+     *
+     * @return string
      */
-    public function getBillingFullName(): string
+    public function getBillingFullName()
     {
         return join(' ', [$this->getBillingFirstName(), $this->getBillingLastName()]);
     }
 
     /**
      * Get Billing Full address.
+     *
+     * @return array
      */
-    public function getBillingAddress(): array
+    public function getBillingAddress()
     {
         return array_filter(
             [$this->getBillingAddress1(), $this->getBillingAddress2(), $this->getBillingAddress3()],
-            fn($value) => !empty($value)
+            fn($val) => $val !== null || $val !== false || $val !== ''
         );
     }
 
     /**
      * Get Shipping Full name.
+     *
+     * @return string
      */
-    public function getShippingFullName(): string
+    public function getShippingFullName()
     {
         return join(' ', [$this->getShippingFirstName(), $this->getShippingLastName()]);
     }
 
     /**
      * Get Shipping Full address.
+     *
+     * @return array
      */
-    public function getShippingAddress(): array
+    public function getShippingAddress()
     {
         return array_filter(
             [$this->getShippingAddress1(), $this->getShippingAddress2(), $this->getShippingAddress3()],
-            fn($value) => !empty($value)
+            fn($val) => $val !== null || $val !== false || $val !== ''
         );
     }
 
     /**
      * Get Billing Country Code.
+     *
+     * @return mixed
      */
-    public function getBillingCountryCode(): mixed
+    public function getBillingCountryCode()
     {
         if (!$this->hasData('billing_country_code')) {
             // For backward compatibility
@@ -404,8 +428,10 @@ class Order extends Data
 
     /**
      * Get Shipping Country Code.
+     *
+     * @return mixed
      */
-    public function getShippingCountryCode(): mixed
+    public function getShippingCountryCode()
     {
         if (!$this->hasData('shipping_country_code')) {
             // For backward compatibility
@@ -418,9 +444,10 @@ class Order extends Data
     /**
      * Get Browser's HTTP_ACCEPT value.
      *
+     * @return string
      * @SuppressWarnings("Duplicates")
      */
-    public function getHttpAccept(): string
+    public function getHttpAccept()
     {
         if (!$this->hasData('http_accept')) {
             $this->setData('http_accept', $_SERVER['HTTP_ACCEPT'] ?? null);
@@ -442,9 +469,10 @@ class Order extends Data
     /**
      * Get Browser's HTTP_USER_AGENT value.
      *
+     * @return string
      * @SuppressWarnings("Duplicates")
      */
-    public function getHttpUserAgent(): string
+    public function getHttpUserAgent()
     {
         if (!$this->hasData('http_user_agent')) {
             $this->setData('http_user_agent', $_SERVER['HTTP_USER_AGENT'] ?? null);
@@ -456,17 +484,20 @@ class Order extends Data
     /**
      * Set Order Items
      *
+     * @param array $items
      * @return $this
      */
-    public function setItems(array $items = []): static
+    public function setItems(array $items = [])
     {
         return $this->setData('items', $items);
     }
 
     /**
      * Get Order Items
+     *
+     * @return array
      */
-    public function getItems(): array
+    public function getItems()
     {
         $result = [];
         $items = $this->getData('items');
@@ -484,17 +515,21 @@ class Order extends Data
      * Returns array with cancel, accept,
      * exception and back url.
      *
+     * @param mixed $orderId
      * @param string|null $paymentMode
+     * @return ReturnUrl
      */
-    public function getReturnUrls(mixed $orderId, string $paymentMode = null): ReturnUrl
+    public function getReturnUrls($orderId, $paymentMode = null)
     {
         // @todo move from IngenicoCoreLibrary:requestReturnUrls()
     }
 
     /**
      * Returns if an order is non-shippable (virtual) or shippable.
+     *
+     * @return bool
      */
-    public function isVirtual(): bool
+    public function isVirtual()
     {
         if ($this->hasData(OrderField::IS_VIRTUAL)) {
             return (bool) $this->getData(OrderField::IS_VIRTUAL);

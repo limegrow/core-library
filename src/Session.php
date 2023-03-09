@@ -10,8 +10,10 @@ trait Session
 {
     /**
      * Get all Session values in a key => value format
+     *
+     * @return array
      */
-    public function getSessionValues(): array
+    public function getSessionValues()
     {
         $values = $this->extension->getSessionValues();
 
@@ -26,8 +28,11 @@ trait Session
 
     /**
      * Get value from Session.
+     *
+     * @param string $key
+     * @return mixed
      */
-    public function getSessionValue(string $key): mixed
+    public function getSessionValue($key)
     {
         $value = $this->extension->getSessionValue($key);
 
@@ -40,8 +45,12 @@ trait Session
 
     /**
      * Store value in Session.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return void
      */
-    public function setSessionValue(string $key, mixed $value): void
+    public function setSessionValue($key, $value)
     {
         if (is_array($value) || is_object($value)) {
             $value = serialize($value);
@@ -54,8 +63,9 @@ trait Session
      * Remove value from Session.
      *
      * @param $key
+     * @return void
      */
-    public function unsetSessionValue($key): void
+    public function unsetSessionValue($key)
     {
         $this->extension->unsetSessionValue($key);
     }

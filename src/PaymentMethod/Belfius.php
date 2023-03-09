@@ -10,43 +10,43 @@ class Belfius extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'Belfius';
+    protected $name = 'Belfius';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'belfius.svg';
+    protected $logo = 'belfius.svg';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'real_time_banking';
+    protected $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'DEXIA NetBanking';
+    protected $pm = 'DEXIA NetBanking';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'DEXIA NetBanking';
+    protected $brand = 'DEXIA NetBanking';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'BE' => [
             'popularity' => 40
         ]
@@ -56,17 +56,17 @@ class Belfius extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 
     /**
      * Transaction codes that indicate capturing.
      * @var array
      */
-    protected array $direct_sales_success_code = [41];
+    protected $direct_sales_success_code = [41];
 
     /**
      * Transaction codes that indicate authorization.
      * @var array
      */
-    protected array $auth_mode_success_code = [];
+    protected $auth_mode_success_code = [];
 }

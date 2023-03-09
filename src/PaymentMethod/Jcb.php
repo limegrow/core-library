@@ -10,43 +10,43 @@ class Jcb extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'JCB';
+    protected $name = 'JCB';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'jcb.svg';
+    protected $logo = 'jcb.svg';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'card';
+    protected $category = 'card';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'CreditCard';
+    protected $pm = 'CreditCard';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'JCB';
+    protected $brand = 'JCB';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'AT' => [
             'popularity' => 20
         ],

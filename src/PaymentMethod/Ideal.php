@@ -10,43 +10,43 @@ class Ideal extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'iDEAL';
+    protected $name = 'iDEAL';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'ideal.svg';
+    protected $logo = 'ideal.svg';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'real_time_banking';
+    protected $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'iDEAL';
+    protected $pm = 'iDEAL';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'iDEAL';
+    protected $brand = 'iDEAL';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'NL' => [
             'popularity' => 100
         ]
@@ -56,5 +56,5 @@ class Ideal extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 }

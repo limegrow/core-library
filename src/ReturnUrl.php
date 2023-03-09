@@ -25,6 +25,7 @@ class ReturnUrl extends Data
 
     /**
      * ReturnUrl constructor.
+     * @param array $data
      */
     public function __construct(array $data = [])
     {
@@ -36,7 +37,7 @@ class ReturnUrl extends Data
      *
      * @return string[]
      */
-    public function getUrls(): array
+    public function getUrls()
     {
         return [
             'accept' => $this->getAcceptUrl(),

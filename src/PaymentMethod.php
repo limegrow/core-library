@@ -6,7 +6,6 @@ class PaymentMethod implements \Countable, \IteratorAggregate
 {
     /**
      * Holds all the Payment Methods with their properties
-     * @var array
      */
     private array $payment_methods = [];
 
@@ -62,7 +61,8 @@ class PaymentMethod implements \Countable, \IteratorAggregate
      *
      * @return int
      */
-    public function count(): int
+    #[\ReturnTypeWillChange]
+    public function count()
     {
         return count($this->payment_methods);
     }
@@ -74,23 +74,30 @@ class PaymentMethod implements \Countable, \IteratorAggregate
      *
      * @return \ArrayIterator
      */
-    public function getIterator(): \ArrayIterator
+    #[\ReturnTypeWillChange]
+    public function getIterator()
     {
         return new \ArrayIterator($this->payment_methods);
     }
 
     /**
      * Returns Payment Methods as array.
+     *
+     * @return array
      */
-    public function toArray(): array
+    public function toArray()
     {
         return $this->payment_methods;
     }
 
     /**
      * Get Payment Method by field and value
+     *
+     * @param string $field
+     * @param mixed $value
+     * @return array
      */
-    public static function find(string $field, mixed $value): array
+    public static function find($field, $value)
     {
         $result = [];
         $paymentMethods = new PaymentMethod();
@@ -108,8 +115,10 @@ class PaymentMethod implements \Countable, \IteratorAggregate
     /**
      * Get All Countries of Payment Methods.
      * Returns array like ['DE' => 'Germany']
+     *
+     * @return array
      */
-    public static function getAllCountries(): array
+    public static function getAllCountries()
     {
         $countries = [];
         $paymentMethods = new PaymentMethod();
@@ -131,8 +140,9 @@ class PaymentMethod implements \Countable, \IteratorAggregate
     /**
      * Returns countries array match between each country and its PMs
      * @deprecated
+     * @return array
      */
-    public function getCountriesPaymentMethods(): array
+    public function getCountriesPaymentMethods()
     {
         $country_payment_methods = [];
 
@@ -157,18 +167,21 @@ class PaymentMethod implements \Countable, \IteratorAggregate
 
     /**
      * Returns Payment methods array
+     *
+     * @return array
      */
-    public static function getPaymentMethods(): array
+    public static function getPaymentMethods()
     {
         return (new PaymentMethod)->toArray();
     }
 
     /**
      * Get payment methods by country ISO code
+     * @deprecated
      * @param $country_iso_code
-     *@deprecated
+     * @return mixed
      */
-    public function getPaymentMethodsByIsoCode($country_iso_code): array
+    public function getPaymentMethodsByIsoCode($country_iso_code)
     {
         $payment_methods_ids = [];
 
@@ -187,8 +200,9 @@ class PaymentMethod implements \Countable, \IteratorAggregate
      * Get payment methods by Category
      *
      * @param $category
+     * @return array
      */
-    public static function getPaymentMethodsByCategory($category): array
+    public static function getPaymentMethodsByCategory($category)
     {
         return self::find('category', $category);
     }
@@ -196,9 +210,11 @@ class PaymentMethod implements \Countable, \IteratorAggregate
     /**
      * Get Payment Method by Brand
      *
+     * @param string $brand
      * @param IngenicoCoreLibrary|null $coreLibrary
+     * @return PaymentMethod\PaymentMethod|false
      */
-    public static function getPaymentMethodByBrand(string $brand, IngenicoCoreLibrary $coreLibrary = null): bool|PaymentMethod\PaymentMethod
+    public static function getPaymentMethodByBrand($brand, $coreLibrary = null)
     {
         // Workaround for Afterpay/Klarna
         if (in_array($brand, ['Open Invoice DE', 'Open Invoice NL'])) {
@@ -233,8 +249,9 @@ class PaymentMethod implements \Countable, \IteratorAggregate
      * Get Payment Method by Id
      *
      * @param $id
+     * @return PaymentMethod\PaymentMethod|false
      */
-    public static function getPaymentMethodById($id): bool|PaymentMethod\PaymentMethod
+    public static function getPaymentMethodById($id)
     {
         $paymentMethods = new PaymentMethod();
 
@@ -250,8 +267,10 @@ class PaymentMethod implements \Countable, \IteratorAggregate
 
     /**
      * Get Payment Categories
+     *
+     * @return array
      */
-    public static function getPaymentCategories(): array
+    public static function getPaymentCategories()
     {
         return self::CATEGORY_LABELS;
     }

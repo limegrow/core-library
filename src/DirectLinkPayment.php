@@ -2,7 +2,6 @@
 
 namespace IngenicoClient;
 
-use Ogone\AbstractPaymentRequest;
 use Ogone\DirectLink\DirectLinkPaymentRequest;
 use Ogone\DirectLink\DirectLinkPaymentResponse;
 use Ogone\DirectLink\Eci;
@@ -20,9 +19,8 @@ trait DirectLinkPayment
      * @param Alias $alias
      *
      * @return Payment
-     * @throws \Exception
      */
-    public function executePayment($orderId, Alias $alias): Payment
+    public function executePayment($orderId, Alias $alias)
     {
         $order = $this->getOrder($orderId);
 
@@ -41,10 +39,10 @@ trait DirectLinkPayment
     /**
      * @param Order $order
      * @param Alias $alias
-     * @param array|Data $additional
+     * @param Data|array $additional
      * @return DirectLinkPaymentRequest
      */
-    public function getDirectLinkPaymentRequest(Order $order, Alias $alias, Data|array $additional = []): DirectLinkPaymentRequest
+    public function getDirectLinkPaymentRequest(Order $order, Alias $alias, $additional = [])
     {
         if (is_array($additional)) {
             $additional = (new Data())->setData($additional);
@@ -91,6 +89,7 @@ trait DirectLinkPayment
             $skipSecurityCheck = false;
         }
 
+        /** @var ReturnUrl $urls */
         $urls = $this->requestReturnUrls($order->getOrderId());
 
         // Add the customer name

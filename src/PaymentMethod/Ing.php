@@ -10,43 +10,43 @@ class Ing extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'ING Home\'Pay';
+    protected $name = 'ING Home\'Pay';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'ing.svg';
+    protected $logo = 'ing.svg';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'real_time_banking';
+    protected $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'ING HomePay';
+    protected $pm = 'ING HomePay';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'ING HomePay';
+    protected $brand = 'ING HomePay';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'BE' => [
             'popularity' => 40
         ]
@@ -56,5 +56,5 @@ class Ing extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 }

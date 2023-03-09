@@ -12,7 +12,7 @@ abstract class Oney extends PaymentMethod
      * @var array
      * @SuppressWarnings("Duplicates")
      */
-    protected array $common_fields = [
+    protected $common_fields = [
         OrderField::BILLING_CUSTOMER_TITLE => [
             'required' => true,
             'field_type' => PaymentMethod::TYPE_RADIO,
@@ -162,5 +162,5 @@ abstract class Oney extends PaymentMethod
      * @var array
      * @SuppressWarnings("Duplicates")
      */
-    protected array $additional_fields = [];
+    protected $additional_fields = [];
 }

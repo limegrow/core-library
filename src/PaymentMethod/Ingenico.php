@@ -10,43 +10,43 @@ class Ingenico extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'Ingenico ePayments';
+    protected $name = 'Ingenico ePayments';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'ingenico.gif';
+    protected $logo = 'ingenico.gif';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'real_time_banking';
+    protected $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = '';
+    protected $pm = '';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = '';
+    protected $brand = '';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'AT' => [
             'popularity' => 100
         ],
@@ -86,11 +86,11 @@ class Ingenico extends PaymentMethod implements PaymentMethodInterface
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 
     /**
      * Defines if this payment method requires order line items to be sent with the request
      * @var bool
      */
-    protected bool $order_line_items_required = false;
+    protected $order_line_items_required = false;
 }

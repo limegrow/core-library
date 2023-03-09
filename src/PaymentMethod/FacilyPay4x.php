@@ -12,43 +12,43 @@ class FacilyPay4x extends Oney implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'FacilyPay 4x';
+    protected $name = 'FacilyPay 4x';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'oney.png';
+    protected $logo = 'oney.png';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'real_time_banking';
+    protected $category = 'real_time_banking';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'FACILYPAY4X';
+    protected $pm = 'FACILYPAY4X';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'FACILYPAY4X';
+    protected $brand = 'FACILYPAY4X';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'FR' => [
             'popularity' => 20
         ],
@@ -59,23 +59,23 @@ class FacilyPay4x extends Oney implements PaymentMethodInterface
      * 3-step payment (waiting+authorisation+debit)
      * @var bool
      */
-    protected bool $three_phase_flow = true;
+    protected $three_phase_flow = true;
 
     /**
      * Is support Redirect only
      * @var bool
      */
-    protected bool $is_redirect_only = true;
+    protected $is_redirect_only = true;
 
     /**
      * Defines if this payment method requires additional data to be sent with the request.
      * @var bool
      */
-    protected bool $additional_data_required = true;
+    protected $additional_data_required = true;
 
     /**
      * Defines if this payment method requires order line items to be sent with the request
      * @var bool
      */
-    protected bool $order_line_items_required = true;
+    protected $order_line_items_required = true;
 }

@@ -22,6 +22,8 @@ class WhiteLabels extends Data
     /**
      * WhiteLabels constructor.
      *
+     * @param ConnectorInterface $extension
+     * @param IngenicoCoreLibraryInterface $coreLibrary
      * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

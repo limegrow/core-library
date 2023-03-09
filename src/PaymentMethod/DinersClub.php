@@ -10,43 +10,43 @@ class DinersClub extends PaymentMethod implements PaymentMethodInterface
      * ID Code
      * @var string
      */
-    protected string $id = self::CODE;
+    protected $id = self::CODE;
 
     /**
      * Name
      * @var string
      */
-    protected string $name = 'Diners Club';
+    protected $name = 'Diners Club';
 
     /**
      * Logo
      * @var string
      */
-    protected string $logo = 'diners_club.svg';
+    protected $logo = 'diners_club.svg';
 
     /**
      * Category
      * @var string
      */
-    protected string $category = 'card';
+    protected $category = 'card';
 
     /**
      * Payment Method
      * @var string
      */
-    protected string $pm = 'CreditCard';
+    protected $pm = 'CreditCard';
 
     /**
      * Brand
      * @var string
      */
-    protected string $brand = 'Diners Club';
+    protected $brand = 'Diners Club';
 
     /**
      * Countries
      * @var array
      */
-    protected array $countries = [
+    protected $countries = [
         'AT' => [
             'popularity' => 20
         ],
