@@ -306,7 +306,10 @@ class Order extends Data
      */
     public function getAvailableAmountForRefund()
     {
-        return (float) bcsub($this->getAmount(), $this->getTotalRefunded(), 2);
+        //Exception #0 (Exception): Deprecated Functionality: bcsub(): Passing null to parameter #2 ($num2) of type string is deprecated in /app/vendor/ingenico/ogone-client/src/Order.php on line 309
+        return (float) bcsub($this->getAmount(), $this->getTotalRefunded() !== null, 2);
+        // return round($this->getAmount() - $this->getTotalRefunded(), 2);
+
     }
 
     /**

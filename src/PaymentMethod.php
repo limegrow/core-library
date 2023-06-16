@@ -237,9 +237,16 @@ class PaymentMethod implements \Countable, \IteratorAggregate
 
         /** @var PaymentMethod\PaymentMethod $paymentMethod */
         foreach ($paymentMethods as $paymentMethod) {
-            if (strtolower($paymentMethod->getBrand()) === strtolower($brand)) {
+
+            if ($paymentMethod !== null && strtolower($paymentMethod->getBrand()!== null) === strtolower($brand!== null)) {
                 return $paymentMethod;
             }
+
+           // hot fixx
+
+//            if (strtolower($paymentMethod->getBrand()) === strtolower($brand)) {
+//                return $paymentMethod;
+//            }
         }
 
         return false;
