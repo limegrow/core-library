@@ -221,10 +221,10 @@ class Order extends Data
      */
     public function setOrderId($orderId)
     {
-        if (strlen($orderId) > 40) {
+        if (strlen((string) $orderId) > 40) {
             throw new InvalidArgumentException("Orderid cannot be longer than 40 characters");
         }
-        if (preg_match('/[^a-zA-Z0-9_-]/', $orderId)) {
+        if (preg_match('/[^a-zA-Z0-9_-]/', (string) $orderId)) {
             throw new InvalidArgumentException("Order id cannot contain special characters");
         }
 
@@ -306,7 +306,10 @@ class Order extends Data
      */
     public function getAvailableAmountForRefund()
     {
-        return (float) bcsub($this->getAmount(), $this->getTotalRefunded(), 2);
+        //Exception #0 (Exception): Deprecated Functionality: bcsub(): Passing null to parameter #2 ($num2) of type string is deprecated in /app/vendor/ingenico/ogone-client/src/Order.php on line 309
+        return (float) bcsub($this->getAmount(), $this->getTotalRefunded() !== null, 2);
+        // return round($this->getAmount() - $this->getTotalRefunded(), 2);
+
     }
 
     /**
@@ -337,7 +340,7 @@ class Order extends Data
      */
     public function setCurrency($currency)
     {
-        if (!in_array(strtoupper($currency), $this->allowedCurrencies)) {
+        if (!in_array(strtoupper((string) $currency), $this->allowedCurrencies)) {
             throw new InvalidArgumentException("Unknown currency");
         }
 
@@ -384,7 +387,7 @@ class Order extends Data
     {
         return array_filter(
             [$this->getBillingAddress1(), $this->getBillingAddress2(), $this->getBillingAddress3()],
-            'strlen'
+            fn($val) => $val !== null || $val !== false || $val !== ''
         );
     }
 
@@ -407,7 +410,7 @@ class Order extends Data
     {
         return array_filter(
             [$this->getShippingAddress1(), $this->getShippingAddress2(), $this->getShippingAddress3()],
-            'strlen'
+            fn($val) => $val !== null || $val !== false || $val !== ''
         );
     }
 
@@ -450,15 +453,15 @@ class Order extends Data
     public function getHttpAccept()
     {
         if (!$this->hasData('http_accept')) {
-            $this->setData('http_accept', isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : null);
+            $this->setData('http_accept', $_SERVER['HTTP_ACCEPT'] ?? null);
         }
 
         $value = $this->getData('http_accept');
 
         // Workaround: Ingenico doesn't accept values like "application/json, text/javascript, */*; q=0.01"
         // Ingenico returns HTML with "Page not found" text
-        if (mb_stripos($value, 'application/json', 0, 'UTF-8') !== false ||
-            mb_stripos($value, 'text/javascript', 0, 'UTF-8') !== false
+        if (mb_stripos((string) $value, 'application/json', 0, 'UTF-8') !== false ||
+            mb_stripos((string) $value, 'text/javascript', 0, 'UTF-8') !== false
         ) {
             $value = '*/*';
         }
@@ -475,7 +478,7 @@ class Order extends Data
     public function getHttpUserAgent()
     {
         if (!$this->hasData('http_user_agent')) {
-            $this->setData('http_user_agent', isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null);
+            $this->setData('http_user_agent', $_SERVER['HTTP_USER_AGENT'] ?? null);
         }
 
         return $this->getData('http_user_agent');

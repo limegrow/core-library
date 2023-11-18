@@ -44,8 +44,7 @@ trait OpenInvoice
         $orderFields = array_merge($order->getData(), $fields);
 
         // Get Expected Fields
-        $checkoutType = $order->getCheckoutType() ? $order->getCheckoutType()
-            : PaymentMethod\PaymentMethod::CHECKOUT_B2C;
+        $checkoutType = $order->getCheckoutType() ?: PaymentMethod\PaymentMethod::CHECKOUT_B2C;
         $expectedFields = (array) $paymentMethod->getExpectedFields($checkoutType);
 
         // Get Missing or Invalid parameters
@@ -205,7 +204,7 @@ trait OpenInvoice
             throw new Exception(sprintf(
                 'Unable to use %s as Open Invoice method. Use %s::initiateRedirectPayment() instead of.',
                 $alias->getPaymentId(),
-                __CLASS__
+                self::class
             ));
         }
 

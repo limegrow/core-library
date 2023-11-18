@@ -4,10 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 class IngenicoCoreLibraryFacadeTest extends TestCase
 {
-    /**
-     * @var \IngenicoClient\IngenicoCoreLibrary
-     */
-    private $coreLibraryFacade;
+    private ?\IngenicoClient\IngenicoCoreLibrary $coreLibraryFacade = null;
 
     public function testOrderStatusRequest()
     {

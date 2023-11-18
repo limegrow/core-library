@@ -167,9 +167,8 @@ class PaymentMethod implements \ArrayAccess, PaymentMethodInterface
 
     /**
      * Missing Fields
-     * @var array
      */
-    private $missing_fields = [];
+    private array $missing_fields = [];
 
     /**
      * PaymentMethod constructor.
@@ -472,7 +471,7 @@ class PaymentMethod implements \ArrayAccess, PaymentMethodInterface
                 $mime = 'image/svg+xml';
             }
 
-            if (strpos($mime, 'image') !== false) {
+            if (str_contains($mime, 'image')) {
                 $contents = file_get_contents($file);
                 return sprintf('data:%s;base64,%s', $mime, base64_encode($contents));
             }
@@ -518,7 +517,7 @@ class PaymentMethod implements \ArrayAccess, PaymentMethodInterface
                 return property_exists($this, $key) ? $this->$key : null;
             case 'set':
                 $key = $this->underscore(substr($method, 3));
-                $this->$key = isset($args[0]) ? $args[0] : null;
+                $this->$key = $args[0] ?? null;
                 return $this;
             case 'uns':
                 $key = $this->underscore(substr($method, 3));
@@ -529,7 +528,7 @@ class PaymentMethod implements \ArrayAccess, PaymentMethodInterface
                 return property_exists($this, $key);
         }
 
-        throw new Exception(sprintf('Invalid method %s::%s', get_class($this), $method));
+        throw new Exception(sprintf('Invalid method %s::%s', $this::class, $method));
     }
 
     /**
@@ -540,6 +539,7 @@ class PaymentMethod implements \ArrayAccess, PaymentMethodInterface
      * @return void
      * @link http://www.php.net/manual/en/arrayaccess.offsetset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->$offset = $value;
@@ -552,6 +552,7 @@ class PaymentMethod implements \ArrayAccess, PaymentMethodInterface
      * @return bool
      * @link http://www.php.net/manual/en/arrayaccess.offsetexists.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return property_exists($this, $offset);
@@ -564,6 +565,7 @@ class PaymentMethod implements \ArrayAccess, PaymentMethodInterface
      * @return void
      * @link http://www.php.net/manual/en/arrayaccess.offsetunset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         if (property_exists($this, $offset)) {
@@ -578,6 +580,7 @@ class PaymentMethod implements \ArrayAccess, PaymentMethodInterface
      * @return mixed
      * @link http://www.php.net/manual/en/arrayaccess.offsetget.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (property_exists($this, $offset)) {

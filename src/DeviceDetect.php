@@ -21,10 +21,7 @@ class DeviceDetect
      */
     const DEVICE_TYPE_TABLET = 'tablet';
 
-    /**
-     * @var MobileDetect
-     */
-    private $mobileDetect;
+    private \Detection\MobileDetect $mobileDetect;
 
     /**
      * Constructor.

@@ -29,7 +29,7 @@ class Data implements \ArrayAccess
             return $this->data;
         }
 
-        return isset($this->data[$key]) ? $this->data[$key] : null;
+        return $this->data[$key] ?? null;
     }
 
     /**
@@ -93,7 +93,7 @@ class Data implements \ArrayAccess
                 return $this->getData($key);
             case 'set':
                 $key = $this->underscore(substr($method, 3));
-                $this->setData($key, isset($args[0]) ? $args[0] : null);
+                $this->setData($key, $args[0] ?? null);
                 return $this;
             case 'uns':
                 $key = $this->underscore(substr($method, 3));
@@ -104,7 +104,7 @@ class Data implements \ArrayAccess
                 return $this->hasData($key);
         }
 
-        throw new Exception(sprintf('Invalid method %s::%s', get_class($this), $method));
+        throw new Exception(sprintf('Invalid method %s::%s', $this::class, $method));
     }
 
     /**
@@ -115,6 +115,7 @@ class Data implements \ArrayAccess
      * @return void
      * @link http://www.php.net/manual/en/arrayaccess.offsetset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->data[$offset] = $value;
@@ -127,6 +128,7 @@ class Data implements \ArrayAccess
      * @return bool
      * @link http://www.php.net/manual/en/arrayaccess.offsetexists.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return $this->hasData($offset);
@@ -139,6 +141,7 @@ class Data implements \ArrayAccess
      * @return void
      * @link http://www.php.net/manual/en/arrayaccess.offsetunset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $this->unsData($offset);
@@ -151,6 +154,7 @@ class Data implements \ArrayAccess
      * @return mixed
      * @link http://www.php.net/manual/en/arrayaccess.offsetget.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->getData($offset);

@@ -39,10 +39,7 @@ class Request implements \ArrayAccess
     const ALIAS_STATUS_UPDATED = 2;
     const ALIAS_STATUS_CANCELLED = 3;
 
-    /**
-     * @var array
-     */
-    private $data;
+    private array $data;
 
     /**
      * Request constructor.
@@ -306,6 +303,7 @@ class Request implements \ArrayAccess
      * @return void
      * @link http://www.php.net/manual/en/arrayaccess.offsetset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
@@ -322,6 +320,7 @@ class Request implements \ArrayAccess
      * @return bool
      * @link http://www.php.net/manual/en/arrayaccess.offsetexists.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->data[$offset]);
@@ -334,6 +333,7 @@ class Request implements \ArrayAccess
      * @return void
      * @link http://www.php.net/manual/en/arrayaccess.offsetunset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->data[$offset]);
@@ -346,9 +346,10 @@ class Request implements \ArrayAccess
      * @return mixed
      * @link http://www.php.net/manual/en/arrayaccess.offsetget.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
-        return isset($this->data[$offset]) ? $this->data[$offset] : null;
+        return $this->data[$offset] ?? null;
     }
 
     /**
@@ -362,10 +363,10 @@ class Request implements \ArrayAccess
      */
     public function __call($method, $arguments)
     {
-        $key = lcfirst(mb_substr($method, 3, mb_strlen($method, 'UTF-8'), 'UTF-8'));
-        switch (mb_substr($method, 0, 3, 'UTF-8')) {
+        $key = lcfirst(mb_substr((string) $method, 3, mb_strlen((string) $method, 'UTF-8'), 'UTF-8'));
+        switch (mb_substr((string) $method, 0, 3, 'UTF-8')) {
             case 'get':
-                return isset($this->data[$key]) ? $this->data[$key] : null;
+                return $this->data[$key] ?? null;
             case 'set':
                 $this->data[$key] = $arguments[0];
                 return $this;
@@ -376,6 +377,6 @@ class Request implements \ArrayAccess
                 return isset($this->data[$key]);
         }
 
-        throw new Exception(sprintf('Invalid method %s::%s', get_class($this), $method));
+        throw new Exception(sprintf('Invalid method %s::%s', $this::class, $method));
     }
 }

@@ -105,9 +105,8 @@ class Configuration extends Data implements ConfigurationInterface
 {
     /**
      * Default Settings
-     * @var array
      */
-    private static $default_settings = [
+    private static array $default_settings = [
         self::CONF_CONNECTION_MODE => self::MODE_TEST,
         self::CONF_CONNECTION_TEST_ALGORITHM => self::HASH_SHA512,
         self::CONF_CONNECTION_TEST_PSPID => null,
@@ -158,11 +157,9 @@ class Configuration extends Data implements ConfigurationInterface
         self::CONF_GENERIC_COUNTRY => null,
     ];
 
-    /** @var ConnectorInterface */
-    private $extension;
+    private \IngenicoClient\ConnectorInterface $extension;
 
-    /** @var IngenicoCoreLibraryInterface */
-    private $coreLibrary;
+    private \IngenicoClient\IngenicoCoreLibraryInterface $coreLibrary;
 
     /**
      * Configuration constructor.
@@ -291,7 +288,7 @@ class Configuration extends Data implements ConfigurationInterface
      */
     public function setPspid($pspid)
     {
-        if (strlen($pspid) > 30) {
+        if (strlen((string) $pspid) > 30) {
             throw new InvalidArgumentException('PSPId is too long');
         }
 
@@ -451,7 +448,7 @@ class Configuration extends Data implements ConfigurationInterface
      */
     public function validate($fieldKey, $fieldValue)
     {
-        if (strpos($fieldKey, 'instalments_') !== false) {
+        if (str_contains($fieldKey, 'instalments_')) {
             if ($fieldValue < 0) {
                 // Instalments negative values are not valid.
                 return $this->coreLibrary->__('validator.instalments.negative_values');
@@ -482,7 +479,7 @@ class Configuration extends Data implements ConfigurationInterface
 
         /** Validate template url */
         if ($fieldKey === self::CONF_PAYMENTPAGE_TEMPLATE_EXTERNALURL) {
-            $url = strpos($fieldValue, 'http') !== 0 ? "http://{$fieldValue}" : $fieldValue;
+            $url = !str_starts_with($fieldValue, 'http') ? "http://{$fieldValue}" : $fieldValue;
             if (!empty($fieldValue) && !filter_var($url, FILTER_VALIDATE_URL)) {
                 // Template file URL is not valid.
                 return $this->coreLibrary->__('validator.template_url_invalid');
@@ -549,7 +546,7 @@ class Configuration extends Data implements ConfigurationInterface
                     self::CONF_CONNECTION_TEST_DL_PASSWORD, self::CONF_CONNECTION_TEST_SIGNATURE,
                     self::CONF_CONNECTION_TEST_ALGORITHM]
             )) {
-                $testConf->setData(str_replace('test', 'live', $fieldKey), $fieldValue);
+                $testConf->setData(str_replace('test', 'live', (string) $fieldKey), $fieldValue);
             }
         }
 
@@ -637,15 +634,11 @@ class Configuration extends Data implements ConfigurationInterface
             new Passphrase($this->getPassphrase()),
             new HashAlgorithm($this->getAlgorithm())
         );
-
-        switch ($direction) {
-            case 'in':
-                $shaComposer->addParameterFilter(new ShaInParameterFilter);
-                break;
-            case 'out':
-                $shaComposer->addParameterFilter(new ShaOutParameterFilter);
-                break;
-        }
+        match ($direction) {
+            'in' => $shaComposer->addParameterFilter(new ShaInParameterFilter),
+            'out' => $shaComposer->addParameterFilter(new ShaOutParameterFilter),
+            default => $shaComposer,
+        };
 
         return $shaComposer;
     }

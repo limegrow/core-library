@@ -19,8 +19,7 @@ class DirectLink
     const ITEM_PRICE = 'itemprice';
     const ITEM_VATCODE = 'itemvatcode';
 
-    /** @var LoggerInterface|null */
-    private $logger;
+    private ?\Psr\Log\LoggerInterface $logger = null;
 
     /**
      * Set Logger.
@@ -187,15 +186,15 @@ class DirectLink
         if (count($items) > 0) {
             foreach ($items as &$item) {
                 if (isset($item[self::ITEM_ID])) {
-                    $item[self::ITEM_ID] = mb_strimwidth($item[self::ITEM_ID], 0, 15);
+                    $item[self::ITEM_ID] = mb_strimwidth((string) $item[self::ITEM_ID], 0, 15);
                 }
 
                 if (isset($item[self::ITEM_NAME])) {
-                    $item[self::ITEM_NAME] = mb_strimwidth($item[self::ITEM_NAME], 0, 30);
+                    $item[self::ITEM_NAME] = mb_strimwidth((string) $item[self::ITEM_NAME], 0, 30);
                 }
 
                 if (isset($item[self::ITEM_PRICE])) {
-                    $item[self::ITEM_PRICE] = (int) bcmul(100, $item[self::ITEM_PRICE]);
+                    $item[self::ITEM_PRICE] = (int) bcmul(100, (string) $item[self::ITEM_PRICE]);
                 }
 
                 if (isset($item[self::ITEM_VATCODE])) {

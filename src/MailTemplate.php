@@ -38,20 +38,11 @@ class MailTemplate
      */
     private $template;
 
-    /**
-     * @var string
-     */
-    private $templates_directory;
+    private ?string $templates_directory = null;
 
-    /**
-     * @var array
-     */
-    private $fields = [];
+    private array $fields = [];
 
-    /**
-     * @var Translator
-     */
-    private $translator;
+    private \Symfony\Component\Translation\Translator $translator;
 
     /**
      * MailTemplate constructor.
@@ -85,7 +76,7 @@ class MailTemplate
             }
 
             $filename = $info['filename'];
-            list($domain, $locale) = explode('.', $filename);
+            [$domain, $locale] = explode('.', $filename);
 
             $this->translator->addResource(
                 'po',
